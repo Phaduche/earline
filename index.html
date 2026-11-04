@@ -3,289 +3,347 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F7F8FA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B1120" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Earline">
-<meta name="description" content="Personal turtle-neck alerts.">
+<meta name="description" content="Turtle-neck alerts that learn your posture.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Earline</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
+/* Apple iOS look: system font, grouped background, inset grouped lists, system colors */
 :root{
-  --page:#F7F8FA; --board:#ECF0F5; --grid:#DCE3EC; --grid-major:#C3CDDA;
-  --ink:#0E1A33; --ink-2:#47546E; --ink-3:#8590A6; --rule:#DEE3EA;
-  --ok:#14936A; --warn:#DB940A; --bad:#EE2E6C;
-  --display:"Big Shoulders","Big Shoulders Display","Arial Narrow",sans-serif;
-  --body:Archivo,-apple-system,"Segoe UI",system-ui,sans-serif;
-  --lvl:var(--ink-3);
+  --bg:#F2F2F7; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.6); --label3:rgba(60,60,67,.3);
+  --sep:rgba(60,60,67,.29); --fill:rgba(118,118,128,.12); --fill2:rgba(120,120,128,.16); --segsel:#FFFFFF;
+  --blue:#007AFF; --green:#34C759; --orange:#FF9500; --red:#FF3B30; --pink:#FF2D55; --gray:#8E8E93; --cyan:#32ADE6; --indigo:#5856D6; --teal:#30B0C7;
+  --bar:rgba(249,249,249,.94); --banner:rgba(246,246,246,.88);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Segoe UI",Roboto,system-ui,sans-serif;
+  --round:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --lvl:var(--gray);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --page:#0B1120; --board:#111A2C; --grid:#19233A; --grid-major:#253252;
-    --ink:#E9EEF7; --ink-2:#A3AECB; --ink-3:#6C7795; --rule:#1E2945;
-    --ok:#3CCB95; --warn:#F5B53A; --bad:#FF5A8E;
+    --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6); --label3:rgba(235,235,245,.3);
+    --sep:rgba(84,84,88,.65); --fill:rgba(118,118,128,.24); --fill2:rgba(120,120,128,.32); --segsel:#636366;
+    --blue:#0A84FF; --green:#30D158; --orange:#FF9F0A; --red:#FF453A; --pink:#FF375F; --cyan:#64D2FF; --indigo:#5E5CE6; --teal:#40C8E0;
+    --bar:rgba(22,22,22,.92); --banner:rgba(44,44,46,.9);
     color-scheme:dark;
   }
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
-body{background:var(--page);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;min-height:100dvh}
+body{background:var(--bg);color:var(--label);font:17px/1.29 var(--font);-webkit-font-smoothing:antialiased;min-height:100dvh}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:2px solid var(--bad);outline-offset:3px}
-[hidden]{display:none!important}
 p{margin:0}
-[data-level="ok"]{--lvl:var(--ok)} [data-level="warn"]{--lvl:var(--warn)} [data-level="bad"]{--lvl:var(--bad)}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+[data-level="ok"]{--lvl:var(--green)} [data-level="warn"]{--lvl:var(--orange)} [data-level="bad"]{--lvl:var(--red)}
 
-/* header */
-.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;padding:14px 28px;background:var(--page);border-bottom:1px solid var(--rule)}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:800;font-size:26px;line-height:1}
-.brand svg{width:28px;height:28px}
-.nav{margin-left:auto;display:flex;gap:6px}
-.nav button{position:relative;border:0;background:none;width:44px;height:40px;display:grid;place-items:center;color:var(--ink-3)}
-.nav svg{width:24px;height:24px}
-.nav button[aria-current="page"]{color:var(--ink)}
-.nav button[aria-current="page"]::after{content:"";position:absolute;left:10px;right:10px;bottom:-15px;height:3px;background:var(--bad)}
+/* ---------- screens ---------- */
+.screen{max-width:980px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom))}
+.navbar{display:flex;align-items:center;justify-content:flex-end;gap:2px;height:44px;margin-top:env(safe-area-inset-top)}
+.navbar .left{margin-right:auto}
+.nb{width:44px;height:44px;border:0;background:none;color:var(--blue);display:grid;place-items:center;border-radius:10px}
+.nb svg{width:23px;height:23px}
+.nbtext{border:0;background:none;color:var(--blue);font-size:17px;height:44px;padding:0 4px}
+.large{font-size:34px;line-height:41px;font-weight:700;margin:0 0 14px;letter-spacing:.01em}
 
-main{max-width:1100px;margin:0 auto;padding:32px 28px 110px}
+/* ---------- cards & lists ---------- */
+.card{background:var(--card);border-radius:12px;padding:16px}
+.grid{display:grid;gap:16px}
+.list{background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:34px}
+.cell{position:relative;display:flex;align-items:center;gap:12px;min-height:44px;padding:0 16px;width:100%;border:0;background:none;text-align:left;font-size:17px}
+.cell+.cell::before,.cell+details::before,details+.cell::before{content:"";position:absolute;top:0;right:0;left:57px;border-top:.5px solid var(--sep)}
+.list.noicon .cell+.cell::before{left:16px}
+button.cell:active,summary.cell:active{background:var(--fill)}
+.cell .t{flex:1;min-width:0}
+.cell .v{color:var(--label2);white-space:nowrap}
+.cell.action .t{color:var(--blue)}
+.cell.danger .t{color:var(--red)}
+.ico{width:29px;height:29px;border-radius:7px;display:grid;place-items:center;color:#fff;flex:none}
+.ico svg{width:18px;height:18px}
+.chev{width:9px;height:14px;color:var(--label3);flex:none}
+.cell select{appearance:none;-webkit-appearance:none;border:0;background:none;color:var(--label2);font-size:17px;text-align:right;direction:rtl;padding:0;cursor:pointer}
+.cell select option{direction:ltr}
+details{position:relative}
+summary{list-style:none}
+summary::-webkit-details-marker{display:none}
+details[open] summary .chev{transform:rotate(90deg)}
+.fieldcell input{flex:1;border:0;background:none;font-size:17px;padding:11px 0;outline:none;min-width:0}
+.fieldcell input::placeholder{color:var(--label3)}
+
+/* iOS switch */
+.sw{appearance:none;-webkit-appearance:none;margin:0;flex:none;position:relative;width:51px;height:31px;border-radius:16px;background:var(--fill2);transition:background .25s;cursor:pointer}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06);transition:transform .25s}
+.sw:checked{background:var(--green)}
+.sw:checked::after{transform:translateX(20px)}
+
+/* iOS slider */
+.slidercell{flex-wrap:wrap;padding:11px 16px 14px}
+.slidercell .slider{flex-basis:100%;margin-top:12px}
+.slider{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--blue) var(--p,50%),var(--fill2) var(--p,50%));margin:0;cursor:pointer}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
+.slider::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:6px;padding:13px 22px;font-weight:600;font-size:15px;background:var(--ink);color:var(--page)}
-.btn:active{transform:translateY(1px)}
-.btn[disabled]{opacity:.4;cursor:default}
-.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.btn.small{padding:8px 13px;font-size:14px}
-.ibtn{width:44px;height:44px;border:0;border-radius:6px;background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--rule);display:grid;place-items:center}
-.ibtn svg{width:20px;height:20px}
-.ibtn:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-size:17px;font-weight:600}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn:not([disabled]):active{opacity:.75}
+.plain{display:block;width:100%;height:44px;border:0;background:none;color:var(--blue);font-size:17px}
+.spin{width:18px;height:18px;border:2.2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* board */
-.board{position:relative;background:var(--board);border-radius:4px;overflow:hidden}
-.fig{display:block;width:100%;height:100%}
-.fig .gl{stroke:var(--grid);stroke-width:1}
-.fig .glM{stroke:var(--grid-major);stroke-width:1}
-.fig .plumb{stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:3 5}
-.fig .level{stroke:var(--lvl);stroke-width:1.5;stroke-dasharray:3 5;transition:stroke .4s}
-.fig .body,.fig .neck,.fig .head{fill:var(--ink)}
-.fig .mk{fill:var(--lvl);stroke:var(--board);stroke-width:3;transition:fill .4s}
-.fig .bracket line{stroke:var(--lvl);stroke-width:2;transition:stroke .4s}
-.fig[data-level="away"] .body,.fig[data-level="away"] .neck,.fig[data-level="away"] .head{fill:var(--ink-3);opacity:.35}
-.chip{position:absolute;left:12px;top:12px;font-size:13px;font-weight:700;background:var(--page);padding:6px 9px;border-radius:3px;box-shadow:0 0 0 1px var(--grid-major);font-variant-numeric:tabular-nums}
-.inset{position:absolute;right:12px;top:12px;width:30%;min-width:110px;max-width:210px}
-.inset .cam{border-radius:3px;box-shadow:0 0 0 1px var(--grid-major)}
+/* segmented control */
+.seg{display:flex;background:var(--fill);border-radius:9px;padding:2px;margin-bottom:12px}
+.seg button{flex:1;height:28px;border:0;background:none;border-radius:7px;font-size:13px;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--segsel);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 
-/* onboarding */
-.onboard{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;min-height:calc(100dvh - 180px)}
-.onboard h1{margin:0 0 32px;font-family:var(--display);font-weight:800;font-size:clamp(60px,8vw,112px);line-height:.92}
-.onboard .board{aspect-ratio:8/9;max-height:72vh;width:100%}
-.fine{margin-top:18px;font-size:13px;color:var(--ink-3)}
-.err{color:var(--bad);font-weight:600}
+/* ---------- onboarding (Apple welcome sheet) ---------- */
+.welcome{max-width:400px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(56px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))}
+.appicon{width:92px;height:92px;border-radius:21px;margin:0 auto 22px;display:block;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.welcome h1{font-size:34px;line-height:41px;font-weight:700;text-align:center;margin:0}
+.welcome .sub{color:var(--label2);text-align:center;margin-top:6px}
+.feats{list-style:none;margin:44px 0 0;padding:0 8px;display:grid;gap:26px}
+.feats li{display:flex;align-items:center;gap:18px;font-size:17px;font-weight:600}
+.feats svg{width:34px;height:34px;flex:none}
+.welcome .bottom{margin-top:auto;padding-top:32px}
+.privacy{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;color:var(--label2);text-align:center;margin-bottom:18px}
+.privacy svg{width:24px;height:24px;color:var(--blue)}
+.foot{font-size:13px;color:var(--label2);text-align:center;min-height:18px;margin-top:10px}
+.foot.err{color:var(--red)}
 
-/* camera */
-.cam{position:relative;width:100%;aspect-ratio:var(--ar,4/3);overflow:hidden;background:#080d18;border-radius:4px}
+/* ---------- calibration (Face ID style) ---------- */
+.enroll{max-width:420px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 24px calc(24px + env(safe-area-inset-bottom))}
+.enroll .navbar{justify-content:flex-start}
+.enroll h1{font-size:28px;line-height:34px;font-weight:700;text-align:center;margin:14px 0 0}
+.enroll .sub{color:var(--label2);text-align:center;margin-top:8px;min-height:22px}
+.ring-cam{position:relative;width:min(290px,76vw);aspect-ratio:1;margin:34px auto 0}
+.ring-cam .ticks{position:absolute;inset:0;width:100%;height:100%}
+.ring-cam .ticks line{stroke:var(--fill2);stroke-width:3.2;stroke-linecap:round;transition:stroke .15s}
+.ring-cam .ticks line.on{stroke:var(--green)}
+.lens{position:absolute;inset:11%;border-radius:50%;overflow:hidden;background:#000}
+.lens .cam{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:50%}
+.ring-cam .count{position:absolute;inset:11%;display:grid;place-items:center;font:700 96px var(--round);color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.45);pointer-events:none}
+.ring-cam .done{position:absolute;inset:11%;display:grid;place-items:center;border-radius:50%;background:var(--card)}
+.ring-cam .done svg{width:46%;height:46%}
+.enroll .bottom{margin-top:auto;padding-top:28px}
+
+/* ---------- camera ---------- */
+.cam{position:relative;width:100%;aspect-ratio:var(--ar,4/3);overflow:hidden;background:#000;border-radius:10px}
 .cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1)}
 .cam video{object-fit:cover}
-.cam .count{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:150px;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.45);pointer-events:none}
-.cam .oval{position:absolute;left:50%;top:42%;width:32%;aspect-ratio:3/4;transform:translate(-50%,-50%);border:2px dashed rgba(255,255,255,.6);border-radius:50%;pointer-events:none}
-.cam .hint{position:absolute;left:12px;bottom:12px;font-size:14px;font-weight:600;color:#fff;background:rgba(8,13,24,.7);padding:6px 10px;border-radius:4px;pointer-events:none}
+.cam canvas{object-fit:cover}
 
-/* calibration */
-.calib{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center}
-.dots{display:flex;gap:8px;margin-bottom:22px}
-.dots i{width:28px;height:4px;background:var(--rule)}
-.dots i.done{background:var(--ok)} .dots i.now{background:var(--bad)}
-.say{font-family:var(--display);font-weight:800;font-size:52px;line-height:.95;margin-bottom:24px}
-.tape{position:relative;height:30px;background:var(--board);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.tape .fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--bad);transition:width .12s linear}
-.tape .ticks{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/60 - 1px),color-mix(in srgb,var(--ink) 22%,transparent) calc(100%/60 - 1px) calc(100%/60))}
-.tape .ticks::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/6 - 2px),color-mix(in srgb,var(--ink) 45%,transparent) calc(100%/6 - 2px) calc(100%/6));clip-path:inset(0 0 45% 0)}
-.count2{text-align:right;font-size:13px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-bottom:22px}
-.acc{font-family:var(--display);font-weight:900;font-size:120px;line-height:.82}
-.acc small{display:block;font-family:var(--body);font-size:14px;font-weight:600;color:var(--ink-3);margin:10px 0 26px}
+/* ---------- posture tab ---------- */
+.now{display:flex;align-items:center;gap:20px}
+.ring{width:128px;height:128px;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:14;stroke-linecap:round}
+.ring .track{stroke:var(--lvl);opacity:.2;transition:stroke .4s}
+.ring .prog{stroke:var(--lvl);transition:stroke-dashoffset .5s ease,stroke .4s}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;font:700 34px var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ring .num small{font-size:17px;font-weight:600;margin-left:1px}
+.now .status{font-size:22px;line-height:28px;font-weight:700}
+.now .neck{color:var(--label2);font-size:15px;margin-top:4px;min-height:20px}
+.figbox{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg)}
+.figbox .cam{position:absolute;inset:0;height:100%;aspect-ratio:auto;border-radius:0}
+.fig{display:block;width:100%;height:100%}
+.fig .gl{stroke:var(--sep);stroke-width:.6;opacity:.6}
+.fig .plumb{stroke:var(--label3);stroke-width:1.5;stroke-dasharray:3 5}
+.fig .level{stroke:var(--lvl);stroke-width:1.5;stroke-dasharray:3 5;transition:stroke .4s}
+.fig .sil{fill:var(--label);opacity:.86;transition:opacity .4s}
+.fig .mk{fill:var(--lvl);stroke:var(--bg);stroke-width:3;transition:fill .4s}
+.fig .bracket line{stroke:var(--lvl);stroke-width:2;transition:stroke .4s}
+.fig[data-level="away"] .sil{opacity:.22}
+.metrics{display:flex;gap:28px}
+.metrics .cap{font-size:13px;font-weight:600;color:var(--label2)}
+.metrics b{display:block;font:700 28px/1.15 var(--round);font-variant-numeric:tabular-nums}
+.metrics b small{font-size:17px;font-weight:600}
+#timeline{width:100%;height:84px;display:block;margin-top:14px}
 
-/* monitor */
-.monitor{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
-.monitor .board{aspect-ratio:8/9;max-height:calc(100dvh - 160px);width:100%}
-.pct{font-family:var(--display);font-weight:900;font-size:clamp(140px,16vw,220px);line-height:.8;color:var(--lvl);font-variant-numeric:tabular-nums;transition:color .4s}
-.pct small{font-size:.42em;margin-left:2px}
-.status{font-size:28px;font-weight:700;margin-top:16px;letter-spacing:-.01em}
-#timeline{width:100%;height:70px;display:block;margin-top:28px}
-.mini{display:flex;gap:32px;margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
-.mini b{display:block;font-family:var(--display);font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
-.mini span{font-size:13px;color:var(--ink-3)}
-.controls{display:flex;gap:8px;margin-top:24px}
+/* ---------- devices tab ---------- */
+.summary .cap{font-size:15px;font-weight:600;color:var(--label2)}
+.summary b{display:block;font:700 54px/1.05 var(--round);font-variant-numeric:tabular-nums;margin-top:2px}
+.summary b small{font-size:28px}
+.cell .sub2{display:block;font-size:13px;color:var(--label2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;vertical-align:middle}
 
-/* devices */
-.devices{max-width:640px}
-.big{font-family:var(--display);font-weight:900;font-size:130px;line-height:.82;font-variant-numeric:tabular-nums}
-.big+small{display:block;font-size:14px;font-weight:600;color:var(--ink-3);margin:10px 0 30px}
-.dlist{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--ink)}
-.dlist li{display:grid;grid-template-columns:26px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--rule)}
-.dlist svg{width:24px;height:24px;display:block;color:var(--ink-2)}
-.dlist .name{font-weight:600}
-.dlist .name.here{color:var(--bad)}
-.dlist .val{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+/* ---------- tab bar ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);background:var(--bar);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);border-top:.5px solid var(--sep)}
+.tabbar button{flex:1;max-width:180px;height:49px;border:0;background:none;color:#999999;display:grid;place-items:center}
+.tabbar button[aria-current="page"]{color:var(--blue)}
+.tabbar svg{width:28px;height:28px}
 
-/* settings */
-.settings{max-width:560px}
-.field{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:58px;border-bottom:1px solid var(--rule)}
-.field:first-child{border-top:1.5px solid var(--ink)}
-.field>label,.field>span:first-child{font-weight:600}
-.field select{border:1.5px solid var(--rule);background:var(--page);border-radius:5px;padding:7px 10px}
-.range{display:flex;align-items:center;gap:10px}
-.range input{width:150px;accent-color:var(--bad)}
-.range output{font-family:var(--display);font-weight:800;font-size:26px;width:2.2em;text-align:right;font-variant-numeric:tabular-nums}
-.switch input{appearance:none;-webkit-appearance:none;margin:0;position:relative;width:46px;height:26px;border-radius:5px;background:var(--grid-major);transition:background .2s;cursor:pointer;display:block}
-.switch input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:3px;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
-.switch input:checked{background:var(--ink)}
-.switch input:checked::after{transform:translateX(20px)}
-details{border-bottom:1px solid var(--rule)}
-summary{list-style:none;cursor:pointer;min-height:58px;display:flex;align-items:center;justify-content:space-between;font-weight:600}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);margin-right:4px;transition:transform .2s}
-details[open] summary::after{transform:rotate(-135deg)}
-.dbody{display:grid;gap:10px;padding:0 0 18px}
-.dbody input[type=text],.dbody input[type=password]{width:100%;border:1.5px solid var(--rule);background:var(--page);border-radius:5px;padding:10px 12px}
-.note{font-size:13px;color:var(--ink-3)}
+/* ---------- iOS notification banner ---------- */
+.banner{position:fixed;z-index:50;left:50%;top:max(8px,env(safe-area-inset-top));width:min(400px,calc(100% - 16px));transform:translate(-50%,-140%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1.08),visibility 0s .45s;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:22px;background:var(--banner);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);box-shadow:0 10px 30px rgba(0,0,0,.18);cursor:pointer;border:0;text-align:left;color:var(--label)}
+.banner.show{transform:translate(-50%,0);visibility:visible;transition:transform .45s cubic-bezier(.2,.9,.25,1.08)}
+.banner img{width:38px;height:38px;border-radius:9px;flex:none}
+.banner .bt{display:flex;justify-content:space-between;gap:8px;font-size:15px;font-weight:600}
+.banner .bt span{font-size:13px;font-weight:400;color:var(--label2)}
+.banner p{font-size:15px}
+.banner>div{flex:1}
+.hud{position:fixed;z-index:49;left:50%;bottom:calc(66px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:10px 16px;border-radius:14px;background:var(--banner);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:0 6px 20px rgba(0,0,0,.15);font-size:15px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;max-width:calc(100vw - 32px)}
+.hud.show{opacity:1}
 
-/* alert + toast */
-.alert{position:fixed;z-index:50;left:50%;top:max(12px,env(safe-area-inset-top));transform:translate(-50%,-150%);visibility:hidden;transition:transform .3s cubic-bezier(.2,.9,.3,1.15),visibility 0s .3s;display:flex;align-items:center;gap:18px;padding:10px 10px 10px 18px;border-radius:6px;background:var(--bad);color:#fff;box-shadow:0 14px 34px -14px rgba(238,46,108,.7)}
-.alert.show{transform:translate(-50%,0);visibility:visible;transition:transform .3s cubic-bezier(.2,.9,.3,1.15)}
-.alert b{font-size:17px;white-space:nowrap}
-.alert button{border:0;background:#fff;color:var(--bad);font-weight:700;padding:8px 14px;border-radius:4px}
-.toast{position:fixed;z-index:49;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--page);padding:9px 14px;border-radius:5px;font-size:14px;font-weight:600;max-width:calc(100vw - 32px);opacity:0;pointer-events:none;transition:opacity .25s}
-.toast.show{opacity:1}
-
-@media (max-width: 920px){
-  .onboard,.calib,.monitor{grid-template-columns:1fr;gap:26px}
-  .onboard{min-height:auto}
-  .onboard .board{order:-1;aspect-ratio:5/4;max-height:52vh}
-  .monitor .board{aspect-ratio:5/4;max-height:none}
-}
-@media (max-width: 640px){
-  .top{padding:12px 16px}
-  .nav{position:fixed;left:0;right:0;bottom:0;z-index:30;gap:0;background:var(--page);border-top:1px solid var(--rule);padding:0 0 env(safe-area-inset-bottom)}
-  .nav button{flex:1;height:58px;width:auto}
-  .nav button svg{width:26px;height:26px}
-  .nav button[aria-current="page"]::after{top:0;bottom:auto;left:38%;right:38%}
-  main{padding:20px 16px 100px}
-  .onboard h1{font-size:62px}
-  .monitor .board{aspect-ratio:1/1}
-  .say{font-size:42px}
-  .acc,.big{font-size:100px}
-  .range input{width:110px}
+@media (min-width: 860px){
+  .grid.posture{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto 1fr;align-items:start}
+  .grid.posture .figcard{grid-row:span 2}
+  .figbox{aspect-ratio:4/5}
+  .settings-wrap,.devices-wrap{max-width:620px;margin:0 auto}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
-<header class="top">
-  <a class="brand" href="#" data-go="home" aria-label="Earline home">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="5" fill="currentColor"/><path d="M5 32 Q6 25 11 23.5 L21 23.5 Q26 25 27 32Z" fill="var(--page)"/><rect x="13.5" y="17" width="5" height="8" rx="2" fill="var(--page)"/><ellipse cx="16" cy="12.5" rx="5.6" ry="6.6" fill="var(--page)"/><circle cx="10.6" cy="13.4" r="1.9" fill="#EE2E6C"/><circle cx="21.4" cy="13.4" r="1.9" fill="#EE2E6C"/></svg>
-    Earline
-  </a>
-  <nav class="nav" aria-label="Main">
-    <button data-go="monitor" aria-label="Posture" title="Posture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="8" rx="3.6" ry="4.2"/><path d="M10.6 12v2.2M13.4 12v2.2M4 21c.6-3.6 2.8-5.6 6-6.2h4c3.2.6 5.4 2.6 6 6.2"/></svg></button>
-    <button data-go="devices" aria-label="Devices" title="Devices"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="13" height="9.5" rx="1.5"/><path d="M5.5 18h7"/><rect x="17.5" y="8" width="4.5" height="11.5" rx="1.2"/></svg></button>
-    <button data-go="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
-  </nav>
-</header>
-
-<main>
-  <section data-view="onboard" class="onboard">
-    <div>
-      <h1>Your neck shouldn't disappear.</h1>
-      <button class="btn" id="btnBegin">Start</button>
-      <p id="obStatus" class="fine" role="status" aria-live="polite">Video stays on this device.</p>
+<!-- ========== welcome ========== -->
+<section data-view="onboard" hidden>
+  <div class="welcome">
+    <img class="appicon" src="icon-180.png" alt="">
+    <h1>Earline</h1>
+    <p class="sub">Turtle-neck alerts that learn you.</p>
+    <ul class="feats">
+      <li><svg viewBox="0 0 34 34" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11V7a2 2 0 0 1 2-2h4M23 5h4a2 2 0 0 1 2 2v4M29 23v4a2 2 0 0 1-2 2h-4M11 29H7a2 2 0 0 1-2-2v-4"/><circle cx="17" cy="14" r="4.2"/><path d="M10.5 25c1.2-3.4 3.6-5 6.5-5s5.3 1.6 6.5 5"/></svg>Learns your posture</li>
+      <li><svg viewBox="0 0 34 34" fill="var(--red)"><path d="M17 4.5c-4.9 0-8.3 3.8-8.3 8.6v5.3l-2.6 3.9c-.6.9 0 2.1 1.1 2.1h19.6c1.1 0 1.7-1.2 1.1-2.1l-2.6-3.9v-5.3c0-4.8-3.4-8.6-8.3-8.6zM13.6 26.5a3.5 3.5 0 0 0 6.8 0z"/></svg>Alerts you in seconds</li>
+      <li><svg viewBox="0 0 34 34" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="19" height="13.5" rx="2"/><path d="M8 25h10"/><rect x="24.5" y="11" width="7" height="16" rx="1.8"/></svg>Works on every device</li>
+    </ul>
+    <div class="bottom">
+      <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg>Video stays on this device.</p>
+      <button class="btn" id="btnBegin">Continue</button>
+      <p class="foot" id="obStatus" role="status" aria-live="polite"></p>
     </div>
-    <div class="board" id="obBoard" data-level="ok"></div>
-  </section>
+  </div>
+</section>
 
-  <section data-view="calib" class="calib" hidden>
-    <div id="camSlotCalib"></div>
-    <div id="calBody"></div>
-  </section>
-
-  <section data-view="monitor" class="monitor" hidden>
-    <div class="board" id="mBoard">
-      <div class="inset" id="camSlotMonitor"></div>
-      <p class="chip" id="mChip" hidden></p>
+<!-- ========== calibration ========== -->
+<section data-view="calib" hidden>
+  <div class="enroll">
+    <div class="navbar"><button class="nbtext" id="calCancel">Cancel</button></div>
+    <h1 id="calTitle">Sit up straight</h1>
+    <p class="sub" id="calSub">Keep your face in the circle.</p>
+    <div class="ring-cam">
+      <svg class="ticks" id="calTicks" viewBox="0 0 300 300" aria-hidden="true"></svg>
+      <div class="lens" id="camSlotCalib"></div>
+      <div class="count" id="camCount" hidden></div>
+      <div class="done" id="calDone" hidden></div>
     </div>
-    <div id="readout" data-level="ok">
-      <div class="pct" id="mPct">–<small>%</small></div>
-      <p class="status" id="mStatus">–</p>
-      <button class="btn small" data-act="calib" id="mCal" hidden style="margin-top:16px">Calibrate</button>
+    <p class="foot" id="calHint"></p>
+    <div class="bottom">
+      <button class="btn" id="calBtn">Start</button>
+      <button class="plain" id="calBtn2" hidden></button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== posture ========== -->
+<section data-view="monitor" class="screen" hidden>
+  <div class="navbar">
+    <button class="nb" id="btnWidget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="2.5"/><rect x="12" y="11" width="7" height="5.5" rx="1.2" fill="currentColor"/></svg></button>
+    <button class="nb" data-act="calib" aria-label="Recalibrate" title="Recalibrate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></button>
+    <button class="nb" id="btnPause" aria-label="Pause" title="Pause"></button>
+  </div>
+  <h1 class="large">Posture</h1>
+  <div class="grid posture">
+    <div class="card now" id="nowCard" data-level="ok">
+      <div class="ring" id="ring">
+        <svg viewBox="0 0 128 128" aria-hidden="true"><circle class="track" cx="64" cy="64" r="55"/><circle class="prog" cx="64" cy="64" r="55"/></svg>
+        <div class="num" id="ringNum">–</div>
+      </div>
+      <div><p class="status" id="mStatus">–</p><p class="neck" id="mSub"></p>
+        <button class="btn" data-act="calib" id="mCal" hidden style="height:36px;border-radius:18px;font-size:15px;width:auto;padding:0 16px;margin-top:10px">Calibrate</button></div>
+    </div>
+    <div class="card figcard">
+      <div class="seg" role="group" aria-label="View">
+        <button id="segFig" aria-pressed="true">Figure</button>
+        <button id="segCam" aria-pressed="false">Camera</button>
+      </div>
+      <div class="figbox" id="figBox"><div id="camSlotMonitor"></div></div>
+    </div>
+    <div class="card">
+      <div class="metrics">
+        <div><span class="cap">Upright</span><b id="stGood">–</b></div>
+        <div><span class="cap">Alerts</span><b id="stAlerts">0</b></div>
+      </div>
       <canvas id="timeline" aria-label="Last 5 minutes"></canvas>
-      <div class="mini">
-        <div><b id="stGood">–</b><span>upright today</span></div>
-        <div><b id="stAlerts">0</b><span>alerts</span></div>
-      </div>
-      <div class="controls">
-        <button class="ibtn" id="btnPause" aria-label="Pause" title="Pause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
-        <button class="ibtn" id="btnWidget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="3" y="4" width="18" height="15" rx="1.5"/><rect x="12" y="11" width="7" height="6" rx="1" fill="currentColor"/></svg></button>
-        <button class="ibtn" data-act="calib" aria-label="Recalibrate" title="Recalibrate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
-      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section data-view="devices" class="devices" hidden>
-    <div class="big" id="totPct">–</div><small>upright today</small>
-    <ul class="dlist" id="devList"></ul>
-  </section>
+<!-- ========== devices ========== -->
+<section data-view="devices" class="screen" hidden>
+  <div class="navbar"></div>
+  <div class="devices-wrap">
+    <h1 class="large">Devices</h1>
+    <div class="card summary" style="margin-bottom:34px"><span class="cap">Upright today</span><b id="totPct">–</b></div>
+    <div class="list" id="devList"></div>
+  </div>
+</section>
 
-  <section data-view="settings" class="settings" hidden>
-    <div class="field"><label for="devSel">Device</label>
-      <select id="devSel"><option value="laptop">Laptop</option><option value="tablet">Tablet</option><option value="phone">Phone</option></select></div>
-    <div class="field"><label for="setThr">Alert at</label>
-      <div class="range"><input type="range" id="setThr" min="60" max="99" step="1"><output id="setThrOut">90</output></div></div>
-    <div class="field"><label for="setSound">Sound</label><span class="switch"><input type="checkbox" id="setSound"></span></div>
-    <div class="field"><span>Notifications</span><button class="btn small line" id="btnNotif">Allow</button></div>
-    <div class="field"><label for="setPreview">Camera preview</label><span class="switch"><input type="checkbox" id="setPreview"></span></div>
-    <div class="field"><span>Cushion</span><button class="btn small line" id="btnCushion">Connect</button></div>
-    <div class="field"><label for="setBuzz">Buzz on alert</label><span class="switch"><input type="checkbox" id="setBuzz"></span></div>
-    <div class="field"><span>Calibration</span><button class="btn small line" data-act="calib">Redo</button></div>
-    <details>
-      <summary>Cloud sync</summary>
-      <div class="dbody">
-        <input type="text" id="dbUrl" placeholder="Supabase URL" autocomplete="off" spellcheck="false" aria-label="Supabase URL">
-        <input type="password" id="dbKey" placeholder="Anon key" autocomplete="off" spellcheck="false" aria-label="Anon key">
-        <input type="text" id="dbUser" placeholder="Your code" autocomplete="off" spellcheck="false" aria-label="Your code">
-        <div class="row"><button class="btn small" id="btnDbSave">Sync</button><button class="btn small line" id="btnDbOff">Disconnect</button><span class="note" id="dbState"></span></div>
-      </div>
-    </details>
-    <details>
-      <summary>Data</summary>
-      <div class="dbody row">
-        <button class="btn small line" id="btnExport">Export</button>
-        <label class="btn small line" for="importFile">Import</label>
-        <input type="file" id="importFile" accept="application/json" hidden>
-        <button class="btn small line" id="btnReset" style="color:var(--bad);box-shadow:inset 0 0 0 1.5px var(--bad)">Erase</button>
-      </div>
-    </details>
-  </section>
-</main>
+<!-- ========== settings ========== -->
+<section data-view="settings" class="screen" hidden>
+  <div class="navbar"></div>
+  <div class="settings-wrap">
+    <h1 class="large">Settings</h1>
+
+    <div class="list">
+      <label class="cell"><span class="ico" style="background:var(--gray)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><span class="t">Device</span>
+        <select id="devSel"><option value="laptop">Laptop</option><option value="tablet">Tablet</option><option value="phone">Phone</option></select>
+        <svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></label>
+      <button class="cell action" data-act="calib"><span class="ico" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></span><span class="t">Recalibrate</span></button>
+    </div>
+
+    <div class="list">
+      <div class="cell slidercell"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span><span class="t"><label for="setThr">Alert at</label></span><span class="v" id="setThrOut">90%</span>
+        <input class="slider" type="range" id="setThr" min="60" max="99" step="1"></div>
+      <label class="cell"><span class="ico" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5h3.2L12 5.2v13.6l-4.8-4.3H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="t">Sound</span><input class="sw" type="checkbox" id="setSound"></label>
+      <button class="cell" id="btnNotif"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="3.6"/></svg></span><span class="t">Notifications</span><span class="v" id="notifVal">Off</span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
+    </div>
+
+    <div class="list">
+      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
+      <label class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
+    </div>
+
+    <div class="list">
+      <details>
+        <summary class="cell"><span class="ico" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 19h10.5a4 4 0 0 0 .6-8A6 6 0 0 0 6.6 9.6 4.7 4.7 0 0 0 7 19z"/></svg></span><span class="t">Cloud Sync</span><span class="v" id="dbState"></span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></summary>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUrl" placeholder="Supabase URL" autocomplete="off" spellcheck="false" aria-label="Supabase URL"></div>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="password" id="dbKey" placeholder="Anon key" autocomplete="off" spellcheck="false" aria-label="Anon key"></div>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUser" placeholder="Your code" autocomplete="off" spellcheck="false" aria-label="Your code"></div>
+        <button class="cell action" id="btnDbSave" style="padding-left:57px"><span class="t">Sync Now</span></button>
+        <button class="cell danger" id="btnDbOff" style="padding-left:57px"><span class="t">Disconnect</span></button>
+      </details>
+    </div>
+
+    <div class="list noicon">
+      <button class="cell action" id="btnExport"><span class="t">Export Data</span></button>
+      <label class="cell action" for="importFile" style="cursor:pointer"><span class="t">Import Data</span></label>
+      <button class="cell danger" id="btnReset"><span class="t">Erase All Data</span></button>
+    </div>
+  </div>
+</section>
+
+<input type="file" id="importFile" accept="application/json" hidden>
+
+<nav class="tabbar" id="tabbar" aria-label="Main" hidden>
+  <button data-go="monitor" aria-label="Posture" title="Posture"><svg viewBox="0 0 28 28" fill="currentColor"><ellipse cx="14" cy="8.6" rx="4.6" ry="5.4"/><path d="M11.6 14h4.8v3.4h-4.8z"/><path d="M4.5 25.5c.6-4.6 3.3-7.6 7.5-8.4h4c4.2.8 6.9 3.8 7.5 8.4z"/></svg></button>
+  <button data-go="devices" aria-label="Devices" title="Devices"><svg viewBox="0 0 28 28" fill="currentColor"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h12A2.5 2.5 0 0 1 20 6.5V7h-2.2v-.3a.7.7 0 0 0-.7-.7H5.9a.7.7 0 0 0-.7.7v9.6c0 .4.3.7.7.7H15V19H5.5A2.5 2.5 0 0 1 3 16.5z"/><path d="M6 21h9v2H6z"/><rect x="17" y="9" width="8.5" height="15" rx="2"/></svg></button>
+  <button data-go="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="9.6" fill="none" stroke="currentColor" stroke-width="3.6" stroke-dasharray="3.77 3.77"/><circle cx="14" cy="14" r="7.1" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="14" r="2.6" fill="currentColor"/></svg></button>
+</nav>
 
 <div id="camFrame" class="cam" hidden>
   <video id="video" playsinline muted autoplay></video>
   <canvas id="overlay"></canvas>
-  <div class="oval" id="camOval" hidden></div>
-  <div class="count" id="camCount" hidden></div>
-  <div class="hint" id="camHint" hidden></div>
 </div>
 
-<div class="alert" id="alert" role="alert"><b>Turtle neck</b><button id="alertOk">OK</button></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="banner" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt">Turtle neck<span>now</span></div><p>Sit up straight.</p></div></button>
+<div class="hud" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module">
 /* Earline: collect samples -> train personal model -> live risk vs threshold (same 3 steps as Face-id) */
@@ -349,14 +407,16 @@ const Cloud = {
 
 /* devices */
 const DEV = { laptop: 'Laptop', tablet: 'Tablet', phone: 'Phone' };
-const ICONS = {
-  laptop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>',
-  tablet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 18h2"/></svg>',
-  phone:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>',
-  cushion:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="9" width="18" height="9" rx="3.5"/><path d="M7 5.5c1 1 1 2 0 3M12 5c1 1.2 1 2.4 0 3.6M17 5.5c1 1 1 2 0 3"/></svg>'
+const DEV_ICON = {
+  laptop: ['var(--gray)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>'],
+  tablet: ['var(--indigo)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 18h2"/></svg>'],
+  phone:  ['var(--green)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>'],
+  cushion:['var(--orange)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg>']
 };
-const PAUSE_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
-const PLAY_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>';
+const PAUSE_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="1.2"/><rect x="14" y="4.5" width="4" height="15" rx="1.2"/></svg>';
+const PLAY_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 4.6c0-.8.9-1.3 1.6-.9l10.6 6.6c.7.4.7 1.4 0 1.8L9.1 18.7c-.7.4-1.6-.1-1.6-.9z"/></svg>';
+const CHECK_SVG = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--green)"/><path d="M29 51.5 43.5 66 72 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const WARN_SVG = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--orange)"/><path d="M50 27v30" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="72" r="5" fill="#fff"/></svg>';
 function detectDevice() {
   const ua = navigator.userAgent;
   const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
@@ -376,7 +436,7 @@ const profileKey = () => S.device === 'laptop' ? 'laptop' : `${S.device}-${orien
 const S = {
   device: Store.get('device', null) || detectDevice(),
   view: 'onboard', started: false, paused: false,
-  settings: Object.assign({ threshold: 90, sound: true, preview: true, buzz: true }, Store.get('settings', {})),
+  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false }, Store.get('settings', {})),
   profiles: Store.get('profiles', {}),
   stats: Store.get('stats', {}),
   cloudDaily: {},
@@ -508,14 +568,14 @@ function predict(prof, obs) {
 
 /* ---------- camera + loop (Worker timer keeps running in background tabs) ---------- */
 function cameraError(e) {
-  const m = { NotAllowedError: 'Camera blocked. Allow it in the address bar.', NotFoundError: 'No camera found.', NotReadableError: 'Camera is in use by another app.' };
+  const m = { NotAllowedError: 'Camera access is off. Allow it in your browser settings.', NotFoundError: 'No camera found.', NotReadableError: 'Another app is using the camera.' };
   return new Error(m[e.name] || `Camera error (${e.name || e.message})`);
 }
 async function startCamera() {
   if (S.stream) return;
   if (!navigator.mediaDevices?.getUserMedia) {
     if (SIM) return;
-    throw new Error(isSecureContext ? 'No camera support in this browser.' : 'Needs https or localhost.');
+    throw new Error(isSecureContext ? 'This browser can\'t use the camera.' : 'Open this page over https.');
   }
   try { S.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false }); }
   catch (e) { if (SIM) return; throw cameraError(e); }
@@ -565,8 +625,17 @@ async function tick() {
   finally { S.busy = false; }
 }
 
-/* ---------- step 1: collect samples ---------- */
+/* ---------- step 1: collect samples (Face ID-style ring) ---------- */
 const C = { step: 'good', state: 'idle', good: [], bad: [], result: null };
+(function buildTicks() {
+  const g = $('#calTicks'); let h = '';
+  for (let i = 0; i < SAMPLES_PER_POSE; i++) {
+    const a = (i / SAMPLES_PER_POSE) * Math.PI * 2 - Math.PI / 2, c = Math.cos(a), s = Math.sin(a);
+    h += `<line x1="${(150 + c * 132).toFixed(1)}" y1="${(150 + s * 132).toFixed(1)}" x2="${(150 + c * 146).toFixed(1)}" y2="${(150 + s * 146).toFixed(1)}"/>`;
+  }
+  g.innerHTML = h;
+})();
+function setTicks(n) { $$('#calTicks line').forEach((l, i) => l.classList.toggle('on', i < n)); }
 function calibReset() { C.step = 'good'; C.state = 'idle'; C.good = []; C.bad = []; C.result = null; renderCalib(); }
 async function calibCapture() {
   if (C.state !== 'idle') return;
@@ -577,11 +646,11 @@ async function calibCapture() {
   C[C.step] = []; C.state = 'capturing'; renderCalib();
 }
 function calibTick(obs) {
-  setHint(obs.face || C.step === 'done' ? '' : 'No face');
+  $('#calHint').textContent = (C.step === 'good' || C.step === 'bad') && !obs.face ? 'Move into the circle' : '';
   if (C.state !== 'capturing' || !obs.face) return;
   const arr = C[C.step];
   arr.push({ f: obs.face.vec, p: obs.pose?.vec || null, yaw: obs.face.yaw });
-  setTape(arr.length);
+  setTicks(arr.length);
   if (arr.length >= SAMPLES_PER_POSE) {
     if (C.step === 'good') { C.step = 'bad'; C.state = 'idle'; renderCalib(); }
     else { C.step = 'train'; trainNow(); }
@@ -590,7 +659,7 @@ function calibTick(obs) {
 /* step 2: train */
 async function trainNow() {
   C.state = 'training'; renderCalib();
-  await sleep(400);
+  await sleep(500);
   const prof = trainProfile(C.good, C.bad);
   S.profiles[prof.key] = prof; Store.set('profiles', S.profiles);
   if (Cloud.on()) Cloud.pushProfile(prof).catch(e => toast(e.message));
@@ -651,11 +720,11 @@ function unlockAudio() { try { audioCtx ??= new (window.AudioContext || window.w
 function chime() {
   if (!S.settings.sound || !audioCtx) return;
   const t = audioCtx.currentTime;
-  [[660, 0], [880, 0.16]].forEach(([f, d]) => {
+  [[1046.5, 0], [1318.5, 0.12]].forEach(([f, d]) => {   // soft two-note "tri-tone"-like chime
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.type = 'sine'; o.frequency.value = f;
-    g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.18, t + d + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.45);
-    o.connect(g).connect(audioCtx.destination); o.start(t + d); o.stop(t + d + 0.5);
+    g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.14, t + d + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.5);
+    o.connect(g).connect(audioCtx.destination); o.start(t + d); o.stop(t + d + 0.55);
   });
 }
 async function pushNotify(title, body) {
@@ -666,21 +735,23 @@ async function pushNotify(title, body) {
     if (reg) await reg.showNotification(title, opts); else new Notification(title, opts);
   } catch (e) { console.warn(e); }
 }
+let bannerTimer;
 function fireAlert() {
   S.lastAlert = Date.now();
   statToday().alerts++;
-  pushNotify('Turtle neck', `Sit up (${Math.round(S.smooth * 100)}%)`);
+  pushNotify('Turtle neck', 'Sit up straight.');
   if (S.settings.buzz) buzz(1);
   $('#alert').classList.add('show');
+  clearTimeout(bannerTimer); bannerTimer = setTimeout(hideAlert, 6000);
   chime();
   navigator.vibrate?.([120, 60, 120]);
   if (document.hidden) {
     clearInterval(titleTimer); let on = false;
-    titleTimer = setInterval(() => { document.title = (on = !on) ? '● Turtle neck' : 'Earline'; }, 900);
+    titleTimer = setInterval(() => { document.title = (on = !on) ? 'Turtle neck' : 'Earline'; }, 900);
   }
 }
 function hideAlert() { $('#alert').classList.remove('show'); }
-$('#alertOk').onclick = hideAlert;
+$('#alert').onclick = hideAlert;
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(); requestWake(); }
 });
@@ -689,20 +760,16 @@ async function requestWake() {
   try { S.wake = await navigator.wakeLock.request('screen'); } catch {}
 }
 
-/* ---------- front-view figure on a posture grid ---------- */
+/* ---------- front-view figure ---------- */
 let figN = 0;
 function figureMarkup() {
   const id = 'pg' + (++figN);
   return `<svg class="fig" viewBox="0 0 320 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <pattern id="${id}a" width="16" height="16" patternUnits="userSpaceOnUse"><path class="gl" d="M16 0H0V16" fill="none"/></pattern>
-      <pattern id="${id}b" width="80" height="80" patternUnits="userSpaceOnUse"><path class="glM" d="M80 0H0V80" fill="none"/></pattern>
-    </defs>
-    <rect x="-200" y="-200" width="720" height="760" fill="url(#${id}a)"/>
-    <rect x="-200" y="-200" width="720" height="760" fill="url(#${id}b)"/>
+    <defs><pattern id="${id}" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20" fill="none"/></pattern></defs>
+    <rect x="-200" y="-200" width="720" height="760" fill="url(#${id})"/>
     <line class="plumb" x1="160" y1="-200" x2="160" y2="560"/>
     <line class="level" x1="-200" x2="520"/>
-    <path class="body"/><rect class="neck" rx="12"/><ellipse class="head"/>
+    <g class="sil"><path class="body"/><rect class="neck" rx="12"/><ellipse class="head"/></g>
     <g class="bracket"><line class="bv"/><line class="bt1"/><line class="bt2"/></g>
     <circle class="mk earL" r="6"/><circle class="mk earR" r="6"/><circle class="mk shL" r="6"/><circle class="mk shR" r="6"/>
   </svg>`;
@@ -713,7 +780,7 @@ function drawFigure(svg, t) {
   const sy = L(262, 250), hw = L(98, 90), drop = L(26, 12);     // shoulders rise and round
   const nw = L(42, 46);
   const q = s => svg.querySelector(s), A = (el, o) => { for (const k in o) el.setAttribute(k, o[k]); };
-  A(q('.body'), { d: `M${136} ${sy - 12} Q${160 - hw + 12} ${sy - 4} ${160 - hw} ${sy + drop} Q${160 - hw - 16} ${sy + 60} ${160 - hw - 14} 380 L${160 + hw + 14} 380 Q${160 + hw + 16} ${sy + 60} ${160 + hw} ${sy + drop} Q${160 + hw - 12} ${sy - 4} ${184} ${sy - 12}Z` });
+  A(q('.body'), { d: `M136 ${sy - 12} Q${160 - hw + 12} ${sy - 4} ${160 - hw} ${sy + drop} Q${160 - hw - 16} ${sy + 60} ${160 - hw - 14} 380 L${160 + hw + 14} 380 Q${160 + hw + 16} ${sy + 60} ${160 + hw} ${sy + drop} Q${160 + hw - 12} ${sy - 4} 184 ${sy - 12}Z` });
   const neckTop = hcy + ry * 0.5;
   A(q('.neck'), { x: 160 - nw / 2, y: neckTop, width: nw, height: Math.max(0, sy - neckTop + 8) });
   A(q('.head'), { cx: 160, cy: hcy, rx, ry });
@@ -743,15 +810,15 @@ function setFigure(svg, p, level) {
   requestAnimationFrame(animateFigures);
 })();
 
-/* camera overlay */
+/* camera overlay (camera view only) */
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function drawOverlay(obs) {
   const c = S.overlay;
   if (document.hidden || $('#camFrame').hidden) return;
   if (c.width !== S.frameW) { c.width = S.frameW; c.height = S.frameH; }
   const g = c.getContext('2d'); g.clearRect(0, 0, c.width, c.height);
-  if (!obs.face) return;
-  const col = S.view === 'calib' ? '#FFFFFF' : cssVar(S.level === 'bad' ? '--bad' : S.level === 'warn' ? '--warn' : '--ok');
+  if (S.view === 'calib' || !obs.face) return;
+  const col = cssVar(S.level === 'bad' ? '--red' : S.level === 'warn' ? '--orange' : '--green');
   g.fillStyle = col; g.strokeStyle = col; g.lineWidth = 4; g.lineCap = 'round';
   if (obs.pose) {
     g.beginPath(); g.moveTo(obs.pose.sL.x, obs.pose.sL.y); g.lineTo(obs.pose.sR.x, obs.pose.sR.y); g.stroke();
@@ -761,7 +828,7 @@ function drawOverlay(obs) {
   for (const pt of [...obs.face.eyes, obs.face.nose, obs.face.chin]) { g.beginPath(); g.arc(pt.x, pt.y, 5, 0, 7); g.fill(); }
 }
 
-/* timeline */
+/* timeline (Health-style line) */
 function drawTimeline() {
   const c = $('#timeline'); const r = c.getBoundingClientRect(); if (!r.width) return;
   const dpr = devicePixelRatio || 1;
@@ -769,62 +836,66 @@ function drawTimeline() {
   const g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
   const W = r.width, H = r.height; g.clearRect(0, 0, W, H);
   const y = p => 4 + (1 - p) * (H - 8);
-  g.strokeStyle = cssVar('--bad'); g.setLineDash([3, 4]); g.lineWidth = 1.5;
+  g.strokeStyle = cssVar('--sep'); g.lineWidth = .5;
+  for (const p of [0, .5, 1]) { g.beginPath(); g.moveTo(0, y(p)); g.lineTo(W, y(p)); g.stroke(); }
+  g.strokeStyle = cssVar('--red'); g.setLineDash([3, 3]); g.lineWidth = 1;
   g.beginPath(); g.moveTo(0, y(S.settings.threshold / 100)); g.lineTo(W, y(S.settings.threshold / 100)); g.stroke(); g.setLineDash([]);
   const h = S.history; if (h.length < 2) return;
   const t1 = Date.now(), t0 = t1 - 300000, x = t => (t - t0) / 300000 * W;
   g.beginPath(); h.forEach((d, i) => i ? g.lineTo(x(d.t), y(d.p)) : g.moveTo(x(d.t), y(d.p)));
-  g.strokeStyle = cssVar('--ink'); g.lineWidth = 2; g.lineJoin = 'round'; g.stroke();
+  g.strokeStyle = cssVar('--blue'); g.lineWidth = 2; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke();
+  g.lineTo(x(h.at(-1).t), H); g.lineTo(x(h[0].t), H); g.closePath();
+  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, cssVar('--blue') + '40'); grad.addColorStop(1, cssVar('--blue') + '00');
+  g.fillStyle = grad; g.fill();
 }
 
 /* ---------- render ---------- */
-const STATUS = { ok: 'Good', warn: 'Leaning', bad: 'Turtle neck', away: 'Away', look: 'Look here', nocal: 'Not calibrated', paused: 'Paused' };
+const STATUS = { ok: 'Good', warn: 'Leaning', bad: 'Turtle Neck', away: 'Away', look: 'Look Here', nocal: 'Not Calibrated', paused: 'Paused' };
+const RING_C = 2 * Math.PI * 55;
 function render() {
   if (S.pip) renderWidget();
   if (document.hidden || S.view !== 'monitor') return;
   const on = S.mode === 'on' && !S.paused;
   const mode = S.paused ? 'paused' : on ? S.level : (S.mode || 'away');
-  $('#readout').dataset.level = on ? S.level : 'away';
-  $('#mPct').innerHTML = (on && S.smooth != null ? Math.round(S.smooth * 100) : '–') + '<small>%</small>';
+  $('#nowCard').dataset.level = on ? S.level : 'away';
+  const p = on && S.smooth != null ? S.smooth : 0;
+  const prog = $('#ring .prog'); prog.style.strokeDasharray = RING_C; prog.style.strokeDashoffset = RING_C * (1 - Math.max(p, on ? 0.02 : 0));
+  $('#ringNum').innerHTML = on && S.smooth != null ? `<span>${Math.round(S.smooth * 100)}<small>%</small></span>` : '–';
   $('#mStatus').textContent = STATUS[mode] || STATUS.away;
+  $('#mSub').textContent = on && S.neck != null ? `Neck ${Math.round(clamp(S.neck, 0, 1.5) * 100)}%` : '';
   $('#mCal').hidden = S.mode !== 'nocal';
-  const fig = $('#mBoard svg'); if (fig) setFigure(fig, on ? S.smooth : null, on ? S.level : 'away');
-  const chip = $('#mChip');
-  chip.hidden = !(on && S.neck != null);
-  if (!chip.hidden) chip.textContent = `Neck ${Math.round(clamp(S.neck, 0, 1.5) * 100)}%`;
+  const fig = $('#figBox svg'); if (fig) setFigure(fig, on ? S.smooth : null, on ? S.level : 'away');
   const st = statToday(), tot = st.good + st.bad;
-  $('#stGood').textContent = tot > 5 ? Math.round(st.good / tot * 100) + '%' : '–';
+  $('#stGood').innerHTML = tot > 5 ? `${Math.round(st.good / tot * 100)}<small>%</small>` : '–';
   $('#stAlerts').textContent = st.alerts;
   drawTimeline();
 }
-function setHint(t) { const h = $('#camHint'); h.hidden = !t; h.textContent = t; }
-function setTape(n) {
-  const f = $('#calBody .tape .fill'), l = $('#calBody .count2'); if (!f) return;
-  f.style.width = (n / SAMPLES_PER_POSE * 100) + '%'; l.textContent = `${n}/${SAMPLES_PER_POSE}`;
-}
 function renderCalib() {
-  const cur = C.step === 'done' ? 3 : ['good', 'bad', 'train'].indexOf(C.step);
-  const dots = `<div class="dots">${[0, 1, 2].map(i => `<i class="${i < cur ? 'done' : i === cur ? 'now' : ''}"></i>`).join('')}</div>`;
-  $('#camOval').hidden = !(C.step === 'good' || C.step === 'bad');
-  const body = $('#calBody');
-  if (C.step === 'good' || C.step === 'bad') {
-    const good = C.step === 'good', busy = C.state !== 'idle';
-    body.innerHTML = `${dots}
-      <p class="say">${good ? 'Sit up straight.' : 'Now slump forward.'}</p>
-      <div class="tape"><div class="fill"></div><div class="ticks"></div></div>
-      <p class="count2">0/${SAMPLES_PER_POSE}</p>
-      <div class="row">
-        <button class="btn" data-act="capture" ${busy ? 'disabled' : ''}>${busy ? '…' : 'Record'}</button>
-        ${!good && !busy ? '<button class="btn line" data-act="restart">Redo</button>' : ''}
-      </div>`;
-    setTape(C[C.step].length);
+  const good = C.step === 'good', capture = C.step === 'good' || C.step === 'bad';
+  const busy = C.state !== 'idle';
+  $('#calCancel').hidden = !currentProfile();
+  $('#camSlotCalib').hidden = !capture && C.state !== 'training';
+  const done = $('#calDone'), b1 = $('#calBtn'), b2 = $('#calBtn2');
+  b2.hidden = true; done.hidden = true;
+  if (capture) {
+    $('#calTitle').textContent = good ? 'Sit up straight' : 'Now slump forward';
+    $('#calSub').textContent = good ? 'Keep your face in the circle.' : 'Let your head sink toward the screen.';
+    setTicks(C[C.step].length);
+    b1.hidden = false; b1.disabled = busy;
+    b1.innerHTML = C.state === 'capturing' ? 'Hold still' : C.state === 'countdown' ? 'Get ready' : 'Start';
   } else if (C.state === 'training') {
-    body.innerHTML = `${dots}<p class="say">Training…</p>`;
+    $('#calTitle').textContent = 'Learning your posture';
+    $('#calSub').textContent = '';
+    setTicks(SAMPLES_PER_POSE);
+    b1.hidden = false; b1.disabled = true; b1.innerHTML = '<span class="spin"></span>';
   } else if (C.result) {
-    const acc = Math.round(C.result.valAcc * 100);
-    body.innerHTML = `${dots}
-      <div class="acc">${acc}%<small>${acc < 80 ? 'Too similar. Slump more and redo.' : 'accuracy'}</small></div>
-      <div class="row"><button class="btn" data-act="monitor">Start</button><button class="btn line" data-act="restart">Redo</button></div>`;
+    const acc = Math.round(C.result.valAcc * 100), ok = acc >= 80;
+    done.hidden = false; done.innerHTML = ok ? CHECK_SVG : WARN_SVG;
+    $('#calTitle').textContent = ok ? 'All set' : 'Try again';
+    $('#calSub').textContent = ok ? `Accuracy ${acc}%` : `Accuracy ${acc}%. Slump a bit more.`;
+    setTicks(SAMPLES_PER_POSE);
+    b1.hidden = false; b1.disabled = false; b1.textContent = ok ? 'Done' : 'Try Again';
+    b2.hidden = false; b2.textContent = ok ? 'Redo' : 'Use Anyway';
   }
 }
 function renderDevices() {
@@ -835,90 +906,97 @@ function renderDevices() {
     if (a || b) merged[k] = (a && b) ? ((a.good + a.bad) >= (b.good + b.bad) ? a : b) : (a || b);
   }
   let g = 0, t = 0; Object.values(merged).forEach(s => { g += s.good; t += s.good + s.bad; });
-  $('#totPct').textContent = t > 5 ? Math.round(g / t * 100) + '%' : '–';
+  $('#totPct').innerHTML = t > 5 ? `${Math.round(g / t * 100)}<small>%</small>` : '–';
   const pct = s => s && s.good + s.bad > 5 ? Math.round(s.good / (s.good + s.bad) * 100) + '%' : '–';
-  const rows = ['laptop', 'tablet', 'phone'].map(dev => `<li>${ICONS[dev]}<span class="name${dev === S.device ? ' here' : ''}">${DEV[dev]}</span><span class="val">${pct(merged[dev])}</span></li>`);
-  rows.push(`<li>${ICONS.cushion}<span class="name">Cushion</span><button class="btn small ${S.cushion.dev ? 'line' : ''}" data-act="cushion">${S.cushion.dev ? 'Disconnect' : 'Connect'}</button></li>`);
+  const ico = k => `<span class="ico" style="background:${DEV_ICON[k][0]}">${DEV_ICON[k][1]}</span>`;
+  const rows = ['laptop', 'tablet', 'phone'].map(dev => `<div class="cell">${ico(dev)}<span class="t">${DEV[dev]}${dev === S.device ? '<span class="sub2">This device</span>' : ''}</span><span class="v">${pct(merged[dev])}</span></div>`);
+  rows.push(`<button class="cell" data-act="cushion">${ico('cushion')}<span class="t">Cushion</span><span class="v">${S.cushion.dev ? '<span class="dot"></span>Connected' : '<span style="color:var(--blue)">Connect</span>'}</span></button>`);
   $('#devList').innerHTML = rows.join('');
 }
 
-/* mini widget (Document Picture-in-Picture) */
+/* mini widget (Document Picture-in-Picture): just the ring */
 async function openWidget() {
   if (S.pip) { S.pip.close(); return; }
-  const pip = await documentPictureInPicture.requestWindow({ width: 220, height: 280 });
+  const pip = await documentPictureInPicture.requestWindow({ width: 200, height: 220 });
   [...document.styleSheets].forEach(ss => {
-    try { const st = pip.document.createElement('style'); st.textContent = [...ss.cssRules].map(r => r.cssText).join('\n'); pip.document.head.append(st); }
-    catch { if (ss.href) { const l = pip.document.createElement('link'); l.rel = 'stylesheet'; l.href = ss.href; pip.document.head.append(l); } }
+    try { const st = pip.document.createElement('style'); st.textContent = [...ss.cssRules].map(r => r.cssText).join('\n'); pip.document.head.append(st); } catch {}
   });
-  pip.document.body.style.cssText = 'margin:0;display:grid;grid-template-rows:1fr auto;height:100vh';
-  pip.document.body.innerHTML = `<div class="board" style="border-radius:0">${figureMarkup()}</div>
-    <div id="w" style="padding:8px 12px 10px;text-align:right"><span id="wp" style="font-family:var(--display);font-weight:900;font-size:44px;line-height:.9;color:var(--lvl)">–</span></div>`;
+  pip.document.body.style.cssText = 'margin:0;height:100vh;display:grid;place-items:center;background:var(--card)';
+  pip.document.body.innerHTML = `<div id="w" data-level="ok" style="display:grid;justify-items:center;gap:8px">
+    <div class="ring"><svg viewBox="0 0 128 128"><circle class="track" cx="64" cy="64" r="55"/><circle class="prog" cx="64" cy="64" r="55"/></svg><div class="num" id="wn">–</div></div>
+    <div id="ws" style="font-size:15px;font-weight:600"></div></div>`;
   S.pip = pip;
-  const svg = pip.document.querySelector('.fig'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 });
-  pip.addEventListener('pagehide', () => { figState.delete(svg); S.pip = null; });
+  pip.addEventListener('pagehide', () => { S.pip = null; });
   renderWidget();
 }
 function renderWidget() {
   const d = S.pip.document, on = S.mode === 'on' && !S.paused;
   d.getElementById('w').dataset.level = on ? S.level : 'away';
-  d.getElementById('wp').textContent = on && S.smooth != null ? Math.round(S.smooth * 100) + '%' : '–';
-  const svg = d.querySelector('.fig'); setFigure(svg, on ? S.smooth : null, on ? S.level : 'away');
-  if (document.hidden) { const st = figState.get(svg); st.cur += (st.target - st.cur) * 0.5; drawFigure(svg, st.cur); }
+  const p = on && S.smooth != null ? S.smooth : 0;
+  const prog = d.querySelector('.prog'); prog.style.strokeDasharray = RING_C; prog.style.strokeDashoffset = RING_C * (1 - p);
+  d.getElementById('wn').innerHTML = on && S.smooth != null ? `<span>${Math.round(S.smooth * 100)}<small>%</small></span>` : '–';
+  d.getElementById('ws').textContent = STATUS[S.paused ? 'paused' : on ? S.level : (S.mode || 'away')];
 }
 
 /* ---------- navigation ---------- */
-function mountCamera(slotId) {
-  const f = $('#camFrame'), slot = $('#' + slotId);
-  if (f.parentElement !== slot) slot.append(f);
-  f.hidden = !((S.stream || SIM) && (slotId === 'camSlotCalib' || S.settings.preview));
+function mountCamera() {
+  const f = $('#camFrame');
+  if (S.view === 'calib') { $('#camSlotCalib').append(f); f.hidden = !(S.stream || SIM); }
+  else if (S.view === 'monitor') { $('#camSlotMonitor').append(f); f.hidden = !((S.stream || SIM) && S.settings.camView); }
+  else f.hidden = true;
+  $('#figBox svg')?.toggleAttribute('hidden', S.view === 'monitor' && S.settings.camView);
+  $('#segFig').setAttribute('aria-pressed', String(!S.settings.camView));
+  $('#segCam').setAttribute('aria-pressed', String(S.settings.camView));
   if (S.stream) S.video.play().catch(() => {});
 }
 function goto(view) {
   if (view === 'monitor' && !S.started) view = 'onboard';
   S.view = view;
   $$('section[data-view]').forEach(s => s.hidden = s.dataset.view !== view);
-  const tab = view === 'calib' || view === 'onboard' ? 'monitor' : view;
-  $$('.nav button').forEach(b => b.dataset.go === tab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  $('#tabbar').hidden = view === 'onboard' || view === 'calib';
+  $$('.tabbar button').forEach(b => b.dataset.go === view ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   if (S.started) setTickRate(view === 'calib' ? TICK_CALIB : TICK_MONITOR);
-  if (view === 'calib') { mountCamera('camSlotCalib'); renderCalib(); }
-  if (view === 'monitor') { mountCamera('camSlotMonitor'); if (S.level !== 'bad') hideAlert(); render(); requestWake(); }
+  mountCamera();
+  if (view === 'calib') renderCalib();
+  if (view === 'monitor') { if (S.level !== 'bad') hideAlert(); render(); requestWake(); }
   if (view === 'devices') { renderDevices(); refreshCloudDaily(); }
   if (view === 'settings') renderSettings();
-  if (view === 'onboard') $('#btnBegin').textContent = S.started ? 'Back' : 'Start';
   scrollTo({ top: 0 });
 }
 async function begin() {
   const btn = $('#btnBegin'), out = $('#obStatus');
-  btn.disabled = true; out.className = 'fine'; out.textContent = 'Starting camera…';
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; out.className = 'foot'; out.textContent = '';
   try {
     unlockAudio();
     await startCamera();
-    if (!S.vision) { out.textContent = 'Loading AI…'; S.vision = await initVision(); }
+    if (!S.vision) S.vision = await initVision();
     registerSW();
-    S.started = true; out.textContent = 'Video stays on this device.';
+    S.started = true;
     if (!currentProfile()) calibReset();
     goto(currentProfile() ? 'monitor' : 'calib');
   } catch (e) {
-    console.error(e); out.className = 'fine err'; out.textContent = e.message || String(e);
-  } finally { btn.disabled = false; }
+    console.error(e); out.className = 'foot err'; out.textContent = e.message || String(e);
+  } finally { btn.disabled = false; btn.textContent = 'Continue'; }
 }
 document.addEventListener('click', e => {
   const go = e.target.closest('[data-go]');
-  if (go) { e.preventDefault(); const v = go.dataset.go; goto(v === 'home' ? (S.started ? 'monitor' : 'onboard') : v); return; }
+  if (go) { e.preventDefault(); goto(go.dataset.go); return; }
   const act = e.target.closest('[data-act]')?.dataset.act;
   if (!act) return;
-  if (act === 'capture') calibCapture();
-  if (act === 'restart') calibReset();
-  if (act === 'monitor') { S.smooth = null; goto('monitor'); }
   if (act === 'calib') { if (!S.started) { goto('onboard'); return; } calibReset(); goto('calib'); }
   if (act === 'cushion') toggleCushion();
 });
-$('#btnBegin').onclick = () => S.started ? goto('monitor') : begin();
-$('#btnPause').onclick = () => {
-  S.paused = !S.paused;
-  const b = $('#btnPause'); b.innerHTML = S.paused ? PLAY_SVG : PAUSE_SVG; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause';
-  if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render();
+$('#btnBegin').onclick = begin;
+$('#calBtn').onclick = () => {
+  if (C.step === 'good' || C.step === 'bad') calibCapture();
+  else if (C.step === 'done') { if (C.result.valAcc >= 0.8) { S.smooth = null; goto('monitor'); } else calibReset(); }
 };
+$('#calBtn2').onclick = () => { if (C.step !== 'done') return; if (C.result.valAcc >= 0.8) calibReset(); else { S.smooth = null; goto('monitor'); } };
+$('#calCancel').onclick = () => goto('monitor');
+$('#segFig').onclick = () => { S.settings.camView = false; saveSettings(); mountCamera(); };
+$('#segCam').onclick = () => { S.settings.camView = true; saveSettings(); mountCamera(); };
+function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? PLAY_SVG : PAUSE_SVG; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause'; }
+$('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(); };
 if ('documentPictureInPicture' in window) { $('#btnWidget').hidden = false; $('#btnWidget').onclick = () => openWidget().catch(e => toast(e.message)); }
 function onOrientation() {
   if (S.device === 'laptop') return;
@@ -933,7 +1011,7 @@ addEventListener('resize', () => { if (S.view === 'monitor') drawTimeline(); });
 async function toggleCushion() {
   const cu = S.cushion;
   if (cu.dev) { try { cu.dev.gatt.disconnect(); } catch {} cu.dev = null; cu.ch = null; renderCushion(); return; }
-  if (!navigator.bluetooth) { toast('No Bluetooth here. Use Chrome on a laptop or Android.'); return; }
+  if (!navigator.bluetooth) { toast('Bluetooth isn\'t available in this browser'); return; }
   try {
     const dev = await navigator.bluetooth.requestDevice({ filters: [{ services: [CUSHION_SERVICE] }] });
     const server = await dev.gatt.connect();
@@ -941,7 +1019,7 @@ async function toggleCushion() {
     dev.addEventListener('gattserverdisconnected', () => { cu.dev = null; cu.ch = null; renderCushion(); toast('Cushion disconnected'); });
     cu.dev = dev; renderCushion(); toast('Cushion connected');
     buzz(2);
-  } catch (e) { if (e.name !== 'NotFoundError') toast('Connect failed'); }
+  } catch (e) { if (e.name !== 'NotFoundError') toast('Couldn\'t connect'); }
 }
 async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   const ch = S.cushion.ch; if (!ch) return;
@@ -953,43 +1031,49 @@ async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   } catch (e) { console.warn(e); }
 }
 function renderCushion() {
-  $('#btnCushion').textContent = S.cushion.dev ? 'Disconnect' : 'Connect';
+  $('#cushionVal').innerHTML = S.cushion.dev ? '<span class="dot"></span>Connected' : 'Connect';
+  $('#cushionVal').style.color = S.cushion.dev ? '' : 'var(--blue)';
   if (S.view === 'devices') renderDevices();
 }
 $('#btnCushion').onclick = toggleCushion;
 
 /* ---------- settings ---------- */
 function saveSettings() { Store.set('settings', S.settings); }
+function paintSlider() { const el = $('#setThr'); el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
 function renderSettings() {
   const s = S.settings;
   $('#devSel').value = S.device;
-  $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold;
-  $('#setSound').checked = s.sound; $('#setPreview').checked = s.preview; $('#setBuzz').checked = s.buzz;
+  $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold + '%'; paintSlider();
+  $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz;
   const c = Cloud.cfg() || {};
   $('#dbUrl').value = c.url || ''; $('#dbKey').value = c.key || ''; $('#dbUser').value = c.user || '';
-  $('#dbState').textContent = Cloud.on() ? 'Synced' : '';
+  $('#dbState').textContent = Cloud.on() ? 'On' : 'Off';
   renderNotif(); renderCushion();
 }
 function renderNotif() {
-  const ua = navigator.userAgent, btn = $('#btnNotif');
+  const ua = navigator.userAgent, v = $('#notifVal');
   const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (!('Notification' in window)) { btn.disabled = true; btn.textContent = isIOS && !standalone ? 'Add to Home Screen first' : 'Not supported'; return; }
+  if (!('Notification' in window)) { v.textContent = isIOS && !standalone ? 'Add to Home Screen' : 'Unavailable'; return; }
   const p = Notification.permission;
-  btn.disabled = p !== 'default'; btn.textContent = p === 'granted' ? 'On' : p === 'denied' ? 'Blocked' : 'Allow';
+  v.textContent = p === 'granted' ? 'On' : p === 'denied' ? 'Blocked' : 'Off';
 }
-$('#btnNotif').onclick = async () => { await Notification.requestPermission(); renderNotif(); if (Notification.permission === 'granted') pushNotify('Earline', 'Notifications on'); };
+$('#btnNotif').onclick = async () => {
+  if (!('Notification' in window)) { toast(/iPhone|iPad/.test(navigator.userAgent) ? 'Share → Add to Home Screen, then open from there' : 'Not supported here'); return; }
+  if (Notification.permission === 'denied') { toast('Turn on notifications in browser settings'); return; }
+  await Notification.requestPermission(); renderNotif();
+  if (Notification.permission === 'granted') pushNotify('Earline', 'Notifications are on.');
+};
 $('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; };
-$('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThrOut').textContent = e.target.value; saveSettings(); };
+$('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThrOut').textContent = e.target.value + '%'; paintSlider(); saveSettings(); };
 $('#setSound').onchange = e => { S.settings.sound = e.target.checked; saveSettings(); if (e.target.checked) { unlockAudio(); chime(); } };
-$('#setPreview').onchange = e => { S.settings.preview = e.target.checked; saveSettings(); };
 $('#setBuzz').onchange = e => { S.settings.buzz = e.target.checked; saveSettings(); };
 $('#btnDbSave').onclick = async () => {
   const url = $('#dbUrl').value.trim(), key = $('#dbKey').value.trim(), user = $('#dbUser').value.trim();
-  if (!url || !key || !user) { $('#dbState').textContent = 'Fill all 3'; return; }
+  if (!url || !key || !user) { toast('Fill in all three fields'); return; }
   Store.set('cloud', { url, key, user });
   $('#dbState').textContent = '…';
-  try { await syncFromCloud(); $('#dbState').textContent = 'Synced'; } catch (e) { $('#dbState').textContent = e.message; }
+  try { await syncFromCloud(); $('#dbState').textContent = 'On'; toast('Synced'); } catch (e) { $('#dbState').textContent = 'Off'; toast(e.message); }
 };
 $('#btnDbOff').onclick = () => { Store.set('cloud', null); S.cloudDaily = {}; renderSettings(); };
 async function syncFromCloud() {
@@ -1014,7 +1098,7 @@ async function refreshCloudDaily() {
   } catch (e) { console.warn(e); }
 }
 $('#btnExport').onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: 'earline', version: 3, profiles: S.profiles, stats: S.stats }, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({ app: 'earline', version: 4, profiles: S.profiles, stats: S.stats }, null, 2)], { type: 'application/json' });
   const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `earline-${today()}.json` });
   a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
@@ -1028,12 +1112,12 @@ $('#importFile').onchange = async e => {
   e.target.value = '';
 };
 $('#btnReset').onclick = () => {
-  if (!confirm('Erase everything on this device?')) return;
+  if (!confirm('Erase all data on this device?')) return;
   Store.clear(); S.profiles = {}; S.stats = {}; S.history = []; toast('Erased'); renderSettings();
 };
 
 let toastTimer;
-function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2800); }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2400); }
 
 /* ---------- simulation (?sim) ---------- */
 function makeSimVision() {
@@ -1064,10 +1148,10 @@ function makeSimVision() {
 }
 
 /* ---------- boot ---------- */
-$('#obBoard').innerHTML = figureMarkup();
-$('#mBoard').insertAdjacentHTML('afterbegin', figureMarkup());
-{ const svg = $('#obBoard svg'); drawFigure(svg, 1); svg.dataset.level = 'bad'; figState.set(svg, { cur: 1, target: 1 }); setTimeout(() => setFigure(svg, 0, 'ok'), 600); }
-{ const svg = $('#mBoard svg'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
+$('#figBox').insertAdjacentHTML('afterbegin', figureMarkup());
+{ const svg = $('#figBox svg'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
+setPauseIcon();
+{ const pr = $('#ring .prog'); pr.style.strokeDasharray = RING_C; pr.style.strokeDashoffset = RING_C; }
 goto('onboard');
 if (Cloud.on()) syncFromCloud().catch(e => console.warn(e));
 window.__earline = { S, C, LR, trainProfile, predict };
