@@ -313,6 +313,13 @@ details[open] summary .chev{transform:rotate(90deg)}
 .agroup button.cancel{font-weight:600;background:var(--card)}
 
 /* ===== banner, hud, nudges ===== */
+.notice{display:flex;align-items:center;gap:12px;padding:12px 10px 12px 14px;border-radius:22px;margin:0 0 16px}
+.notice .ico{width:34px;height:34px;border-radius:9px}
+.notice .t{flex:1;min-width:0}
+.notice b{display:block;font-size:15px;font-weight:600}
+.notice span.s{display:block;font-size:13px;color:var(--label2);margin-top:1px}
+.notice .x{width:30px;height:30px;border:0;border-radius:50%;background:var(--fill);color:var(--label2);display:grid;place-items:center;flex:none}
+.notice .x svg{width:12px;height:12px}
 .banner{position:fixed;z-index:55;left:50%;top:max(8px,env(safe-area-inset-top));width:min(400px,calc(100% - 16px));transform:translate(-50%,-150%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1.08),visibility 0s .45s;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:24px;cursor:pointer;border:0;text-align:left;color:var(--label)}
 .banner.show{transform:translate(-50%,0);visibility:visible;transition:transform .45s cubic-bezier(.2,.9,.25,1.08)}
 .banner img{width:38px;height:38px;border-radius:9px;flex:none}
@@ -409,6 +416,12 @@ details[open] summary .chev{transform:rotate(90deg)}
     <button class="gbtn glass" id="btnPause" aria-label="Pause" title="Pause"></button>
   </div>
   <h1 class="large">Posture</h1>
+  <div class="notice glass" id="notice" hidden>
+    <span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span>
+    <div class="t"><b id="noticeTitle"></b><span class="s" id="noticeSub"></span></div>
+    <button class="btn small" id="noticeBtn">Turn On</button>
+    <button class="x" id="noticeX" aria-label="Dismiss"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button>
+  </div>
   <div class="pgrid">
     <div class="left">
       <div class="scan" id="scan" data-level="away">
@@ -687,6 +700,7 @@ const S = {
   stream: null, video: $('#video'), overlay: $('#overlay'), frameW: 640, frameH: 480, imageCapture: null,
   vision: null, busy: false, lastTs: 0, lastVT: -1, lastVTAt: 0,
   smooth: null, fwd: null, fwdDz: 1.5, level: 'away', mode: '', badSince: null, lastAlert: 0, lastTick: 0, history: [], lastHist: 0,
+  disp: { p: null, fwd: null, level: 'away', at: 0, sumP: 0, sumF: 0, n: 0 }, snoozeUntil: 0,
   cushion: { dev: null, ch: null }, pip: null, wake: null
 };
 if (!S.places.length) S.places = DEFAULT_PLACES.map(p => ({ ...p }));
@@ -1072,6 +1086,7 @@ function monitorTick(obs) {
   S.smooth = S.smooth == null ? r.p : S.smooth + 0.3 * (r.p - S.smooth);
   S.fwd = S.fwd == null ? r.fwd : S.fwd + 0.2 * (r.fwd - S.fwd);
   S.fwdDz = r.fwdDz;
+  S.disp.sumP += S.smooth; S.disp.sumF += S.fwd; S.disp.n++;
   const thr = S.settings.threshold / 100;
   S.level = S.smooth >= thr ? 'bad' : S.smooth >= 0.5 ? 'warn' : 'ok';
   const bad = S.smooth >= 0.5, hr = new Date().getHours();
@@ -1125,18 +1140,30 @@ function chime() {
     o.connect(g).connect(audioCtx.destination); o.start(t + d); o.stop(t + d + 0.55);
   });
 }
-async function pushNotify(title, body) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  const opts = { body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'earline', renotify: true, vibrate: [120, 60, 120] };
+/* system notification: shows on the desktop / home screen like a message, even when Earline isn't in front */
+async function pushNotify(title, body, withSnooze = false) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return false;
+  const base = { body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'earline', renotify: true, vibrate: [120, 60, 120], data: { url: location.href } };
   try {
     const reg = swReg || (navigator.serviceWorker ? await navigator.serviceWorker.getRegistration() : null);
-    if (reg) await reg.showNotification(title, opts); else new Notification(title, opts);
-  } catch (e) { console.warn(e); }
+    if (reg) { await reg.showNotification(title, withSnooze ? { ...base, actions: [{ action: 'snooze', title: 'Snooze 15 min' }] } : base); return true; }
+    const n = new Notification(title, base);
+    n.onclick = () => { window.focus(); n.close(); };
+    return true;
+  } catch (e) { console.warn(e); return false; }
 }
+navigator.serviceWorker?.addEventListener('message', e => {
+  if (e.data?.type === 'snooze') { S.snoozeUntil = Date.now() + e.data.minutes * 60000; hideAlert(); toast(`Alerts snoozed for ${e.data.minutes} minutes`); }
+});
 function fireAlert() {
+  if (Date.now() < S.snoozeUntil) return;
   S.lastAlert = Date.now();
   statToday().alerts++;
-  pushNotify('Turtle neck', 'Bring your head back over your shoulders.');
+  // Earline is in the background (another app, another tab, desktop): send a system notification
+  if (document.hidden || !document.hasFocus()) {
+    const cm = S.fwd > S.fwdDz ? `Your head is ${S.fwd.toFixed(1)} cm forward. ` : '';
+    pushNotify('Turtle neck', `${cm}Sit back and bring your head over your shoulders.`, true);
+  }
   if (S.settings.buzz) buzz(1);
   $('#alert').classList.add('show');
   clearTimeout(bannerTimer); bannerTimer = setTimeout(hideAlert, 6000);
@@ -1150,7 +1177,7 @@ function fireAlert() {
 function hideAlert() { $('#alert').classList.remove('show'); }
 $('#alert').onclick = hideAlert;
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(); if (S.view === 'monitor') renderBars(); requestWake(); }
+  if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(true); if (S.view === 'monitor') renderBars(); requestWake(); }
 });
 async function requestWake() {
   if (S.device === 'laptop' || !S.started || !('wakeLock' in navigator) || document.hidden) return;
@@ -1158,11 +1185,11 @@ async function requestWake() {
 }
 /* Dorso-style nudges: edge glow or screen blur that grows as posture worsens */
 function renderNudge() {
-  const on = S.started && S.mode === 'on' && !S.paused && S.smooth != null;
-  const sev = on ? clamp((S.smooth - 0.5) / 0.42, 0, 1) : 0;
+  const p = S.started ? S.disp.p : null;
+  const sev = p != null ? clamp((p - 0.5) / 0.42, 0, 1) : 0;
   const n = S.settings.nudge;
   const g = $('#glow');
-  g.style.setProperty('--gc', S.level === 'bad' ? 'rgba(255,59,48,.55)' : 'rgba(255,149,0,.45)');
+  g.style.setProperty('--gc', S.disp.level === 'bad' ? 'rgba(255,59,48,.55)' : 'rgba(255,149,0,.45)');
   g.style.opacity = n === 'glow' ? sev.toFixed(2) : 0;
   const b = $('#blurN'), bpx = n === 'blur' && sev > .15 ? Math.round(sev * 14) : 0;
   b.style.setProperty('--b', bpx + 'px');
@@ -1291,25 +1318,37 @@ function subText(mode) {
   if (mode === 'look') return 'Face the screen to resume.';
   if (mode === 'nocal') return `Calibrate ${curPlace().name} on ${thisDeviceLabel()}.`;
   if (mode === 'paused') return 'Tracking is paused.';
-  if (S.fwd == null) return '';
-  return S.fwd > S.fwdDz ? `Head ${S.fwd.toFixed(1)} cm forward` : 'Head over your shoulders';
+  if (Date.now() < S.snoozeUntil) return 'Alerts snoozed';
+  if (S.disp.fwd == null) return '';
+  return S.disp.fwd > S.fwdDz ? `Head ${S.disp.fwd.toFixed(1)} cm forward` : 'Head over your shoulders';
 }
-function render() {
+/* The model runs 5x a second; the readout (%, status, head cm, figure, nudges) shows the
+   average of each second so the number is steady and readable. */
+function render(force = false) {
+  const D = S.disp, now = Date.now();
+  if (!force && now - D.at < 1000) return;
+  D.at = now;
+  const on = S.mode === 'on' && !S.paused;
+  if (!on) { D.p = null; D.fwd = null; }
+  else if (D.n) { D.p = D.sumP / D.n; D.fwd = D.sumF / D.n; }
+  D.sumP = D.sumF = D.n = 0;
+  const thr = S.settings.threshold / 100;
+  D.level = D.p == null ? 'away' : D.p >= thr ? 'bad' : D.p >= .5 ? 'warn' : 'ok';
   if (S.pip) renderWidget();
   renderNudge();
   if (document.hidden || S.view !== 'monitor') return;
-  const on = S.mode === 'on' && !S.paused;
-  const mode = S.paused ? 'paused' : on ? S.level : (S.mode || 'away');
-  const lvl = on ? S.level : 'away';
+  const shown = on && D.p != null;
+  const mode = S.paused ? 'paused' : shown ? D.level : on ? 'ok' : (S.mode || 'away');
+  const lvl = shown ? D.level : 'away';
   $('#scan').dataset.level = lvl; $('#statusCard').dataset.level = lvl;
   $('#scan').classList.toggle('live', on);
-  const label = on && S.smooth != null ? Math.round(S.smooth * 100) : null;
-  setRing($('#ringSm'), on ? S.smooth : 0, label); setRing($('#ringLg'), on ? S.smooth : 0, label);
+  const label = shown ? Math.round(D.p * 100) : null;
+  setRing($('#ringSm'), shown ? D.p : 0, label); setRing($('#ringLg'), shown ? D.p : 0, label);
   $$('.js-status').forEach(el => el.textContent = STATUS[mode]);
   const sub = subText(mode); $$('.js-sub').forEach(el => el.textContent = sub);
   const nocal = S.mode === 'nocal';
   $('#scanCal').hidden = !nocal; $('#cardCal').hidden = !nocal;
-  const fig = $('#scan .fig'); if (fig) setFigure(fig, on ? S.smooth : null, lvl);
+  const fig = $('#scan .fig'); if (fig) setFigure(fig, shown ? D.p : null, lvl);
   const st = statToday(), tot = st.good + st.bad;
   $('#stGood').innerHTML = tot > 5 ? `${Math.round(st.good / tot * 100)}<small>%</small>` : '–';
   $('#stBad').innerHTML = `${mins(st.bad)}<small>m</small>`;
@@ -1473,10 +1512,10 @@ async function openWidget() {
   renderWidget();
 }
 function renderWidget() {
-  const d = S.pip.document, on = S.mode === 'on' && !S.paused;
-  d.getElementById('w').dataset.level = on ? S.level : 'away';
-  setRing(d.querySelector('.ring'), on ? S.smooth : 0, on && S.smooth != null ? Math.round(S.smooth * 100) : null);
-  d.getElementById('ws').textContent = STATUS[S.paused ? 'paused' : on ? S.level : (S.mode || 'away')];
+  const d = S.pip.document, D = S.disp, shown = S.mode === 'on' && !S.paused && D.p != null;
+  d.getElementById('w').dataset.level = shown ? D.level : 'away';
+  setRing(d.querySelector('.ring'), shown ? D.p : 0, shown ? Math.round(D.p * 100) : null);
+  d.getElementById('ws').textContent = STATUS[S.paused ? 'paused' : shown ? D.level : (S.mode || 'away')];
 }
 
 /* =====================================================================
@@ -1503,12 +1542,12 @@ function goto(view) {
   if (view !== 'calib') stopDemo();
   mountCamera();
   if (view === 'calib') renderCalib();
-  if (view === 'monitor') { renderHeader(); if (S.level !== 'bad') hideAlert(); renderBars(); render(); requestWake(); }
+  if (view === 'monitor') { renderHeader(); renderNotice(); if (S.level !== 'bad') hideAlert(); renderBars(); render(true); requestWake(); }
   if (view === 'devices') { renderDevices(); refreshCloudDaily(); }
   if (view === 'settings') renderSettings();
   scrollTo({ top: 0 });
 }
-function refreshView() { if (S.view === 'devices') renderDevices(); else if (S.view === 'settings') renderSettings(); else if (S.view === 'monitor') render(); }
+function refreshView() { if (S.view === 'devices') renderDevices(); else if (S.view === 'settings') renderSettings(); else if (S.view === 'monitor') render(true); }
 function startCalibration() { if (!S.started) { goto('onboard'); return; } calibReset(); goto('calib'); }
 async function begin() {
   const btn = $('#btnBegin'), out = $('#obStatus');
@@ -1548,12 +1587,12 @@ $('#calCancel').onclick = () => goto('monitor');
 $('#segFig').onclick = () => { S.settings.camView = false; saveSettings(); mountCamera(); };
 $('#segCam').onclick = () => { S.settings.camView = true; saveSettings(); mountCamera(); };
 function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? ICO.play : ICO.pause; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause'; }
-$('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(); };
+$('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(true); };
 if ('documentPictureInPicture' in window) { $('#btnWidget').hidden = false; $('#btnWidget').onclick = () => openWidget().catch(e => toast(e.message)); }
 function onOrientation() {
   if (S.device === 'laptop') return;
   S.smooth = null; S.badSince = null;
-  if (S.view === 'calib') calibReset(); else render();
+  if (S.view === 'calib') calibReset(); else render(true);
 }
 if (screen.orientation?.addEventListener) screen.orientation.addEventListener('change', onOrientation);
 else addEventListener('orientationchange', onOrientation);
@@ -1610,19 +1649,42 @@ function renderSettings() {
   renderNotif(); renderCushion();
 }
 function renderNotif() {
-  const ua = navigator.userAgent, v = $('#notifVal');
-  const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (!('Notification' in window)) { v.textContent = isIOS && !standalone ? 'Add to Home Screen' : 'Unavailable'; return; }
+  const v = $('#notifVal');
+  if (!('Notification' in window)) { v.textContent = isIOS() && !isStandalone() ? 'Add to Home Screen' : 'Unavailable'; return; }
   const p = Notification.permission;
   v.textContent = p === 'granted' ? 'On' : p === 'denied' ? 'Blocked' : 'Off';
 }
-$('#btnNotif').onclick = async () => {
-  if (!('Notification' in window)) { toast(/iPhone|iPad/.test(navigator.userAgent) ? 'Share, then Add to Home Screen, and open it from there' : 'Not supported here'); return; }
-  if (Notification.permission === 'denied') { toast('Turn on notifications in browser settings'); return; }
-  await Notification.requestPermission(); renderNotif();
-  if (Notification.permission === 'granted') pushNotify('Earline', 'Notifications are on.');
-};
+const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+async function enableNotifications() {
+  if (!('Notification' in window)) { toast(isIOS() ? 'Share, then Add to Home Screen, and open Earline from there' : 'This browser can\'t show notifications'); return; }
+  if (Notification.permission === 'denied') { toast('Allow notifications for this site in your browser settings'); return; }
+  if (Notification.permission === 'default') await Notification.requestPermission();
+  renderNotif(); renderNotice();
+  if (Notification.permission === 'granted') {
+    if (!swReg) await registerSW();
+    await pushNotify('Notifications are on', 'Earline will alert you here when your head drifts forward.');
+    toast('Test notification sent. Not seeing it? Allow your browser in your computer\'s notification settings.');
+  }
+}
+$('#btnNotif').onclick = enableNotifications;
+/* card on the Posture screen until background alerts are set up */
+function renderNotice() {
+  const el = $('#notice');
+  const dismissed = Store.get('noticeDismissed', null);
+  let title = '', sub = '', btn = false;
+  if (!('Notification' in window)) {
+    if (isIOS() && !isStandalone()) { title = 'Get alerts on iPhone'; sub = 'Tap Share, then Add to Home Screen, and open Earline from there.'; }
+  } else if (Notification.permission === 'default') { title = 'Background alerts'; sub = 'Get notified when Earline isn\'t on screen.'; btn = true; }
+  else if (Notification.permission === 'denied') { title = 'Notifications are blocked'; sub = 'Allow them for this site in your browser settings.'; }
+  const key = title ? `${title}|${'Notification' in window ? Notification.permission : 'none'}` : null;
+  el.hidden = !title || dismissed === key;
+  if (el.hidden) return;
+  $('#noticeTitle').textContent = title; $('#noticeSub').textContent = sub; $('#noticeBtn').hidden = !btn;
+  el.dataset.key = key;
+}
+$('#noticeBtn').onclick = enableNotifications;
+$('#noticeX').onclick = () => { Store.set('noticeDismissed', $('#notice').dataset.key); $('#notice').hidden = true; };
 $('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; S.mode = ''; renderSettings(); renderHeader(); };
 $('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThrOut').textContent = e.target.value + '%'; paintSlider(); saveSettings(); };
 $('#nudgeSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.nudge = b.dataset.v; saveSettings(); renderSettings(); renderNudge(); };
