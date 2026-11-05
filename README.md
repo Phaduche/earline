@@ -1,70 +1,80 @@
-# Earline — personal turtle-neck alerts (laptop · tablet · phone · vibration cushion)
+# Earline — turtle-neck alerts that learn you
 
-앱 화면은 전부 영어. 이름 "Earline"은 임시 이름이라 `index.html`에서 찾아 바꾸면 돼요.
+노트북 · 태블릿 · 휴대폰 · 진동 방석을 하나로 잇는 개인 맞춤 거북목 감지 웹앱 (Diamond Challenge 2027).
+앱 화면은 영어, iOS 26 스타일.
 
-## 실행 방법
+**라이브:** https://phaduche.github.io/earline/
 
-카메라는 보안 때문에 **https 주소나 localhost**에서만 켜져요.
+## 실행
 
-**노트북**
+카메라는 https나 localhost에서만 켜져요.
+
 ```bash
 cd earline
-python3 -m http.server 8000
+python3 -m http.server 8000   # 노트북: http://localhost:8000
 ```
-크롬에서 `http://localhost:8000` 열기.
 
-**아이패드 · 휴대폰 (https 필요)**
-- GitHub Pages: 레포에 이 폴더 올리고 Settings → Pages 켜기 → `https://아이디.github.io/레포이름/`
-- 또는 app.netlify.com/drop 에 폴더째 끌어다 놓기
-- 아이폰·아이패드 푸시 알림: Safari 공유 → **Add to Home Screen** 후 그 아이콘으로 열기 (iOS 16.4+)
+- 휴대폰·아이패드는 위 라이브 주소로 열기. 아이폰은 Safari.
+- 아이폰 푸시 알림: Safari 공유 → Add to Home Screen → 그 아이콘으로 열기 (iOS 16.4+)
+- 카메라 없이 흐름 테스트: 주소 뒤에 `?sim` → 키보드 `t` 머리만 앞으로, `s` 구부정, `a` 자리비움
 
-**카메라 없이 흐름 테스트**: 주소 뒤에 `?sim` → 키보드 `t` 바른자세/거북목 전환, `a` 자리비움.
+## 이번 버전에서 바뀐 것 (1차 고정본 반영)
 
-## 동작 (Face-id와 같은 3단계)
+### 1. "상체는 그대로, 목만 앞으로"도 거북목으로 잡힘
+문제: 예전 학습은 바른 자세 / 거북목 두 가지만 기록했는데, 다들 거북목을 **상체째 숙여서** 기록하니까 모델이 "상체가 앞으로 가야 거북목"이라고 배웠음. 그래서 등을 붙이고 머리만 내밀면 Good이 나옴.
 
-| Face-id | Earline | 내용 |
-|---|---|---|
-| Part1 얼굴 100장 수집 | Step 1 | 바른 자세 60개, 거북목 60개 샘플 기록 (줄자 모양 진행바) |
-| Part2 LBPH 학습 | Step 2 | 특징 10개 표준화 → 로지스틱 회귀 학습, 뒤 20%로 검증 정확도 |
-| Part3 confidence > 75 | Step 3 | 거북목 확률 **90% 이상**이 3초 유지되면 알림 (화면 + 소리 + 푸시 + 방석 진동) |
+해결 두 가지:
+- **학습을 3단계로**: Sit up straight → **Push your head forward (등은 그대로, 머리만)** → Now slouch. 모델이 두 종류의 나쁜 자세를 다 봄. 단계마다 옆모습 애니메이션으로 정확한 자세를 보여줌.
+- **전방머리 규칙 (Dorso 오픈소스에서 가져옴)**: 얼굴이 바른 자세 때보다 커지면(= 머리가 화면 쪽으로 옴) 거북목. 여기에 머리-어깨 크기 비율(머리만 나오면 커짐), 3D 머리 거리(cm), 코 높이, 목 길이를 같이 봄. 머리가 ~6 cm 나오면 학습이 약하게 됐어도 무조건 거북목 처리.
+- 최종 확률 = max(개인 모델, 규칙). 시뮬레이션 결과:
 
-MediaPipe(얼굴 478점, 몸 33점)를 브라우저 안에서 돌려서 영상은 기기 밖으로 안 나가요.
+| 자세 | 거북목 확률 |
+|---|---|
+| 바른 자세 | 1–2% |
+| **등 그대로, 머리만 앞으로** | **97–98%** (예전 방식 22%) |
+| 머리 70%만 | 65–75% (Drifting) |
+| 구부정 | 100% |
+| 뒤로 기대기 | 0–1% |
 
-## 정면 그림
+- 화면에 **"Head 6.0 cm forward"** 처럼 머리가 몇 cm 나왔는지 실측 표시 (MediaPipe 3D 머리 위치 기준 추정값).
 
-카메라는 정면에서 찍으니까 그림도 정면. 정면에서 보면 거북목은 **목이 사라지는 것**처럼 보여요: 머리가 어깨 쪽으로 내려오고(목 길이 ↓), 카메라에 가까워져 커지고, 어깨가 말려 올라감. 그림은 거북목 확률에 따라 이렇게 변하고, 귀·어깨에 붙은 점은 물리치료사가 자세 평가할 때 붙이는 마커를 본뜬 것.
+### 2. 장소(Places) — 기숙사 / 면학실 / 도서관
+고정본의 "의자·장소별 카테고라이징" 아이디어. 장소마다 의자 종류(Desk chair / Stool / Sofa / Floor)와 **따로 학습한 모델**을 가짐 (장소 × 기기 × 화면 방향). 상단 장소 버튼으로 전환, New Place로 추가, 장소별 오늘 바른 자세 %.
 
-보드 왼쪽 위 "Neck height 78% of your upright baseline"은 **실제 측정값**: 지금 귀-어깨 높이를 내가 학습 때 기록한 바른 자세 평균과 비교한 비율 (어깨가 보일 때만 표시).
+### 3. UI
+- iOS 26 Liquid Glass: 떠 있는 유리 탭바, 유리 버튼, 시트·액션시트·컨텍스트 메뉴
+- 어두운 "스캔" 카드: 정면 실루엣 + 귀·어깨 마커 + 스캔 라인, 상태 링, 카메라 보기 전환
+- Face ID식 학습 링 + 결과 화면에 자세별 정확도
+- Today 카드: 시간대별 막대그래프(스크린타임 스타일), 최근 5분 그래프
+- Devices 탭: 기기 타일 + 장소별 통계
+- **Nudge (Dorso 스타일)**: 자세가 나빠질수록 화면 가장자리가 빨갛게 빛나거나(Glow) 화면이 흐려짐(Blur). 설정에서 선택.
 
-## 특징 10개
-- 얼굴: Head tilt down, Face size (distance), Face height in frame, Face shape ratio, Chin to nose
-- 어깨: Shoulder width, Ear-to-shoulder height, Nose-to-shoulder height, Head-to-shoulder ratio, **3D neck angle (CVA)** ← 물리치료에서 거북목 진단에 쓰는 두개척추각을 3D 좌표로 근사
+## 동작 원리 (Face-id 코드와 같은 3단계)
 
-## 아이패드 각도·방향 문제
+| Face-id | Earline |
+|---|---|
+| Part1 얼굴 100장 수집 | 자세 3개 × 60 샘플 |
+| Part2 LBPH 학습 | 로지스틱 회귀(개인 모델) + 전방머리 규칙, 각 자세 20%로 검증 |
+| Part3 confidence > 75 | 거북목 확률 ≥ 90%가 3초 유지되면 알림 (배너 + 소리 + 푸시 + 방석 진동) |
 
-기기·방향마다 따로 학습: `laptop`, `tablet-landscape`, `tablet-portrait`, `phone-portrait`, `phone-landscape`. 아이패드를 돌리면 "isn't calibrated yet" 배너가 뜨고 그 방향으로 한 번 더 학습. 절대 각도가 아니라 "그 카메라 위치에서 본 내 바른 자세 vs 내 거북목"을 비교하니까 카메라가 옆이나 아래에 있어도 됨. 어깨가 안 보이면 얼굴 특징만 쓰는 모델로 자동 전환.
+특징 12개: 얼굴 5개(고개 각도, 얼굴 크기, 코 높이, 얼굴 비율, 턱-코) + 어깨 7개(어깨 너비, 목 높이, 코-어깨, **머리/어깨 크기비**, 턱-어깨, 귀 깊이, 3D 목 각도 CVA).
 
-## 백그라운드
-- 노트북(크롬·엣지): 다른 탭/앱 써도 계속 감지. **Mini widget** 버튼으로 화면 구석에 항상 떠 있는 작은 창
-- 휴대폰·태블릿: 브라우저 정책상 페이지를 나가면 카메라가 꺼짐 → 화면 켜둔 동안 감지 (화면 꺼짐 방지 켬). 진짜 백그라운드는 네이티브 앱 단계
+## 발표·설명서에 쓸 근거
 
-## 진동 방석 (신민기)
+- 기존 연구/제품 비교: **Dorso** (https://dorso.app, MIT 오픈소스) — 맥 전용, 웹캠/에어팟. Earline은 맥뿐 아니라 아이폰·아이패드·안드로이드 브라우저, 진동 방석(IoT), 장소별 개인 모델.
+- 고개 각도별 목 하중 (Hansraj 2014, Surgical Technology International): 0° 약 4.5–5.4 kg, 15° 12 kg, 30° 18 kg, 45° 22 kg, 60° 27 kg.
 
-방석에는 센서 없이 **진동모터만** 있음. 웹앱이 거북목 알림을 보낼 때 블루투스로 `[1, 세기]`를 보내면 두 번 진동. `cushion_esp32.ino`에 배선과 펌웨어 있음.
-- 앱: Devices 탭 또는 Settings → Vibration cushion → Connect (노트북·안드로이드 크롬. 아이폰 Safari는 웹 블루투스 미지원)
-- 세기: gentle / medium / strong, Test buzz 버튼으로 확인
+## 진동 방석
 
-## 클라우드 DB (통합 플랫폼)
-1. supabase.com 무료 프로젝트
-2. SQL Editor에서 `supabase_setup.sql` 실행
-3. 앱 Settings → Cloud sync에 URL, anon key, 코드(예: `suah-01`) 입력
-4. 노트북·아이패드·폰에서 같은 코드 → 학습 결과와 하루 기록이 모여서 Devices 탭에 전체 점수로 보임
+`cushion_esp32.ino` — 센서 없이 진동모터만. 알림 때 BLE로 `[1, 세기]` → 두 번 진동. 웹 블루투스는 노트북·안드로이드 크롬만 지원 (아이폰 Safari 미지원).
 
-DB 없이도 기기 안에 저장되고, Export/Import로 JSON 파일로 옮길 수 있음.
+## 클라우드 DB
+
+supabase.com → SQL Editor에서 `supabase_setup.sql` 실행 → 앱 Settings → Cloud Sync에 URL·anon key·코드 입력. 같은 코드를 쓰는 기기끼리 모델과 기록 공유.
 
 ## 파일
+
 - `index.html` 앱 전체
-- `sw.js` 알림용 서비스 워커
-- `manifest.webmanifest`, `icon*` 홈 화면 설치용
-- `supabase_setup.sql` 클라우드 DB
-- `cushion_esp32.ino` 진동 방석 펌웨어
+- `sw.js` 알림용 서비스 워커 · `manifest.webmanifest`, `icon*` 홈 화면 설치
+- `supabase_setup.sql` · `cushion_esp32.ino`
+- `THIRD_PARTY_NOTICES.md` Dorso(MIT), MediaPipe 고지

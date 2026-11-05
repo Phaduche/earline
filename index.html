@@ -9,18 +9,20 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Earline">
-<meta name="description" content="Turtle-neck alerts that learn your posture.">
+<meta name="description" content="Turtle-neck alerts that learn your posture, on every device you sit at.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Earline</title>
 <style>
-/* Apple iOS look: system font, grouped background, inset grouped lists, system colors */
+/* ===== Apple iOS 26 look: system font, grouped background, Liquid Glass chrome ===== */
 :root{
-  --bg:#F2F2F7; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.6); --label3:rgba(60,60,67,.3);
-  --sep:rgba(60,60,67,.29); --fill:rgba(118,118,128,.12); --fill2:rgba(120,120,128,.16); --segsel:#FFFFFF;
-  --blue:#007AFF; --green:#34C759; --orange:#FF9500; --red:#FF3B30; --pink:#FF2D55; --gray:#8E8E93; --cyan:#32ADE6; --indigo:#5856D6; --teal:#30B0C7;
-  --bar:rgba(249,249,249,.94); --banner:rgba(246,246,246,.88);
+  --bg:#F2F2F7; --card:#FFFFFF; --label:#000; --label2:rgba(60,60,67,.6); --label3:rgba(60,60,67,.3);
+  --sep:rgba(60,60,67,.29); --fill:rgba(118,118,128,.12); --fill2:rgba(120,120,128,.16); --segsel:#FFF;
+  --tint:#007AFF; --green:#34C759; --orange:#FF9500; --red:#FF3B30; --pink:#FF2D55; --gray:#8E8E93;
+  --cyan:#32ADE6; --indigo:#5856D6; --brown:#A2845E; --mint:#00C7BE;
+  --glass:rgba(255,255,255,.62); --glass-strong:rgba(250,250,252,.86); --glass-line:rgba(255,255,255,.8);
+  --glass-shadow:0 12px 32px rgba(0,0,0,.10),0 1px 3px rgba(0,0,0,.06);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Segoe UI",Roboto,system-ui,sans-serif;
   --round:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --lvl:var(--gray);
@@ -28,10 +30,11 @@
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6); --label3:rgba(235,235,245,.3);
+    --bg:#000; --card:#1C1C1E; --label:#FFF; --label2:rgba(235,235,245,.6); --label3:rgba(235,235,245,.3);
     --sep:rgba(84,84,88,.65); --fill:rgba(118,118,128,.24); --fill2:rgba(120,120,128,.32); --segsel:#636366;
-    --blue:#0A84FF; --green:#30D158; --orange:#FF9F0A; --red:#FF453A; --pink:#FF375F; --cyan:#64D2FF; --indigo:#5E5CE6; --teal:#40C8E0;
-    --bar:rgba(22,22,22,.92); --banner:rgba(44,44,46,.9);
+    --tint:#0A84FF; --green:#30D158; --orange:#FF9F0A; --red:#FF453A; --pink:#FF375F; --cyan:#64D2FF; --indigo:#5E5CE6; --brown:#AC8E68; --mint:#63E6E2;
+    --glass:rgba(44,44,48,.55); --glass-strong:rgba(37,37,40,.9); --glass-line:rgba(255,255,255,.14);
+    --glass-shadow:0 12px 32px rgba(0,0,0,.55);
     color-scheme:dark;
   }
 }
@@ -40,34 +43,48 @@ html,body{margin:0}
 body{background:var(--bg);color:var(--label);font:17px/1.29 var(--font);-webkit-font-smoothing:antialiased;min-height:100dvh}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-p{margin:0}
+p,h1,h2,h3{margin:0}
 [hidden]{display:none!important}
-:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
-[data-level="ok"]{--lvl:var(--green)} [data-level="warn"]{--lvl:var(--orange)} [data-level="bad"]{--lvl:var(--red)}
+:focus-visible{outline:2px solid var(--tint);outline-offset:2px;border-radius:8px}
+[data-level="ok"]{--lvl:var(--green)} [data-level="warn"]{--lvl:var(--orange)} [data-level="bad"]{--lvl:var(--red)} [data-level="away"]{--lvl:var(--gray)}
 
-/* ---------- screens ---------- */
-.screen{max-width:980px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom))}
-.navbar{display:flex;align-items:center;justify-content:flex-end;gap:2px;height:44px;margin-top:env(safe-area-inset-top)}
-.navbar .left{margin-right:auto}
-.nb{width:44px;height:44px;border:0;background:none;color:var(--blue);display:grid;place-items:center;border-radius:10px}
-.nb svg{width:23px;height:23px}
-.nbtext{border:0;background:none;color:var(--blue);font-size:17px;height:44px;padding:0 4px}
-.large{font-size:34px;line-height:41px;font-weight:700;margin:0 0 14px;letter-spacing:.01em}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 0 0 .5px var(--glass-line),inset 0 1px 0 var(--glass-line),var(--glass-shadow)}
 
-/* ---------- cards & lists ---------- */
-.card{background:var(--card);border-radius:12px;padding:16px}
-.grid{display:grid;gap:16px}
-.list{background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:34px}
-.cell{position:relative;display:flex;align-items:center;gap:12px;min-height:44px;padding:0 16px;width:100%;border:0;background:none;text-align:left;font-size:17px}
+/* ===== layout ===== */
+.screen{max-width:1080px;margin:0 auto;padding:0 16px calc(112px + env(safe-area-inset-bottom))}
+.navbar{display:flex;align-items:center;gap:10px;min-height:52px;padding-top:calc(8px + env(safe-area-inset-top))}
+.navbar .grow{flex:1}
+.large{font-size:34px;line-height:41px;font-weight:700;letter-spacing:.01em;margin:6px 0 14px}
+.gbtn{width:44px;height:44px;border:0;border-radius:50%;display:grid;place-items:center;color:var(--label)}
+.gbtn svg{width:21px;height:21px}
+.gbtn:active{transform:scale(.94)}
+.placebtn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px 0 8px;border:0;border-radius:22px;font-size:17px;font-weight:600;color:var(--label);max-width:62vw}
+.placebtn .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.placebtn .chev{width:11px;height:11px;color:var(--label2);flex:none}
+.nbtext{border:0;background:none;color:var(--tint);font-size:17px;height:44px;padding:0 4px}
+.nbtext.strong{font-weight:600}
+.nbtext[disabled]{color:var(--label3)}
+
+/* ===== cards & lists ===== */
+.card{background:var(--card);border-radius:22px;padding:18px}
+.cardhead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.cardhead h2{font-size:20px;font-weight:700}
+.cardhead span{font-size:15px;color:var(--label2)}
+.sechead{font-size:20px;font-weight:700;margin:30px 4px 12px}
+.list{background:var(--card);border-radius:16px;overflow:hidden;margin-bottom:30px}
+.cell{position:relative;display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;width:100%;border:0;background:none;text-align:left;font-size:17px;color:var(--label)}
 .cell+.cell::before,.cell+details::before,details+.cell::before{content:"";position:absolute;top:0;right:0;left:57px;border-top:.5px solid var(--sep)}
 .list.noicon .cell+.cell::before{left:16px}
-button.cell:active,summary.cell:active{background:var(--fill)}
+button.cell:active,summary.cell:active,label.cell:active{background:var(--fill)}
 .cell .t{flex:1;min-width:0}
+.cell .t small{display:block;font-size:13px;color:var(--label2);margin-top:1px}
 .cell .v{color:var(--label2);white-space:nowrap}
-.cell.action .t{color:var(--blue)}
+.cell .v.tick{color:var(--tint);display:grid}
+.cell .v.tick svg{width:16px;height:16px}
+.cell.action .t{color:var(--tint)}
 .cell.danger .t{color:var(--red)}
-.ico{width:29px;height:29px;border-radius:7px;display:grid;place-items:center;color:#fff;flex:none}
-.ico svg{width:18px;height:18px}
+.ico{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none}
+.ico svg{width:62%;height:62%}
 .chev{width:9px;height:14px;color:var(--label3);flex:none}
 .cell select{appearance:none;-webkit-appearance:none;border:0;background:none;color:var(--label2);font-size:17px;text-align:right;direction:rtl;padding:0;cursor:pointer}
 .cell select option{direction:ltr}
@@ -75,55 +92,71 @@ details{position:relative}
 summary{list-style:none}
 summary::-webkit-details-marker{display:none}
 details[open] summary .chev{transform:rotate(90deg)}
-.fieldcell input{flex:1;border:0;background:none;font-size:17px;padding:11px 0;outline:none;min-width:0}
+.fieldcell input{flex:1;border:0;background:none;font-size:17px;padding:13px 0;outline:none;min-width:0;color:var(--label)}
 .fieldcell input::placeholder{color:var(--label3)}
+.foot{font-size:13px;color:var(--label2);text-align:center;margin:0 16px}
+.foot.err{color:var(--red)}
+.footer{font-size:13px;color:var(--label2);margin:-18px 16px 30px}
 
-/* iOS switch */
+/* controls */
 .sw{appearance:none;-webkit-appearance:none;margin:0;flex:none;position:relative;width:51px;height:31px;border-radius:16px;background:var(--fill2);transition:background .25s;cursor:pointer}
 .sw::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06);transition:transform .25s}
 .sw:checked{background:var(--green)}
 .sw:checked::after{transform:translateX(20px)}
-
-/* iOS slider */
-.slidercell{flex-wrap:wrap;padding:11px 16px 14px}
-.slidercell .slider{flex-basis:100%;margin-top:12px}
-.slider{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--blue) var(--p,50%),var(--fill2) var(--p,50%));margin:0;cursor:pointer}
+.slidercell{flex-wrap:wrap;padding:12px 16px 16px}
+.slidercell .slider{flex-basis:100%;margin-top:14px}
+.slider{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--tint) var(--p,50%),var(--fill2) var(--p,50%));margin:0;cursor:pointer}
 .slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
 .slider::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
-
-/* buttons */
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-size:17px;font-weight:600}
+.seg{display:flex;background:var(--fill);border-radius:9px;padding:2px}
+.seg button{flex:1;height:30px;border:0;background:none;border-radius:7px;font-size:13px;font-weight:500;padding:0 10px;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--segsel);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.cell .seg{flex:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border:0;border-radius:26px;background:var(--tint);color:#fff;font-size:17px;font-weight:600}
 .btn[disabled]{opacity:.45;cursor:default}
-.btn:not([disabled]):active{opacity:.75}
-.plain{display:block;width:100%;height:44px;border:0;background:none;color:var(--blue);font-size:17px}
+.btn:not([disabled]):active{opacity:.78}
+.btn.small{width:auto;height:36px;border-radius:18px;padding:0 16px;font-size:15px}
+.plain{display:block;width:100%;height:46px;border:0;background:none;color:var(--tint);font-size:17px}
 .spin{width:18px;height:18px;border:2.2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* segmented control */
-.seg{display:flex;background:var(--fill);border-radius:9px;padding:2px;margin-bottom:12px}
-.seg button{flex:1;height:28px;border:0;background:none;border-radius:7px;font-size:13px;font-weight:500}
-.seg button[aria-pressed="true"]{background:var(--segsel);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+/* ring */
+.ring{position:relative;width:var(--size,68px);height:var(--size,68px);flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:var(--sw,14);stroke-linecap:round}
+.ring .track{stroke:var(--lvl);opacity:.2;transition:stroke .4s}
+.ring .prog{stroke:var(--lvl);stroke-dasharray:314.16;stroke-dashoffset:314.16;transition:stroke-dashoffset .5s ease,stroke .4s}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;font:700 calc(var(--size,68px)*.29)/1 var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ring .num small{font-size:.5em;font-weight:600;margin-left:1px}
 
-/* ---------- onboarding (Apple welcome sheet) ---------- */
-.welcome{max-width:400px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(56px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))}
-.appicon{width:92px;height:92px;border-radius:21px;margin:0 auto 22px;display:block;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.welcome h1{font-size:34px;line-height:41px;font-weight:700;text-align:center;margin:0}
+/* ===== welcome ===== */
+.welcome{max-width:420px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:calc(48px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))}
+.hero{position:relative;width:148px;height:148px;margin:0 auto 26px;border-radius:36px;overflow:hidden;background:radial-gradient(120% 100% at 50% 0%,#1C2B3B 0%,#0C131B 60%,#06090D 100%);box-shadow:0 18px 40px -16px rgba(13,30,50,.55),inset 0 0 0 .5px rgba(255,255,255,.12);--green:#30D158;--red:#FF453A}
+.hero .fig{position:absolute;inset:0;width:100%;height:100%}
+.welcome h1{font-size:34px;line-height:41px;font-weight:700;text-align:center}
 .welcome .sub{color:var(--label2);text-align:center;margin-top:6px}
-.feats{list-style:none;margin:44px 0 0;padding:0 8px;display:grid;gap:26px}
-.feats li{display:flex;align-items:center;gap:18px;font-size:17px;font-weight:600}
-.feats svg{width:34px;height:34px;flex:none}
-.welcome .bottom{margin-top:auto;padding-top:32px}
-.privacy{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;color:var(--label2);text-align:center;margin-bottom:18px}
-.privacy svg{width:24px;height:24px;color:var(--blue)}
-.foot{font-size:13px;color:var(--label2);text-align:center;min-height:18px;margin-top:10px}
-.foot.err{color:var(--red)}
+.feats{list-style:none;margin:40px 0 0;padding:0 6px;display:grid;gap:26px}
+.feats li{display:flex;align-items:center;gap:18px}
+.feats b{display:block;font-size:17px;font-weight:600}
+.feats span{display:block;font-size:15px;color:var(--label2);margin-top:2px}
+.feats svg{width:36px;height:36px;flex:none}
+.welcome .bottom{margin-top:auto;padding-top:30px;display:grid;gap:12px}
+.privacy{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--label2)}
+.privacy svg{width:16px;height:16px;color:var(--green)}
 
-/* ---------- calibration (Face ID style) ---------- */
-.enroll{max-width:420px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 24px calc(24px + env(safe-area-inset-bottom))}
-.enroll .navbar{justify-content:flex-start}
-.enroll h1{font-size:28px;line-height:34px;font-weight:700;text-align:center;margin:14px 0 0}
-.enroll .sub{color:var(--label2);text-align:center;margin-top:8px;min-height:22px}
-.ring-cam{position:relative;width:min(290px,76vw);aspect-ratio:1;margin:34px auto 0}
+/* ===== calibration ===== */
+.enroll{max-width:440px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 24px calc(20px + env(safe-area-inset-bottom))}
+.enroll .navbar{justify-content:space-between}
+.steps{display:flex;gap:6px}
+.steps i{width:22px;height:5px;border-radius:3px;background:var(--fill2);transition:background .3s}
+.steps i.done{background:var(--green)} .steps i.now{background:var(--label)}
+.nbspacer{width:60px}
+.calfor{font-size:13px;color:var(--label2);text-align:center;margin-top:6px}
+.enroll h1{font-size:28px;line-height:34px;font-weight:700;text-align:center;margin-top:4px}
+.enroll .sub{color:var(--label2);text-align:center;margin-top:6px;min-height:22px}
+.calmain{position:relative;margin:20px auto 0;width:min(290px,74vw,40dvh);transition:width .35s}
+.enroll.done .calmain{width:min(230px,60vw,30dvh)}
+.ring-cam{position:relative;width:100%;aspect-ratio:1}
 .ring-cam .ticks{position:absolute;inset:0;width:100%;height:100%}
 .ring-cam .ticks line{stroke:var(--fill2);stroke-width:3.2;stroke-linecap:round;transition:stroke .15s}
 .ring-cam .ticks line.on{stroke:var(--green)}
@@ -131,109 +164,235 @@ details[open] summary .chev{transform:rotate(90deg)}
 .lens .cam{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:50%}
 .ring-cam .count{position:absolute;inset:11%;display:grid;place-items:center;font:700 96px var(--round);color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.45);pointer-events:none}
 .ring-cam .done{position:absolute;inset:11%;display:grid;place-items:center;border-radius:50%;background:var(--card)}
-.ring-cam .done svg{width:46%;height:46%}
-.enroll .bottom{margin-top:auto;padding-top:28px}
+.ring-cam .done svg{width:44%;height:44%}
+.demo{margin:18px auto 0;width:150px;height:96px;border-radius:24px;display:grid;place-items:center}
+.demo svg{width:132px;height:96px}
+.demo .chair{stroke:var(--label3);stroke-width:3;stroke-linecap:round;fill:none}
+.demo .scr{fill:var(--label3)}
+.demo .spine,.demo .neckl{stroke:var(--label);stroke-width:5;stroke-linecap:round;fill:none}
+.demo .head{fill:var(--label)}
+.demo .ghost{fill:none;stroke:var(--label3);stroke-width:1.5;stroke-dasharray:2.5 2.5}
+.demo .mover{stroke:var(--orange)}
+.demo .head.mover{fill:var(--orange);stroke:none}
+.vals{margin:22px 0 0}
+.vals .cell{min-height:46px}
+.vals .ico{background:none;width:24px;height:24px}
+.vals .ico.ok{color:var(--green)} .vals .ico.no{color:var(--orange)}
+.vals .ico svg{width:100%;height:100%}
+.enroll .bottom{margin-top:auto;padding-top:22px}
 
-/* ---------- camera ---------- */
-.cam{position:relative;width:100%;aspect-ratio:var(--ar,4/3);overflow:hidden;background:#000;border-radius:10px}
-.cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1)}
-.cam video{object-fit:cover}
-.cam canvas{object-fit:cover}
+/* ===== camera ===== */
+.cam{position:relative;width:100%;aspect-ratio:var(--ar,4/3);overflow:hidden;background:#000}
+.cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 
-/* ---------- posture tab ---------- */
-.now{display:flex;align-items:center;gap:20px}
-.ring{width:128px;height:128px;flex:none;position:relative}
-.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:14;stroke-linecap:round}
-.ring .track{stroke:var(--lvl);opacity:.2;transition:stroke .4s}
-.ring .prog{stroke:var(--lvl);transition:stroke-dashoffset .5s ease,stroke .4s}
-.ring .num{position:absolute;inset:0;display:grid;place-items:center;font:700 34px var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
-.ring .num small{font-size:17px;font-weight:600;margin-left:1px}
-.now .status{font-size:22px;line-height:28px;font-weight:700}
-.now .neck{color:var(--label2);font-size:15px;margin-top:4px;min-height:20px}
-.figbox{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--bg)}
-.figbox .cam{position:absolute;inset:0;height:100%;aspect-ratio:auto;border-radius:0}
-.fig{display:block;width:100%;height:100%}
-.fig .gl{stroke:var(--sep);stroke-width:.6;opacity:.6}
-.fig .plumb{stroke:var(--label3);stroke-width:1.5;stroke-dasharray:3 5}
-.fig .level{stroke:var(--lvl);stroke-width:1.5;stroke-dasharray:3 5;transition:stroke .4s}
-.fig .sil{fill:var(--label);opacity:.86;transition:opacity .4s}
-.fig .mk{fill:var(--lvl);stroke:var(--bg);stroke-width:3;transition:fill .4s}
+/* ===== posture: dark scan card ===== */
+.pgrid{display:grid;gap:16px}
+.scan{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:4/5;color:#fff;isolation:isolate;
+  background:radial-gradient(120% 85% at 50% 0%,#1D2D3E 0%,#0D151E 58%,#06090D 100%);
+  box-shadow:0 24px 48px -24px rgba(10,25,45,.55),inset 0 0 0 .5px rgba(255,255,255,.08);
+  --green:#30D158;--orange:#FF9F0A;--red:#FF453A;--gray:#8E8E93}
+.scan .fig{position:absolute;inset:0;width:100%;height:100%}
+.camslot{position:absolute;inset:0}
+.camslot .cam{position:absolute;inset:0;height:100%;aspect-ratio:auto}
+.scan .vig{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(6,9,13,.55),transparent 22%,transparent 60%,rgba(6,9,13,.75));z-index:1}
+.scanline{position:absolute;left:0;right:0;top:-26%;height:26%;pointer-events:none;opacity:0;z-index:1;
+  background:linear-gradient(to bottom,transparent,rgba(110,200,255,.035) 70%,rgba(150,225,255,.16) 98%,transparent)}
+.scan.live .scanline{opacity:1;animation:sweep 3.8s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes sweep{from{transform:translateY(0)}to{transform:translateY(490%)}}
+.scan .topbar{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;z-index:2}
+.pill{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 13px;border-radius:16px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;min-width:0;
+  background:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18)}
+.pill span{overflow:hidden;text-overflow:ellipsis}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--lvl);flex:none}
+.scan.live .pill .dot{animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--lvl) 70%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
+.seg.dark{flex:none;background:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.18)}
+.seg.dark button{color:#fff;height:28px;padding:0 12px}
+.seg.dark button[aria-pressed="true"]{background:rgba(255,255,255,.92);color:#000;box-shadow:none}
+.seg.dark svg{width:16px;height:16px;display:block}
+.scan .panel{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:22px;
+  background:rgba(16,20,26,.5);-webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.14)}
+.scan .panel .ring .track{stroke:#fff;opacity:.16}
+.st-title{font-size:21px;line-height:26px;font-weight:700}
+.st-sub{font-size:15px;color:rgba(255,255,255,.7);margin-top:2px;font-variant-numeric:tabular-nums}
+.scan .calbtn{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:2;background:#fff;color:#000}
+
+/* figure (front view) */
+.fig .gl{stroke:rgba(140,200,255,.07);stroke-width:1}
+.fig .glM{stroke:rgba(140,200,255,.13);stroke-width:1}
+.fig .plumb{stroke:rgba(255,255,255,.22);stroke-width:1.5;stroke-dasharray:3 6}
+.fig .level{stroke:var(--lvl);stroke-width:1.5;stroke-dasharray:4 6;opacity:.75;transition:stroke .4s}
+.fig .mk{fill:var(--lvl);transition:fill .4s}
+.fig .halo{fill:var(--lvl);opacity:.22;transition:fill .4s}
 .fig .bracket line{stroke:var(--lvl);stroke-width:2;transition:stroke .4s}
-.fig[data-level="away"] .sil{opacity:.22}
-.metrics{display:flex;gap:28px}
+.fig .sil{transition:opacity .4s}
+.fig[data-level="away"] .sil{opacity:.4}
+
+/* status card (desktop) */
+.statuscard{display:flex;align-items:center;gap:22px}
+.statuscard .st-title{font-size:28px;line-height:34px}
+.statuscard .st-sub{color:var(--label2);font-size:17px;margin-top:4px}
+.statuscard .ring{--size:132px;--sw:12}
+
+/* today */
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .metrics .cap{font-size:13px;font-weight:600;color:var(--label2)}
-.metrics b{display:block;font:700 28px/1.15 var(--round);font-variant-numeric:tabular-nums}
-.metrics b small{font-size:17px;font-weight:600}
-#timeline{width:100%;height:84px;display:block;margin-top:14px}
+.metrics b{display:block;font:700 28px/1.15 var(--round);font-variant-numeric:tabular-nums;margin-top:2px}
+.metrics b small{font-size:15px;font-weight:600;margin-left:1px}
+.metrics .g b{color:var(--green)} .metrics .r b{color:var(--red)}
+.chart{position:relative;margin-top:18px;padding-right:32px}
+.bars{position:relative;display:grid;grid-template-columns:repeat(24,1fr);gap:3px;height:96px;align-items:end;
+  background:linear-gradient(var(--sep),var(--sep)) 0 0/100% .5px no-repeat,linear-gradient(var(--sep),var(--sep)) 0 50%/100% .5px no-repeat,linear-gradient(var(--sep),var(--sep)) 0 100%/100% .5px no-repeat}
+.bars i{display:flex;flex-direction:column-reverse;height:100%;border-radius:3px;overflow:hidden}
+.bars i b{display:block;flex:none;background:var(--green)}
+.bars i b+b{background:var(--red)}
+.bars i.now{background:var(--fill)}
+.chart .yl{position:absolute;right:0;font-size:11px;color:var(--label2);transform:translateY(-50%)}
+.xlabels{display:grid;grid-template-columns:repeat(4,1fr);margin-top:6px;font-size:11px;color:var(--label2)}
+#timeline{width:100%;height:84px;display:block}
 
-/* ---------- devices tab ---------- */
-.summary .cap{font-size:15px;font-weight:600;color:var(--label2)}
-.summary b{display:block;font:700 54px/1.05 var(--round);font-variant-numeric:tabular-nums;margin-top:2px}
-.summary b small{font-size:28px}
-.cell .sub2{display:block;font-size:13px;color:var(--label2)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;vertical-align:middle}
+/* devices */
+.summary{display:flex;align-items:center;gap:18px}
+.summary .ring{--size:92px;--sw:13}
+.summary b{display:block;font:700 34px/1.1 var(--round)}
+.summary span{color:var(--label2);font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{display:block;text-align:left;border:0;background:var(--card);border-radius:20px;padding:14px 14px 16px;color:var(--label);min-height:128px}
+.tile .tic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.tile .tic svg{width:21px;height:21px}
+.tile b{display:block;font-size:17px;font-weight:600;margin-top:14px}
+.tile>span:last-child{display:block;font-size:15px;color:var(--label2);margin-top:1px}
+.tile .tv{float:right;font:700 22px/38px var(--round);font-variant-numeric:tabular-nums}
+.tile.here{box-shadow:inset 0 0 0 2px var(--tint)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--green);font-weight:600}
+.badge i{width:7px;height:7px;border-radius:50%;background:currentColor}
 
-/* ---------- tab bar ---------- */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);background:var(--bar);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);border-top:.5px solid var(--sep)}
-.tabbar button{flex:1;max-width:180px;height:49px;border:0;background:none;color:#999999;display:grid;place-items:center}
-.tabbar button[aria-current="page"]{color:var(--blue)}
-.tabbar svg{width:28px;height:28px}
+/* ===== floating glass tab bar ===== */
+.tabbar{position:fixed;z-index:30;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:2px;padding:5px;border-radius:999px}
+.tabbar button{width:74px;height:52px;border:0;border-radius:999px;background:none;color:var(--label);display:grid;place-items:center;transition:background .25s,color .25s}
+.tabbar button[aria-current="page"]{color:var(--tint);background:var(--fill)}
+.tabbar svg{width:27px;height:27px}
 
-/* ---------- iOS notification banner ---------- */
-.banner{position:fixed;z-index:50;left:50%;top:max(8px,env(safe-area-inset-top));width:min(400px,calc(100% - 16px));transform:translate(-50%,-140%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1.08),visibility 0s .45s;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:22px;background:var(--banner);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);box-shadow:0 10px 30px rgba(0,0,0,.18);cursor:pointer;border:0;text-align:left;color:var(--label)}
+/* ===== menus & sheets ===== */
+.menu{position:fixed;z-index:62;width:258px;border-radius:16px;overflow:hidden;transform-origin:top left;transform:scale(.88);opacity:0;pointer-events:none;transition:transform .22s cubic-bezier(.2,.9,.3,1.1),opacity .18s;
+  background:var(--glass-strong);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);box-shadow:0 18px 50px rgba(0,0,0,.22),inset 0 0 0 .5px var(--glass-line)}
+.menu.open{transform:none;opacity:1;pointer-events:auto}
+.mi{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:6px 16px 6px 10px;border:0;background:none;font-size:17px;text-align:left;color:var(--label)}
+.mi+.mi{border-top:.5px solid var(--sep)}
+.mi:active{background:var(--fill)}
+.mi .chk{width:20px;flex:none;color:var(--label)}
+.mi .chk svg{width:15px;height:15px;display:block}
+.mi .t{flex:1;min-width:0}
+.mi .t small{display:block;font-size:13px;color:var(--label2)}
+.mi .mic{width:21px;height:21px;flex:none}
+.msep{height:8px;background:var(--fill)}
+.backdrop{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.32);opacity:0;pointer-events:none;transition:opacity .3s}
+.backdrop.open{opacity:1;pointer-events:auto}
+.backdrop.clear{background:transparent}
+.sheet{position:fixed;z-index:61;left:0;right:0;bottom:0;margin:0 auto;max-width:540px;max-height:92dvh;overflow:auto;background:var(--bg);border-radius:16px 16px 0 0;transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.9,.25,1);padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+.sheet:not(.open),.actions:not(.open){visibility:hidden;transition:transform .38s cubic-bezier(.2,.9,.25,1),visibility 0s .38s}
+.sheet.open{transform:none}
+.sheet .grab{width:36px;height:5px;border-radius:3px;background:var(--label3);margin:6px auto 2px}
+.sheet header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:52px}
+.sheet header h2{font-size:17px;font-weight:600}
+.sheet header .nbtext:last-child{justify-self:end}
+.sheet header .nbtext:first-child{justify-self:start}
+.sheet .lbl{font-size:13px;color:var(--label2);margin:22px 16px 8px}
+.sheet .list{margin-bottom:0}
+.iconpick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.iconpick button{display:grid;justify-items:center;gap:8px;padding:14px 6px 12px;border:0;border-radius:16px;background:var(--card);font-size:13px;color:var(--label)}
+.iconpick button .ico{width:40px;height:40px;border-radius:11px}
+.iconpick button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--tint)}
+.actions{position:fixed;z-index:61;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));max-width:480px;margin:0 auto;display:grid;gap:8px;transform:translateY(130%);transition:transform .34s cubic-bezier(.2,.9,.25,1)}
+.actions.open{transform:none}
+.agroup{border-radius:14px;overflow:hidden;background:var(--glass-strong);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8)}
+.agroup p{font-size:13px;color:var(--label2);text-align:center;padding:14px 16px;border-bottom:.5px solid var(--sep)}
+.agroup button{display:block;width:100%;height:57px;border:0;background:none;color:var(--tint);font-size:20px}
+.agroup button+button{border-top:.5px solid var(--sep)}
+.agroup button.danger{color:var(--red)}
+.agroup button.cancel{font-weight:600;background:var(--card)}
+
+/* ===== banner, hud, nudges ===== */
+.banner{position:fixed;z-index:55;left:50%;top:max(8px,env(safe-area-inset-top));width:min(400px,calc(100% - 16px));transform:translate(-50%,-150%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1.08),visibility 0s .45s;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:24px;cursor:pointer;border:0;text-align:left;color:var(--label)}
 .banner.show{transform:translate(-50%,0);visibility:visible;transition:transform .45s cubic-bezier(.2,.9,.25,1.08)}
 .banner img{width:38px;height:38px;border-radius:9px;flex:none}
+.banner>div{flex:1}
 .banner .bt{display:flex;justify-content:space-between;gap:8px;font-size:15px;font-weight:600}
 .banner .bt span{font-size:13px;font-weight:400;color:var(--label2)}
 .banner p{font-size:15px}
-.banner>div{flex:1}
-.hud{position:fixed;z-index:49;left:50%;bottom:calc(66px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:10px 16px;border-radius:14px;background:var(--banner);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:0 6px 20px rgba(0,0,0,.15);font-size:15px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;max-width:calc(100vw - 32px)}
+.hud{position:fixed;z-index:56;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:11px 18px;border-radius:22px;font-size:15px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;max-width:calc(100vw - 32px);text-align:center}
 .hud.show{opacity:1}
+#glow{position:fixed;inset:0;z-index:41;pointer-events:none;opacity:0;transition:opacity .6s;--gc:rgba(255,59,48,.55);box-shadow:inset 0 0 90px 26px var(--gc),inset 0 0 0 3px var(--gc)}
+#blurN{position:fixed;inset:0;z-index:40;pointer-events:none;-webkit-backdrop-filter:blur(var(--b,0px));backdrop-filter:blur(var(--b,0px));transition:-webkit-backdrop-filter .5s,backdrop-filter .5s;display:grid;place-items:center}
+#blurN .msg{display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:26px;font-size:17px;font-weight:600;opacity:0;transform:scale(.94);transition:opacity .4s,transform .4s}
+#blurN .msg svg{width:22px;height:22px;color:var(--red)}
+#blurN.on .msg{opacity:1;transform:none}
 
-@media (min-width: 860px){
-  .grid.posture{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto 1fr;align-items:start}
-  .grid.posture .figcard{grid-row:span 2}
-  .figbox{aspect-ratio:4/5}
-  .settings-wrap,.devices-wrap{max-width:620px;margin:0 auto}
+/* ===== desktop ===== */
+.deskonly{display:none}
+@media (min-width: 900px){
+  .screen{padding-left:32px;padding-right:32px}
+  .pgrid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start;gap:20px}
+  .pgrid .left{position:sticky;top:12px}
+  .scan{aspect-ratio:auto;height:min(76vh,680px)}
+  .scan .panel{display:none}
+  .statuscard.deskonly{display:flex}
+  .tiles{grid-template-columns:repeat(4,1fr)}
+  .narrow{max-width:680px;margin:0 auto}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
-<!-- ========== welcome ========== -->
+<!-- ================= welcome ================= -->
 <section data-view="onboard" hidden>
   <div class="welcome">
-    <img class="appicon" src="icon-180.png" alt="">
+    <div class="hero" id="heroFig"></div>
     <h1>Earline</h1>
     <p class="sub">Turtle-neck alerts that learn you.</p>
     <ul class="feats">
-      <li><svg viewBox="0 0 34 34" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11V7a2 2 0 0 1 2-2h4M23 5h4a2 2 0 0 1 2 2v4M29 23v4a2 2 0 0 1-2 2h-4M11 29H7a2 2 0 0 1-2-2v-4"/><circle cx="17" cy="14" r="4.2"/><path d="M10.5 25c1.2-3.4 3.6-5 6.5-5s5.3 1.6 6.5 5"/></svg>Learns your posture</li>
-      <li><svg viewBox="0 0 34 34" fill="var(--red)"><path d="M17 4.5c-4.9 0-8.3 3.8-8.3 8.6v5.3l-2.6 3.9c-.6.9 0 2.1 1.1 2.1h19.6c1.1 0 1.7-1.2 1.1-2.1l-2.6-3.9v-5.3c0-4.8-3.4-8.6-8.3-8.6zM13.6 26.5a3.5 3.5 0 0 0 6.8 0z"/></svg>Alerts you in seconds</li>
-      <li><svg viewBox="0 0 34 34" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="19" height="13.5" rx="2"/><path d="M8 25h10"/><rect x="24.5" y="11" width="7" height="16" rx="1.8"/></svg>Works on every device</li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b>Learns your posture</b><span>Three quick poses train a model just for you.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b>Catches turtle neck</b><span>Even when only your head drifts forward.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="20" height="14" rx="2.2"/><path d="M8 25.5h11"/><rect x="25.5" y="11" width="7" height="17" rx="2"/></svg><div><b>Every place you sit</b><span>Laptop, tablet, phone and cushion, together.</span></div></li>
     </ul>
     <div class="bottom">
-      <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg>Video stays on this device.</p>
+      <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg>Video never leaves this device.</p>
       <button class="btn" id="btnBegin">Continue</button>
       <p class="foot" id="obStatus" role="status" aria-live="polite"></p>
     </div>
   </div>
 </section>
 
-<!-- ========== calibration ========== -->
+<!-- ================= calibration ================= -->
 <section data-view="calib" hidden>
   <div class="enroll">
-    <div class="navbar"><button class="nbtext" id="calCancel">Cancel</button></div>
-    <h1 id="calTitle">Sit up straight</h1>
-    <p class="sub" id="calSub">Keep your face in the circle.</p>
-    <div class="ring-cam">
-      <svg class="ticks" id="calTicks" viewBox="0 0 300 300" aria-hidden="true"></svg>
-      <div class="lens" id="camSlotCalib"></div>
-      <div class="count" id="camCount" hidden></div>
-      <div class="done" id="calDone" hidden></div>
+    <div class="navbar">
+      <button class="nbtext" id="calCancel">Cancel</button>
+      <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i><i></i></div>
+      <span class="nbspacer"></span>
     </div>
-    <p class="foot" id="calHint"></p>
+    <p class="calfor" id="calFor"></p>
+    <h1 id="calTitle"></h1>
+    <p class="sub" id="calSub"></p>
+    <div class="calmain">
+      <div class="ring-cam">
+        <svg class="ticks" id="calTicks" viewBox="0 0 300 300" aria-hidden="true"></svg>
+        <div class="lens" id="camSlotCalib"></div>
+        <div class="count" id="camCount" hidden></div>
+        <div class="done" id="calDone" hidden></div>
+      </div>
+    </div>
+    <div class="demo glass" id="calDemo" aria-hidden="true">
+        <svg viewBox="0 0 120 88" id="sideFig">
+          <path class="chair" d="M24 20v58M24 72h46"/>
+          <rect class="scr" x="104" y="22" width="5" height="34" rx="2"/>
+          <circle class="ghost" r="9.5"/>
+          <path class="spine"/><path class="neckl"/><circle class="head" r="9.5"/>
+        </svg>
+    </div>
+    <div class="list noicon vals" id="calVals" hidden></div>
+    <p class="foot" id="calHint" style="margin-top:12px;min-height:18px"></p>
     <div class="bottom">
       <button class="btn" id="calBtn">Start</button>
       <button class="plain" id="calBtn2" hidden></button>
@@ -241,73 +400,104 @@ details[open] summary .chev{transform:rotate(90deg)}
   </div>
 </section>
 
-<!-- ========== posture ========== -->
+<!-- ================= posture ================= -->
 <section data-view="monitor" class="screen" hidden>
   <div class="navbar">
-    <button class="nb" id="btnWidget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="2.5"/><rect x="12" y="11" width="7" height="5.5" rx="1.2" fill="currentColor"/></svg></button>
-    <button class="nb" data-act="calib" aria-label="Recalibrate" title="Recalibrate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></button>
-    <button class="nb" id="btnPause" aria-label="Pause" title="Pause"></button>
+    <button class="placebtn glass" id="placeBtn" aria-haspopup="menu"><span id="placeIco"></span><span class="nm" id="placeName"></span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg></button>
+    <span class="grow"></span>
+    <button class="gbtn glass" id="btnWidget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="3"/><rect x="12" y="11" width="7" height="5.5" rx="1.4" fill="currentColor"/></svg></button>
+    <button class="gbtn glass" id="btnPause" aria-label="Pause" title="Pause"></button>
   </div>
   <h1 class="large">Posture</h1>
-  <div class="grid posture">
-    <div class="card now" id="nowCard" data-level="ok">
-      <div class="ring" id="ring">
-        <svg viewBox="0 0 128 128" aria-hidden="true"><circle class="track" cx="64" cy="64" r="55"/><circle class="prog" cx="64" cy="64" r="55"/></svg>
-        <div class="num" id="ringNum">–</div>
+  <div class="pgrid">
+    <div class="left">
+      <div class="scan" id="scan" data-level="away">
+        <div class="camslot" id="camSlotMonitor"></div>
+        <div class="vig"></div>
+        <div class="scanline"></div>
+        <div class="topbar">
+          <span class="pill"><i class="dot"></i><span id="livePill">Live</span></span>
+          <div class="seg dark" role="group" aria-label="View">
+            <button id="segFig" aria-pressed="true" aria-label="Figure" title="Figure"><svg viewBox="0 0 16 16" fill="currentColor"><ellipse cx="8" cy="5" rx="2.8" ry="3.3"/><path d="M2.5 15c.4-3 2.2-4.8 5.5-4.8s5.1 1.8 5.5 4.8z"/></svg></button>
+            <button id="segCam" aria-pressed="false" aria-label="Camera" title="Camera"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 5.2c0-.9.7-1.6 1.6-1.6h6.4c.9 0 1.6.7 1.6 1.6v5.6c0 .9-.7 1.6-1.6 1.6H3.1c-.9 0-1.6-.7-1.6-1.6zM11.8 6.5l2.7-1.7v6.4l-2.7-1.7z"/></svg></button>
+          </div>
+        </div>
+        <button class="btn small calbtn" data-act="calib" id="scanCal" hidden>Calibrate</button>
+        <div class="panel">
+          <div class="ring" id="ringSm" style="--size:64px;--sw:13"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
+          <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p></div>
+        </div>
       </div>
-      <div><p class="status" id="mStatus">–</p><p class="neck" id="mSub"></p>
-        <button class="btn" data-act="calib" id="mCal" hidden style="height:36px;border-radius:18px;font-size:15px;width:auto;padding:0 16px;margin-top:10px">Calibrate</button></div>
     </div>
-    <div class="card figcard">
-      <div class="seg" role="group" aria-label="View">
-        <button id="segFig" aria-pressed="true">Figure</button>
-        <button id="segCam" aria-pressed="false">Camera</button>
+    <div class="right pgrid" style="gap:16px;grid-template-columns:minmax(0,1fr)">
+      <div class="card statuscard deskonly" id="statusCard" data-level="away">
+        <div class="ring" id="ringLg"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
+        <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p><button class="btn small" data-act="calib" id="cardCal" hidden style="margin-top:12px">Calibrate</button></div>
       </div>
-      <div class="figbox" id="figBox"><div id="camSlotMonitor"></div></div>
-    </div>
-    <div class="card">
-      <div class="metrics">
-        <div><span class="cap">Upright</span><b id="stGood">–</b></div>
-        <div><span class="cap">Alerts</span><b id="stAlerts">0</b></div>
+      <div class="card">
+        <div class="cardhead"><h2>Today</h2><span id="todayDate"></span></div>
+        <div class="metrics">
+          <div class="g"><span class="cap">Upright</span><b id="stGood">–</b></div>
+          <div class="r"><span class="cap">Turtle neck</span><b id="stBad">0<small>m</small></b></div>
+          <div><span class="cap">Alerts</span><b id="stAlerts">0</b></div>
+        </div>
+        <div class="chart">
+          <div class="bars" id="bars"></div>
+          <span class="yl" style="top:0">60m</span><span class="yl" style="top:48px">30m</span>
+          <div class="xlabels"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span></div>
+        </div>
       </div>
-      <canvas id="timeline" aria-label="Last 5 minutes"></canvas>
+      <div class="card">
+        <div class="cardhead"><h2>Last 5 Minutes</h2><span id="thrLabel"></span></div>
+        <canvas id="timeline" aria-label="Turtle-neck risk over the last five minutes"></canvas>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ========== devices ========== -->
+<!-- ================= devices ================= -->
 <section data-view="devices" class="screen" hidden>
-  <div class="navbar"></div>
-  <div class="devices-wrap">
+  <div class="narrow">
+    <div class="navbar"></div>
     <h1 class="large">Devices</h1>
-    <div class="card summary" style="margin-bottom:34px"><span class="cap">Upright today</span><b id="totPct">–</b></div>
-    <div class="list" id="devList"></div>
+    <div class="card summary" data-level="ok">
+      <div class="ring" id="ringTot"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num"></div></div>
+      <div><b id="totPct">–</b><span id="totSub">upright today</span></div>
+    </div>
+    <h2 class="sechead">Devices</h2>
+    <div class="tiles" id="devTiles"></div>
+    <h2 class="sechead">Places</h2>
+    <div class="list" id="placeStats"></div>
   </div>
 </section>
 
-<!-- ========== settings ========== -->
+<!-- ================= settings ================= -->
 <section data-view="settings" class="screen" hidden>
-  <div class="navbar"></div>
-  <div class="settings-wrap">
+  <div class="narrow">
+    <div class="navbar"></div>
     <h1 class="large">Settings</h1>
 
+    <div class="list" id="placeList"></div>
+
     <div class="list">
-      <label class="cell"><span class="ico" style="background:var(--gray)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><span class="t">Device</span>
+      <label class="cell"><span class="ico" style="background:var(--gray)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><span class="t">This Device</span>
         <select id="devSel"><option value="laptop">Laptop</option><option value="tablet">Tablet</option><option value="phone">Phone</option></select>
         <svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></label>
-      <button class="cell action" data-act="calib"><span class="ico" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></span><span class="t">Recalibrate</span></button>
+      <button class="cell action" data-act="calib"><span class="ico" style="background:var(--tint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></span><span class="t">Recalibrate</span></button>
     </div>
 
     <div class="list">
       <div class="cell slidercell"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span><span class="t"><label for="setThr">Alert at</label></span><span class="v" id="setThrOut">90%</span>
         <input class="slider" type="range" id="setThr" min="60" max="99" step="1"></div>
+      <div class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><rect x="7.5" y="7.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></span><span class="t">Nudge</span>
+        <div class="seg" role="group" aria-label="Nudge style" id="nudgeSeg"><button data-v="glow">Glow</button><button data-v="blur">Blur</button><button data-v="off">Off</button></div></div>
       <label class="cell"><span class="ico" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5h3.2L12 5.2v13.6l-4.8-4.3H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="t">Sound</span><input class="sw" type="checkbox" id="setSound"></label>
       <button class="cell" id="btnNotif"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="3.6"/></svg></span><span class="t">Notifications</span><span class="v" id="notifVal">Off</span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
     </div>
 
     <div class="list">
-      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
-      <label class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
+      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
+      <label class="cell"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
     </div>
 
     <div class="list">
@@ -326,12 +516,13 @@ details[open] summary .chev{transform:rotate(90deg)}
       <label class="cell action" for="importFile" style="cursor:pointer"><span class="t">Import Data</span></label>
       <button class="cell danger" id="btnReset"><span class="t">Erase All Data</span></button>
     </div>
+    <p class="footer">Pose tracking by MediaPipe. Forward-head rule adapted from Dorso (MIT).</p>
   </div>
 </section>
 
 <input type="file" id="importFile" accept="application/json" hidden>
 
-<nav class="tabbar" id="tabbar" aria-label="Main" hidden>
+<nav class="tabbar glass" id="tabbar" aria-label="Main" hidden>
   <button data-go="monitor" aria-label="Posture" title="Posture"><svg viewBox="0 0 28 28" fill="currentColor"><ellipse cx="14" cy="8.6" rx="4.6" ry="5.4"/><path d="M11.6 14h4.8v3.4h-4.8z"/><path d="M4.5 25.5c.6-4.6 3.3-7.6 7.5-8.4h4c4.2.8 6.9 3.8 7.5 8.4z"/></svg></button>
   <button data-go="devices" aria-label="Devices" title="Devices"><svg viewBox="0 0 28 28" fill="currentColor"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h12A2.5 2.5 0 0 1 20 6.5V7h-2.2v-.3a.7.7 0 0 0-.7-.7H5.9a.7.7 0 0 0-.7.7v9.6c0 .4.3.7.7.7H15V19H5.5A2.5 2.5 0 0 1 3 16.5z"/><path d="M6 21h9v2H6z"/><rect x="17" y="9" width="8.5" height="15" rx="2"/></svg></button>
   <button data-go="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="9.6" fill="none" stroke="currentColor" stroke-width="3.6" stroke-dasharray="3.77 3.77"/><circle cx="14" cy="14" r="7.1" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="14" r="2.6" fill="currentColor"/></svg></button>
@@ -342,11 +533,33 @@ details[open] summary .chev{transform:rotate(90deg)}
   <canvas id="overlay"></canvas>
 </div>
 
-<button class="banner" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt">Turtle neck<span>now</span></div><p>Sit up straight.</p></div></button>
-<div class="hud" id="toast" role="status" aria-live="polite"></div>
+<div id="blurN"><div class="msg glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v4M12 3 9 6M12 3l3 3"/><ellipse cx="12" cy="12.5" rx="3" ry="3.4"/><path d="M5.5 21c.6-3 3-4.8 6.5-4.8s5.9 1.8 6.5 4.8"/></svg>Sit up to clear the screen</div></div>
+<div id="glow"></div>
+<button class="banner glass" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt">Turtle neck<span>now</span></div><p>Bring your head back over your shoulders.</p></div></button>
+<div class="hud glass" id="toast" role="status" aria-live="polite"></div>
+
+<div class="menu" id="placeMenu" role="menu"></div>
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="placeSheet" role="dialog" aria-modal="true" aria-labelledby="psTitle">
+  <div class="grab"></div>
+  <header><button class="nbtext" id="psCancel">Cancel</button><h2 id="psTitle">New Place</h2><button class="nbtext strong" id="psSave">Add</button></header>
+  <div class="list noicon"><div class="cell fieldcell"><input id="psName" placeholder="Name" maxlength="24" autocomplete="off" aria-label="Place name"></div></div>
+  <p class="lbl">Icon</p>
+  <div class="iconpick" id="psIcons"></div>
+  <p class="lbl">Seat</p>
+  <div class="seg" id="psSeat" role="group" aria-label="Seat"></div>
+</div>
+<div class="actions" id="actionSheet" role="dialog" aria-modal="true"></div>
 
 <script type="module">
-/* Earline: collect samples -> train personal model -> live risk vs threshold (same 3 steps as Face-id) */
+/* =====================================================================
+   Earline
+   Same three steps as the Face-id project: collect samples -> train a
+   personal model -> live probability vs. threshold. Detection combines
+   (1) a personal logistic model trained on upright / head-forward / slouch
+   samples and (2) a forward-head rule adapted from Dorso (MIT):
+   your face growing past its upright size means your head moved forward.
+   ===================================================================== */
 const MP_VER = '0.10.14';
 const MP_URL = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}`;
 const MODEL_FACE = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
@@ -357,6 +570,7 @@ const BUZZ_STRENGTH = 205;
 const HOLD_SEC = 3, COOLDOWN_SEC = 60;
 const SAMPLES_PER_POSE = 60;
 const TICK_MONITOR = 200, TICK_CALIB = 100;
+const PROFILE_V = 5;
 const SIM = new URLSearchParams(location.search).has('sim');   // dev: run without camera/models
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -366,16 +580,21 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const deg = r => r * 180 / Math.PI;
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, z: ((a.z || 0) + (b.z || 0)) / 2 });
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const sigmoid = z => 1 / (1 + Math.exp(-z));
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const pct = (arr, q) => { const a = arr.filter(Number.isFinite).sort((x, y) => x - y); if (!a.length) return null; const i = (a.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return a[lo] + (a[hi] - a[lo]) * (i - lo); };
+const median = a => pct(a, .5);
+const mins = s => Math.round(s / 60);
 
-/* storage */
+/* ---------- storage ---------- */
 const Store = {
   get(k, d) { try { const v = localStorage.getItem('earline.' + k); return v ? JSON.parse(v) ?? d : d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem('earline.' + k, JSON.stringify(v)); } catch {} },
   clear() { try { Object.keys(localStorage).filter(k => k.startsWith('earline.')).forEach(k => localStorage.removeItem(k)); } catch {} }
 };
 
-/* cloud DB (Supabase REST, optional) */
+/* ---------- cloud DB (Supabase REST, optional) ---------- */
 const Cloud = {
   cfg() { return Store.get('cloud', null); },
   on() { const c = this.cfg(); return !!(c && c.url && c.key && c.user); },
@@ -384,7 +603,7 @@ const Cloud = {
     const r = await fetch(c.url.replace(/\/+$/, '') + '/rest/v1/' + path, {
       ...opts, headers: { apikey: c.key, Authorization: 'Bearer ' + c.key, 'Content-Type': 'application/json', ...(opts.headers || {}) }
     });
-    if (!r.ok) throw new Error(`Error ${r.status}`);
+    if (!r.ok) throw new Error(`Sync error ${r.status}`);
     const t = await r.text(); return t ? JSON.parse(t) : null;
   },
   async pushProfile(p) {
@@ -405,18 +624,42 @@ const Cloud = {
   async pullDaily(day) { const c = this.cfg(); return await this.req(`posture_daily?user_code=eq.${encodeURIComponent(c.user)}&day=eq.${day}&select=device,good_sec,bad_sec,alerts`) || []; }
 };
 
-/* devices */
+/* ---------- devices, places, icons ---------- */
 const DEV = { laptop: 'Laptop', tablet: 'Tablet', phone: 'Phone' };
 const DEV_ICON = {
-  laptop: ['var(--gray)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>'],
-  tablet: ['var(--indigo)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 18h2"/></svg>'],
-  phone:  ['var(--green)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg>'],
-  cushion:['var(--orange)', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg>']
+  laptop: ['var(--gray)', '<path d="M4 5.5h16v10.5H4zM2 19h20"/>'],
+  tablet: ['var(--indigo)', '<rect x="5" y="3" width="14" height="18" rx="2.2"/><path d="M11 18h2"/>'],
+  phone:  ['var(--green)', '<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/>'],
+  cushion:['var(--mint)', '<rect x="3" y="10.5" width="18" height="8" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/>']
 };
-const PAUSE_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="1.2"/><rect x="14" y="4.5" width="4" height="15" rx="1.2"/></svg>';
-const PLAY_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 4.6c0-.8.9-1.3 1.6-.9l10.6 6.6c.7.4.7 1.4 0 1.8L9.1 18.7c-.7.4-1.6-.1-1.6-.9z"/></svg>';
-const CHECK_SVG = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--green)"/><path d="M29 51.5 43.5 66 72 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const WARN_SVG = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--orange)"/><path d="M50 27v30" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="72" r="5" fill="#fff"/></svg>';
+const PLACE_ICONS = {
+  dorm:    { label: 'Dorm',       color: 'var(--indigo)', svg: '<path d="M3 5v14M3 14.5h18M21 19v-4.5a3 3 0 0 0-3-3h-7.5v3"/><circle cx="7" cy="11.3" r="1.8"/>' },
+  study:   { label: 'Study Hall', color: 'var(--orange)', svg: '<path d="M12 7.5C10 6 7 5.5 3.5 6v12c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V6c-3.5-.5-6.5 0-8.5 1.5zM12 7.5v12"/>' },
+  library: { label: 'Library',    color: 'var(--brown)',  svg: '<path d="M5 4h3.2v16H5zM10.4 4h3.2v16h-3.2zM15.6 5.2l3-.8 3 15.2-3 .8z"/>' },
+  home:    { label: 'Home',       color: 'var(--green)',  svg: '<path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z"/>' },
+  class:   { label: 'Classroom',  color: 'var(--tint)',   svg: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11v4.8c3.2 2.2 7.8 2.2 11 0V11M21.5 9v5"/>' },
+  cafe:    { label: 'Café',       color: 'var(--pink)',   svg: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5V6M12 3.5V6"/>' }
+};
+const SEATS = { chair: 'Desk chair', stool: 'Stool', sofa: 'Sofa', floor: 'Floor' };
+const DEFAULT_PLACES = [
+  { id: 'dorm', name: 'Dorm', icon: 'dorm', seat: 'chair' },
+  { id: 'study', name: 'Study Hall', icon: 'study', seat: 'chair' },
+  { id: 'library', name: 'Library', icon: 'library', seat: 'chair' }
+];
+const svgIcon = (body, extra = '') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${body}</svg>`;
+const placeSquare = (icon, size = 29) => `<span class="ico" style="background:${PLACE_ICONS[icon]?.color || 'var(--gray)'};width:${size}px;height:${size}px">${svgIcon(PLACE_ICONS[icon]?.svg || '')}</span>`;
+const ICO = {
+  check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.2 3.2L13 4.8"/></svg>',
+  plus: svgIcon('<path d="M12 5v14M5 12h14"/>', 'class="mic"'),
+  recal: svgIcon('<path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/>', 'class="mic"'),
+  chev: '<svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="1.3"/><rect x="14" y="4.5" width="4" height="15" rx="1.3"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 4.6c0-.8.9-1.3 1.6-.9l10.6 6.6c.7.4.7 1.4 0 1.8L9.1 18.7c-.7.4-1.6-.1-1.6-.9z"/></svg>',
+  okc: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--green)"/><path d="M29 51.5 43.5 66 72 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  warnc: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="var(--orange)"/><path d="M50 27v30" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="72" r="5" fill="#fff"/></svg>',
+  rowOk: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.3 14.2-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4z"/></svg>',
+  rowNo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2zm0-4h-2V7h2z"/></svg>'
+};
 function detectDevice() {
   const ua = navigator.userAgent;
   const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
@@ -429,24 +672,36 @@ function orientation() {
   if (t) return t.startsWith('landscape') ? 'landscape' : 'portrait';
   return innerWidth > innerHeight ? 'landscape' : 'portrait';
 }
-// tablets/phones: one model per orientation (camera sits somewhere else)
-const profileKey = () => S.device === 'laptop' ? 'laptop' : `${S.device}-${orientation()}`;
 
-/* state */
+/* ---------- state ---------- */
 const S = {
   device: Store.get('device', null) || detectDevice(),
+  places: Store.get('places', null) || DEFAULT_PLACES.map(p => ({ ...p })),
+  place: Store.get('place', 'dorm'),
   view: 'onboard', started: false, paused: false,
-  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false }, Store.get('settings', {})),
+  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false, nudge: 'glow' }, Store.get('settings', {})),
   profiles: Store.get('profiles', {}),
   stats: Store.get('stats', {}),
+  pstats: Store.get('pstats', {}),
   cloudDaily: {},
   stream: null, video: $('#video'), overlay: $('#overlay'), frameW: 640, frameH: 480, imageCapture: null,
   vision: null, busy: false, lastTs: 0, lastVT: -1, lastVTAt: 0,
-  smooth: null, neck: null, level: 'away', mode: '', badSince: null, lastAlert: 0, lastTick: 0, history: [], lastHist: 0,
+  smooth: null, fwd: null, fwdDz: 1.5, level: 'away', mode: '', badSince: null, lastAlert: 0, lastTick: 0, history: [], lastHist: 0,
   cushion: { dev: null, ch: null }, pip: null, wake: null
 };
+if (!S.places.length) S.places = DEFAULT_PLACES.map(p => ({ ...p }));
+if (!S.places.some(p => p.id === S.place)) S.place = S.places[0].id;
+const curPlace = () => S.places.find(p => p.id === S.place) || S.places[0];
+// one model per place x device (x orientation for tablets and phones: the camera sits somewhere else)
+const keyFor = (placeId, device = S.device) => `${placeId}|${device === 'laptop' ? 'laptop' : `${device}-${orientation()}`}`;
+const profileKey = () => keyFor(S.place);
+const currentProfile = () => { const p = S.profiles[profileKey()]; return p && p.v === PROFILE_V ? p : null; };
+const placeCalibrated = id => Object.entries(S.profiles).some(([k, p]) => k.startsWith(id + '|') && p.v === PROFILE_V);
+const thisDeviceLabel = () => S.device === 'laptop' ? 'this laptop' : `this ${S.device} (${orientation()})`;
 
-/* ---------- vision (MediaPipe, on-device) ---------- */
+/* =====================================================================
+   Vision: MediaPipe face + pose landmarkers, on-device
+   ===================================================================== */
 async function initVision() {
   if (SIM) return makeSimVision();
   const { FilesetResolver, FaceLandmarker, PoseLandmarker } = await import(`${MP_URL}/vision_bundle.mjs`);
@@ -461,21 +716,25 @@ async function initVision() {
   ]);
   return { detect: (src, ts) => ({ face: face.detectForVideo(src, ts), pose: pose.detectForVideo(src, ts) }) };
 }
-// face: head tilt, face size, face height in frame, face shape ratio, chin-to-nose
+
+/* face: head tilt, face size, nose height in frame, face shape, chin-to-nose; plus distance (cm) from the 3D head transform */
 function faceFeatures(lm, matrix, W, H) {
   const P = i => ({ x: lm[i].x * W, y: lm[i].y * H });
   const eR = P(33), eL = P(263), nose = P(1), chin = P(152), top = P(10), cl = P(234), cr = P(454);
   const iod = dist(eR, eL) || 1, fw = dist(cl, cr) || 1, fh = dist(top, chin);
-  let pitch, yaw = 0;
-  if (matrix?.data) {
-    const m = matrix.data;
+  let pitch, yaw = 0, tz = null;
+  if (matrix?.data?.length >= 16) {
+    const m = matrix.data;                                   // 4x4, column-major
     pitch = deg(Math.atan2(m[6], m[10]));
     yaw = deg(Math.asin(clamp(-m[2], -1, 1)));
+    const t = Math.abs(m[14]) || Math.abs(m[11]);
+    if (t > 12 && t < 250) tz = t;
   } else pitch = deg(Math.atan2(nose.y - (eR.y + eL.y) / 2, iod));
-  return { vec: [pitch, iod / W * 100, nose.y / H * 100, fh / fw, (chin.y - nose.y) / iod], yaw, iod, nose, eyes: [eR, eL], chin };
+  const scale = iod / W * 100, noseY = nose.y / H * 100;
+  return { vec: [pitch, scale, noseY, fh / fw, (chin.y - nose.y) / iod], yaw, iod, scale, noseY, tz, nose, eyes: [eR, eL], chin };
 }
-// shoulders: width, ear-shoulder height, nose-shoulder height, head/shoulder ratio, 3D neck angle (CVA)
-function poseFeatures(lm, world, W, H, iodPx) {
+/* shoulders: torso distance, neck height, nose height, head-vs-torso size, chin-to-shoulders, ear depth vs shoulders, 3D neck angle */
+function poseFeatures(lm, world, W, H, face) {
   const vis = i => lm[i] && (lm[i].visibility ?? 1) > 0.6 && lm[i].y < 1.02;
   if (!vis(11) || !vis(12)) return null;
   const P = i => ({ x: lm[i].x * W, y: lm[i].y * H });
@@ -483,13 +742,14 @@ function poseFeatures(lm, world, W, H, iodPx) {
   if (sw < W * 0.08) return null;
   const earPts = [7, 8].filter(i => lm[i] && (lm[i].visibility ?? 1) > 0.3).map(P);
   const earMid = earPts.length === 2 ? mid(earPts[0], earPts[1]) : earPts[0] || P(0);
-  const nose = P(0);
-  let cva = 0;
-  if (world?.[11] && world?.[7]) {
+  let cva = 0, earFwd = 0;
+  if (world?.[11] && world?.[12] && world?.[7] && world?.[8]) {
     const ws = mid(world[11], world[12]), we = mid(world[7], world[8]);
     cva = deg(Math.atan2(ws.y - we.y, Math.abs(we.z - ws.z) + 1e-3));
+    earFwd = (ws.z - we.z) * 100;                            // cm the ears sit in front of the shoulders
   }
-  return { vec: [sw / W * 100, (sm.y - earMid.y) / sw, (sm.y - nose.y) / sw, iodPx / sw, cva], sL, sR, earMid };
+  const ht = face.iod / sw;                                  // head size vs torso size: grows when only the head moves forward
+  return { vec: [sw / W * 100, (sm.y - earMid.y) / sw, (sm.y - face.nose.y) / sw, ht, (sm.y - face.chin.y) / sw, earFwd, cva], sw, ht, sL, sR, sm, earMid };
 }
 function extract(r) {
   const W = S.frameW, H = S.frameH;
@@ -497,12 +757,17 @@ function extract(r) {
   const fl = r.face?.faceLandmarks?.[0];
   if (fl) face = faceFeatures(fl, r.face.facialTransformationMatrixes?.[0], W, H);
   const pl = r.pose?.landmarks?.[0];
-  if (pl && face) pose = poseFeatures(pl, r.pose.worldLandmarks?.[0], W, H, face.iod);
+  if (pl && face) pose = poseFeatures(pl, r.pose.worldLandmarks?.[0], W, H, face);
   return { face, pose };
 }
+const toSample = obs => ({
+  f: obs.face.vec, p: obs.pose ? obs.pose.vec : null, yaw: obs.face.yaw, scale: obs.face.scale, noseY: obs.face.noseY,
+  tz: obs.face.tz, ht: obs.pose ? obs.pose.ht : null, neck: obs.pose ? obs.pose.vec[1] : null
+});
 
-/* ---------- personal model: standardized features + L2 logistic regression ---------- */
-const sigmoid = z => 1 / (1 + Math.exp(-z));
+/* =====================================================================
+   Personal model
+   ===================================================================== */
 const LR = {
   train(X, y, { l2 = 0.02, epochs = 500, lr = 0.3 } = {}) {
     const n = X.length, d = X[0].length;
@@ -527,46 +792,93 @@ const LR = {
     }
     return { mu, sd, w, b };
   },
-  prob(m, x) { let z = m.b; for (let j = 0; j < m.w.length; j++) z += m.w[j] * ((x[j] - m.mu[j]) / m.sd[j]); return sigmoid(z); }
+  prob(m, x) { if (!m) return 0; let z = m.b; for (let j = 0; j < m.w.length; j++) z += m.w[j] * ((x[j] - m.mu[j]) / m.sd[j]); return sigmoid(z); }
 };
-function trainProfile(good, bad) {
-  const split = a => { const k = Math.max(1, Math.floor(a.length * 0.8)); return [a.slice(0, k), a.slice(k)]; };
-  const [gTr, gVa] = split(good), [bTr, bVa] = split(bad);
-  const fit = (sel, g, b) => {
+
+/* Forward-head rule. Adapted from Dorso's camera detector (MIT, (c) Posturr Contributors):
+   a baseline from your upright samples, a dead zone around it, and a severity that ramps up
+   to the poses you recorded. Indicators: face size (Dorso's forward-head check),
+   nose drop (Dorso's slouch check), head distance in cm, head-vs-torso size, neck height. */
+const RULE_MIN_DZ = { grow: .04, drop: 1.5, fwd: 1.0, ht: .03, neck: .05 };
+const RULE_DEFAULT = { grow: { dz: .05, ref: .20 }, fwd: { dz: 1.5, ref: 5 } };   // Dorso: +5% face size starts, +15% more is full severity
+const RULE_CAP = { grow: .15, fwd: 6 };   // a head ~6 cm forward always counts as turtle neck, even after a weak head-forward recording
+function indicators(base, s) {
+  const o = { grow: s.scale / base.scaleMax - 1, drop: s.noseY - base.noseYMax };
+  o.fwd = base.tz0 && s.tz ? base.tz0 - s.tz : 55 * (1 - base.scaleMed / s.scale);
+  if (base.ht0 && s.ht != null) o.ht = s.ht / base.ht0 - 1;
+  if (base.neck0 && s.neck != null) o.neck = 1 - s.neck / base.neck0;
+  return o;
+}
+function buildRule(good, turtle, slouch) {
+  const nums = a => a.filter(v => v != null && Number.isFinite(v));
+  const base = {
+    scaleMax: pct(good.map(s => s.scale), .97), scaleMed: median(good.map(s => s.scale)),
+    noseYMax: pct(good.map(s => s.noseY), .97),
+    tz0: median(nums(good.map(s => s.tz))), ht0: median(nums(good.map(s => s.ht))), neck0: median(nums(good.map(s => s.neck)))
+  };
+  const ind = arr => arr.map(s => indicators(base, s));
+  const G = ind(good), T = ind(turtle), L = ind(slouch);
+  const rule = {};
+  for (const k of Object.keys(RULE_MIN_DZ)) {
+    const gv = nums(G.map(o => o[k]));
+    if (gv.length < good.length * .6) continue;
+    const spread = (pct(gv, .75) - pct(gv, .25)) || 0;
+    const dz = Math.max(pct(gv, .97) + spread * .5, RULE_MIN_DZ[k]);
+    const refs = [T, L].map(R => median(nums(R.map(o => o[k])))).filter(r => r != null && r > dz * 1.5 + RULE_MIN_DZ[k]);
+    if (refs.length) rule[k] = { dz, ref: Math.min(...refs) };
+    else if (RULE_DEFAULT[k]) rule[k] = { dz: Math.max(dz, RULE_DEFAULT[k].dz), ref: Math.max(RULE_DEFAULT[k].ref, dz * 2.5) };
+    if (rule[k] && RULE_CAP[k]) rule[k].ref = Math.max(Math.min(rule[k].ref, RULE_CAP[k]), rule[k].dz * 1.6);
+  }
+  return { base, rule };
+}
+function ruleEval(R, s) {
+  const o = indicators(R.base, s); let sev = 0, by = null;
+  for (const k in R.rule) {
+    const v = o[k]; if (!Number.isFinite(v)) continue;
+    const { dz, ref } = R.rule[k];
+    const sv = clamp((v - dz) / (ref - dz), 0, 1.5);
+    if (sv > sev) { sev = sv; by = k; }
+  }
+  return { sev, by, fwd: o.fwd, fwdDz: R.rule.fwd?.dz ?? 1.5 };
+}
+function predictCore(prof, s) {
+  const pLR = prof.full && s.p ? LR.prob(prof.full, [...s.f, ...s.p]) : LR.prob(prof.face, s.f);
+  const r = ruleEval(prof.R, s);
+  const pRule = sigmoid(10 * (r.sev - .62));
+  return { p: Math.max(pLR, pRule), pLR, pRule, fwd: r.fwd, fwdDz: r.fwdDz, by: r.by };
+}
+function fitAll(good, turtle, slouch) {
+  const bad = [...turtle, ...slouch];
+  const share = a => a.filter(x => x.p).length / Math.max(a.length, 1);
+  const useFull = share(good) >= .6 && share(turtle) >= .6 && share(slouch) >= .6;
+  const fit = sel => {
     const X = [], y = [];
-    for (const s of g) { const x = sel(s); if (x) { X.push(x); y.push(0); } }
-    for (const s of b) { const x = sel(s); if (x) { X.push(x); y.push(1); } }
+    for (const s of good) { const x = sel(s); if (x) { X.push(x); y.push(0); } }
+    for (const s of bad) { const x = sel(s); if (x) { X.push(x); y.push(1); } }
     return X.length >= 10 && y.includes(0) && y.includes(1) ? LR.train(X, y) : null;
   };
-  const acc = (m, sel, g, b) => {
-    let ok = 0, n = 0;
-    for (const s of g) { const x = sel(s); if (x) { n++; if (LR.prob(m, x) < 0.5) ok++; } }
-    for (const s of b) { const x = sel(s); if (x) { n++; if (LR.prob(m, x) >= 0.5) ok++; } }
-    return n ? ok / n : 0;
+  return {
+    face: fit(s => s.f), full: useFull ? fit(s => s.p ? [...s.f, ...s.p] : null) : null,
+    R: buildRule(good, turtle, slouch), yaw0: good.reduce((a, s) => a + s.yaw, 0) / Math.max(good.length, 1)
   };
-  const selFace = s => s.f, selFull = s => s.p ? [...s.f, ...s.p] : null;
-  const poseShare = a => a.filter(s => s.p).length / a.length;
-  const useFull = poseShare(good) >= 0.6 && poseShare(bad) >= 0.6;
-  const sel = useFull ? selFull : selFace;
-  const valModel = fit(sel, gTr, bTr);
-  const withPose = good.filter(s => s.p);
+}
+function trainProfile(rec) {
+  const split = a => { const k = Math.max(1, Math.floor(a.length * .8)); return [a.slice(0, k), a.slice(k)]; };
+  const [g1, g2] = split(rec.good), [t1, t2] = split(rec.turtle), [s1, s2] = split(rec.slouch);
+  const tmp = fitAll(g1, t1, s1);
+  const rate = (arr, want) => arr.length ? arr.filter(x => (predictCore(tmp, x).p >= .5) === want).length / arr.length : 1;
+  const val = { good: rate(g2, false), turtle: rate(t2, true), slouch: rate(s2, true) };
   const now = Date.now();
   return {
-    key: profileKey(), device: S.device, createdAt: now, updatedAt: now,
-    face: fit(selFace, good, bad), full: useFull ? fit(selFull, good, bad) : null,
-    valAcc: valModel ? acc(valModel, sel, gVa, bVa) : 0,
-    yaw0: good.reduce((a, s) => a + s.yaw, 0) / good.length,
-    neck0: withPose.length ? withPose.reduce((a, s) => a + s.p[1], 0) / withPose.length : null,
-    samples: { good: good.length, bad: bad.length }
+    v: PROFILE_V, key: profileKey(), place: S.place, device: S.device, createdAt: now, updatedAt: now,
+    ...fitAll(rec.good, rec.turtle, rec.slouch), val, valAcc: (val.good + val.turtle + val.slouch) / 3,
+    samples: { good: rec.good.length, turtle: rec.turtle.length, slouch: rec.slouch.length }
   };
 }
-function predict(prof, obs) {
-  if (!obs.face) return { p: null, look: false };
-  if (Math.abs(obs.face.yaw - prof.yaw0) > 35) return { p: null, look: true };
-  return { p: (prof.full && obs.pose) ? LR.prob(prof.full, [...obs.face.vec, ...obs.pose.vec]) : LR.prob(prof.face, obs.face.vec), look: false };
-}
 
-/* ---------- camera + loop (Worker timer keeps running in background tabs) ---------- */
+/* =====================================================================
+   Camera + loop (Worker timer keeps running in background tabs)
+   ===================================================================== */
 function cameraError(e) {
   const m = { NotAllowedError: 'Camera access is off. Allow it in your browser settings.', NotFoundError: 'No camera found.', NotReadableError: 'Another app is using the camera.' };
   return new Error(m[e.name] || `Camera error (${e.name || e.message})`);
@@ -625,66 +937,148 @@ async function tick() {
   finally { S.busy = false; }
 }
 
-/* ---------- step 1: collect samples (Face ID-style ring) ---------- */
-const C = { step: 'good', state: 'idle', good: [], bad: [], result: null };
+/* =====================================================================
+   Calibration: three poses (Face ID-style ring)
+   ===================================================================== */
+const STEPS = [
+  { key: 'good',   title: 'Sit up straight',        sub: 'Back against the chair, eyes on the screen.' },
+  { key: 'turtle', title: 'Push your head forward', sub: 'Keep your back still. Only your head moves.' },
+  { key: 'slouch', title: 'Now slouch',             sub: 'Round your shoulders and lean in.' }
+];
+const C = { i: 0, state: 'idle', rec: { good: [], turtle: [], slouch: [] }, result: null };
 (function buildTicks() {
-  const g = $('#calTicks'); let h = '';
+  let h = '';
   for (let i = 0; i < SAMPLES_PER_POSE; i++) {
     const a = (i / SAMPLES_PER_POSE) * Math.PI * 2 - Math.PI / 2, c = Math.cos(a), s = Math.sin(a);
     h += `<line x1="${(150 + c * 132).toFixed(1)}" y1="${(150 + s * 132).toFixed(1)}" x2="${(150 + c * 146).toFixed(1)}" y2="${(150 + s * 146).toFixed(1)}"/>`;
   }
-  g.innerHTML = h;
+  $('#calTicks').innerHTML = h;
 })();
-function setTicks(n) { $$('#calTicks line').forEach((l, i) => l.classList.toggle('on', i < n)); }
-function calibReset() { C.step = 'good'; C.state = 'idle'; C.good = []; C.bad = []; C.result = null; renderCalib(); }
+const setTicks = n => $$('#calTicks line').forEach((l, i) => l.classList.toggle('on', i < n));
+function calibReset() { C.i = 0; C.state = 'idle'; C.rec = { good: [], turtle: [], slouch: [] }; C.result = null; renderCalib(); }
 async function calibCapture() {
   if (C.state !== 'idle') return;
   C.state = 'countdown'; renderCalib();
   const cnt = $('#camCount');
   for (let i = 3; i > 0; i--) { cnt.hidden = false; cnt.textContent = i; await sleep(750); }
   cnt.hidden = true;
-  C[C.step] = []; C.state = 'capturing'; renderCalib();
+  C.rec[STEPS[C.i].key] = []; C.state = 'capturing'; renderCalib();
 }
 function calibTick(obs) {
-  $('#calHint').textContent = (C.step === 'good' || C.step === 'bad') && !obs.face ? 'Move into the circle' : '';
+  const capture = !C.result && C.state !== 'training';
+  $('#calHint').textContent = capture && !obs.face ? 'Move your face into the circle' : '';
   if (C.state !== 'capturing' || !obs.face) return;
-  const arr = C[C.step];
-  arr.push({ f: obs.face.vec, p: obs.pose?.vec || null, yaw: obs.face.yaw });
+  const arr = C.rec[STEPS[C.i].key];
+  arr.push(toSample(obs));
   setTicks(arr.length);
   if (arr.length >= SAMPLES_PER_POSE) {
-    if (C.step === 'good') { C.step = 'bad'; C.state = 'idle'; renderCalib(); }
-    else { C.step = 'train'; trainNow(); }
+    navigator.vibrate?.(30);
+    if (C.i < 2) { C.i++; C.state = 'idle'; renderCalib(); }
+    else trainNow();
   }
 }
-/* step 2: train */
 async function trainNow() {
   C.state = 'training'; renderCalib();
-  await sleep(500);
-  const prof = trainProfile(C.good, C.bad);
+  await sleep(450);
+  const prof = trainProfile(C.rec);
   S.profiles[prof.key] = prof; Store.set('profiles', S.profiles);
   if (Cloud.on()) Cloud.pushProfile(prof).catch(e => toast(e.message));
-  C.result = prof; C.step = 'done'; C.state = 'idle';
+  C.result = prof; C.state = 'idle';
   renderCalib();
 }
-const currentProfile = () => S.profiles[profileKey()] || null;
 
-/* ---------- step 3: live risk + alerts ---------- */
+/* side-view pose demo shown during calibration */
+const SIDE = {
+  up:     { hip: [38, 70], ctl: [37, 55], sh: [40, 40], nk: [42, 31], hd: [43, 22] },
+  turtle: { hip: [38, 70], ctl: [37, 55], sh: [40, 40], nk: [53, 33], hd: [60, 27] },
+  slouch: { hip: [40, 70], ctl: [56, 60], sh: [56, 42], nk: [66, 38], hd: [73, 32] }
+};
+let demoKind = 'up', demoRaf = 0;
+function drawSide(t) {
+  const a = SIDE.up, b = SIDE[demoKind];
+  const L = k => [a[k][0] + (b[k][0] - a[k][0]) * t, a[k][1] + (b[k][1] - a[k][1]) * t];
+  const hip = L('hip'), ctl = L('ctl'), sh = L('sh'), nk = L('nk'), hd = L('hd');
+  const svg = $('#sideFig');
+  svg.querySelector('.spine').setAttribute('d', `M${hip} Q${ctl} ${sh}`);
+  svg.querySelector('.neckl').setAttribute('d', `M${sh} L${nk}`);
+  const h = svg.querySelector('.head'); h.setAttribute('cx', hd[0]); h.setAttribute('cy', hd[1]);
+  const g = svg.querySelector('.ghost'); g.setAttribute('cx', a.hd[0]); g.setAttribute('cy', a.hd[1]); g.style.display = demoKind === 'up' ? 'none' : '';
+  const mover = demoKind === 'turtle' ? ['.neckl', '.head'] : demoKind === 'slouch' ? ['.spine', '.neckl', '.head'] : [];
+  ['.spine', '.neckl', '.head'].forEach(s => svg.querySelector(s).classList.toggle('mover', mover.includes(s)));
+}
+function runDemo(kind) {
+  if (kind === demoKind && demoRaf) return;
+  demoKind = kind; cancelAnimationFrame(demoRaf); demoRaf = 0;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (kind === 'up' || reduce) { drawSide(kind === 'up' ? 0 : 1); return; }
+  const t0 = performance.now();
+  const loop = now => { const ph = ((now - t0) / 2400) % 1; drawSide((1 - Math.cos(ph * Math.PI * 2)) / 2); demoRaf = requestAnimationFrame(loop); };
+  demoRaf = requestAnimationFrame(loop);
+}
+function stopDemo() { cancelAnimationFrame(demoRaf); demoRaf = 0; }
+
+function renderCalib() {
+  const done = !!C.result, step = STEPS[Math.min(C.i, 2)];
+  $('.enroll').classList.toggle('done', done);
+  $('#calCancel').style.visibility = currentProfile() ? 'visible' : 'hidden';
+  $('#calFor').textContent = `${curPlace().name} · ${DEV[S.device]}`;
+  $$('#calSteps i').forEach((el, i) => el.className = done || i < C.i ? 'done' : i === C.i ? 'now' : '');
+  const b1 = $('#calBtn'), b2 = $('#calBtn2');
+  $('#calDone').hidden = !done; $('#calVals').hidden = !done; $('#calDemo').hidden = done || C.state === 'training';
+  $('#camSlotCalib').style.visibility = done ? 'hidden' : 'visible';
+  b2.hidden = true;
+  if (done) {
+    const v = C.result.val, ok = v.good >= .8 && v.turtle >= .8 && v.slouch >= .8;
+    $('#calDone').innerHTML = ok ? ICO.okc : ICO.warnc;
+    $('#calTitle').textContent = ok ? 'All set' : 'Almost there';
+    $('#calSub').textContent = ok ? `Your model for ${curPlace().name} is ready.` : (v.turtle < .8 ? 'Head forward looked too close to upright. Push further.' : 'Some poses looked too similar. Try bigger moves.');
+    const row = (name, r) => `<div class="cell"><span class="ico ${r >= .8 ? 'ok' : 'no'}">${r >= .8 ? ICO.rowOk : ICO.rowNo}</span><span class="t">${name}</span><span class="v">${Math.round(r * 100)}%</span></div>`;
+    $('#calVals').innerHTML = row('Upright', v.good) + row('Head forward', v.turtle) + row('Slouch', v.slouch);
+    setTicks(SAMPLES_PER_POSE);
+    b1.disabled = false; b1.textContent = ok ? 'Done' : 'Try Again';
+    b2.hidden = false; b2.textContent = ok ? 'Redo' : 'Use Anyway';
+    stopDemo();
+    return;
+  }
+  if (C.state === 'training') {
+    $('#calTitle').textContent = 'Learning your posture';
+    $('#calSub').textContent = 'Training a model just for you.';
+    setTicks(SAMPLES_PER_POSE);
+    b1.disabled = true; b1.innerHTML = '<span class="spin"></span>';
+    stopDemo();
+    return;
+  }
+  $('#calTitle').textContent = step.title;
+  $('#calSub').textContent = step.sub;
+  setTicks(C.rec[step.key].length);
+  runDemo(['up', 'turtle', 'slouch'][C.i]);
+  b1.disabled = C.state !== 'idle';
+  b1.textContent = C.state === 'capturing' ? 'Hold still' : C.state === 'countdown' ? 'Get ready' : C.i === 0 ? 'Start' : 'Continue';
+}
+
+/* =====================================================================
+   Live risk, stats and alerts (Face-id Part3: confidence > threshold)
+   ===================================================================== */
 function monitorTick(obs) {
   const prof = currentProfile();
   const now = performance.now();
   const dt = S.lastTick ? Math.min((now - S.lastTick) / 1000, 2) : 0;
   S.lastTick = now;
-  if (!prof) { S.level = 'away'; S.mode = 'nocal'; render(); return; }
-  const r = predict(prof, obs);
-  S.mode = r.look ? 'look' : r.p == null ? 'away' : 'on';
-  if (r.p == null) { S.smooth = null; S.neck = null; S.badSince = null; S.level = 'away'; render(); return; }
+  if (!prof) { S.level = 'away'; S.mode = 'nocal'; S.smooth = null; render(); return; }
+  if (!obs.face) { S.mode = 'away'; S.smooth = null; S.fwd = null; S.badSince = null; S.level = 'away'; render(); return; }
+  if (Math.abs(obs.face.yaw - prof.yaw0) > 35) { S.mode = 'look'; S.smooth = null; S.badSince = null; S.level = 'away'; render(); return; }
+  const r = predictCore(prof, toSample(obs));
+  S.mode = 'on';
   S.smooth = S.smooth == null ? r.p : S.smooth + 0.3 * (r.p - S.smooth);
-  if (prof.neck0 && obs.pose) { const n = obs.pose.vec[1] / prof.neck0; S.neck = S.neck == null ? n : S.neck + 0.2 * (n - S.neck); }
-  else S.neck = null;
+  S.fwd = S.fwd == null ? r.fwd : S.fwd + 0.2 * (r.fwd - S.fwd);
+  S.fwdDz = r.fwdDz;
   const thr = S.settings.threshold / 100;
   S.level = S.smooth >= thr ? 'bad' : S.smooth >= 0.5 ? 'warn' : 'ok';
+  const bad = S.smooth >= 0.5, hr = new Date().getHours();
   const st = statToday();
-  if (S.smooth >= 0.5) st.bad += dt; else st.good += dt;
+  st.h ??= Array.from({ length: 24 }, () => [0, 0]);
+  if (bad) { st.bad += dt; st.h[hr][1] += dt; } else { st.good += dt; st.h[hr][0] += dt; }
+  const ps = placeStatToday(); ps[bad ? 1 : 0] += dt;
   if (S.smooth >= thr) {
     S.badSince ??= now;
     if (now - S.badSince >= HOLD_SEC * 1000 && Date.now() - S.lastAlert >= COOLDOWN_SEC * 1000) fireAlert();
@@ -695,23 +1089,27 @@ function monitorTick(obs) {
   if (now - S.lastHist >= 1000) { S.history.push({ t: Date.now(), p: S.smooth }); S.lastHist = now; if (S.history.length > 300) S.history.shift(); }
   render();
 }
-function statToday() {
+function statToday(device = S.device) {
   const d = today();
   S.stats[d] ??= {};
-  return (S.stats[d][S.device] ??= { good: 0, bad: 0, alerts: 0 });
+  return (S.stats[d][device] ??= { good: 0, bad: 0, alerts: 0 });
+}
+function placeStatToday(id = S.place) {
+  const d = today();
+  S.pstats[d] ??= {};
+  return (S.pstats[d][id] ??= [0, 0]);
 }
 let lastCloudPush = 0;
 setInterval(async () => {
-  Store.set('stats', S.stats);
+  Store.set('stats', S.stats); Store.set('pstats', S.pstats);
   if (Cloud.on() && S.started && Date.now() - lastCloudPush > 60000) {
     lastCloudPush = Date.now();
     try { await Cloud.pushDaily(today(), S.device, statToday()); } catch (e) { console.warn(e); }
   }
 }, 10000);
-addEventListener('pagehide', () => Store.set('stats', S.stats));
+addEventListener('pagehide', () => { Store.set('stats', S.stats); Store.set('pstats', S.pstats); });
 
-/* alerts */
-let swReg = null, audioCtx = null, titleTimer = null;
+let swReg = null, audioCtx = null, titleTimer = null, bannerTimer = null;
 async function registerSW() {
   if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
   try { swReg = await navigator.serviceWorker.register('sw.js'); } catch (e) { console.warn(e); }
@@ -720,7 +1118,7 @@ function unlockAudio() { try { audioCtx ??= new (window.AudioContext || window.w
 function chime() {
   if (!S.settings.sound || !audioCtx) return;
   const t = audioCtx.currentTime;
-  [[1046.5, 0], [1318.5, 0.12]].forEach(([f, d]) => {   // soft two-note "tri-tone"-like chime
+  [[1046.5, 0], [1318.5, 0.12]].forEach(([f, d]) => {
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.type = 'sine'; o.frequency.value = f;
     g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.14, t + d + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.5);
@@ -735,11 +1133,10 @@ async function pushNotify(title, body) {
     if (reg) await reg.showNotification(title, opts); else new Notification(title, opts);
   } catch (e) { console.warn(e); }
 }
-let bannerTimer;
 function fireAlert() {
   S.lastAlert = Date.now();
   statToday().alerts++;
-  pushNotify('Turtle neck', 'Sit up straight.');
+  pushNotify('Turtle neck', 'Bring your head back over your shoulders.');
   if (S.settings.buzz) buzz(1);
   $('#alert').classList.add('show');
   clearTimeout(bannerTimer); bannerTimer = setTimeout(hideAlert, 6000);
@@ -753,42 +1150,68 @@ function fireAlert() {
 function hideAlert() { $('#alert').classList.remove('show'); }
 $('#alert').onclick = hideAlert;
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(); requestWake(); }
+  if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(); if (S.view === 'monitor') renderBars(); requestWake(); }
 });
 async function requestWake() {
   if (S.device === 'laptop' || !S.started || !('wakeLock' in navigator) || document.hidden) return;
   try { S.wake = await navigator.wakeLock.request('screen'); } catch {}
 }
+/* Dorso-style nudges: edge glow or screen blur that grows as posture worsens */
+function renderNudge() {
+  const on = S.started && S.mode === 'on' && !S.paused && S.smooth != null;
+  const sev = on ? clamp((S.smooth - 0.5) / 0.42, 0, 1) : 0;
+  const n = S.settings.nudge;
+  const g = $('#glow');
+  g.style.setProperty('--gc', S.level === 'bad' ? 'rgba(255,59,48,.55)' : 'rgba(255,149,0,.45)');
+  g.style.opacity = n === 'glow' ? sev.toFixed(2) : 0;
+  const b = $('#blurN'), bpx = n === 'blur' && sev > .15 ? Math.round(sev * 14) : 0;
+  b.style.setProperty('--b', bpx + 'px');
+  b.classList.toggle('on', n === 'blur' && sev > .6);
+}
 
-/* ---------- front-view figure ---------- */
+/* =====================================================================
+   Front-view figure on a dark scan grid
+   ===================================================================== */
 let figN = 0;
 function figureMarkup() {
-  const id = 'pg' + (++figN);
-  return `<svg class="fig" viewBox="0 0 320 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs><pattern id="${id}" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20" fill="none"/></pattern></defs>
-    <rect x="-200" y="-200" width="720" height="760" fill="url(#${id})"/>
-    <line class="plumb" x1="160" y1="-200" x2="160" y2="560"/>
+  const id = 'fg' + (++figN);
+  return `<svg class="fig" viewBox="0 0 320 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <pattern id="${id}a" width="16" height="16" patternUnits="userSpaceOnUse"><path class="gl" d="M16 0H0V16" fill="none"/></pattern>
+      <pattern id="${id}b" width="80" height="80" patternUnits="userSpaceOnUse"><path class="glM" d="M80 0H0V80" fill="none"/></pattern>
+      <linearGradient id="${id}s" gradientUnits="userSpaceOnUse" x1="0" y1="80" x2="0" y2="400"><stop offset="0" stop-color="#46607A"/><stop offset=".55" stop-color="#22313F"/><stop offset="1" stop-color="#121B24"/></linearGradient>
+      <filter id="${id}o" x="-10%" y="-10%" width="120%" height="120%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="1.3" result="d"/>
+        <feComposite in="d" in2="SourceAlpha" operator="out" result="edge"/>
+        <feFlood flood-color="#A9D8FF" flood-opacity=".65"/><feComposite in2="edge" operator="in" result="line"/>
+        <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="line"/></feMerge>
+      </filter>
+    </defs>
+    <rect x="-200" y="-200" width="720" height="800" fill="url(#${id}a)"/>
+    <rect x="-200" y="-200" width="720" height="800" fill="url(#${id}b)"/>
+    <line class="plumb" x1="160" y1="-200" x2="160" y2="600"/>
+    <g class="sil" filter="url(#${id}o)" fill="url(#${id}s)"><path class="body"/><rect class="neck" rx="13"/><ellipse class="head"/></g>
     <line class="level" x1="-200" x2="520"/>
-    <g class="sil"><path class="body"/><rect class="neck" rx="12"/><ellipse class="head"/></g>
     <g class="bracket"><line class="bv"/><line class="bt1"/><line class="bt2"/></g>
-    <circle class="mk earL" r="6"/><circle class="mk earR" r="6"/><circle class="mk shL" r="6"/><circle class="mk shR" r="6"/>
+    <circle class="halo earL" r="12"/><circle class="halo earR" r="12"/><circle class="halo shL" r="12"/><circle class="halo shR" r="12"/>
+    <circle class="mk earL" r="5.5"/><circle class="mk earR" r="5.5"/><circle class="mk shL" r="5.5"/><circle class="mk shR" r="5.5"/>
   </svg>`;
 }
+/* t: 0 upright -> 1 turtle neck. From the front the neck "disappears": the head drops toward the shoulders and looks bigger. */
 function drawFigure(svg, t) {
   const L = (a, b) => a + (b - a) * t;
-  const hcy = L(146, 196), rx = L(45, 52), ry = L(55, 63);   // head drops and grows
-  const sy = L(262, 250), hw = L(98, 90), drop = L(26, 12);     // shoulders rise and round
-  const nw = L(42, 46);
-  const q = s => svg.querySelector(s), A = (el, o) => { for (const k in o) el.setAttribute(k, o[k]); };
-  A(q('.body'), { d: `M136 ${sy - 12} Q${160 - hw + 12} ${sy - 4} ${160 - hw} ${sy + drop} Q${160 - hw - 16} ${sy + 60} ${160 - hw - 14} 380 L${160 + hw + 14} 380 Q${160 + hw + 16} ${sy + 60} ${160 + hw} ${sy + drop} Q${160 + hw - 12} ${sy - 4} 184 ${sy - 12}Z` });
+  const hcy = L(150, 196), rx = L(46, 54), ry = L(56, 65);
+  const sy = L(272, 262), hw = L(100, 93), drop = L(26, 14), nw = L(42, 47);
+  const q = s => svg.querySelectorAll(s), A = (els, o) => els.forEach(el => { for (const k in o) el.setAttribute(k, o[k]); });
+  A(q('.body'), { d: `M136 ${sy - 12} Q${160 - hw + 12} ${sy - 4} ${160 - hw} ${sy + drop} Q${160 - hw - 16} ${sy + 60} ${160 - hw - 14} 420 L${160 + hw + 14} 420 Q${160 + hw + 16} ${sy + 60} ${160 + hw} ${sy + drop} Q${160 + hw - 12} ${sy - 4} 184 ${sy - 12}Z` });
   const neckTop = hcy + ry * 0.5;
-  A(q('.neck'), { x: 160 - nw / 2, y: neckTop, width: nw, height: Math.max(0, sy - neckTop + 8) });
+  A(q('.neck'), { x: 160 - nw / 2, y: neckTop, width: nw, height: Math.max(0, sy - neckTop + 10) });
   A(q('.head'), { cx: 160, cy: hcy, rx, ry });
   const earY = hcy + 6, shY = sy + drop - 3;
   A(q('.earL'), { cx: 160 - rx + 2, cy: earY }); A(q('.earR'), { cx: 160 + rx - 2, cy: earY });
-  A(q('.shL'), { cx: 160 - hw + 4, cy: shY }); A(q('.shR'), { cx: 160 + hw - 4, cy: shY });
+  A(q('.shL'), { cx: 160 - hw + 5, cy: shY }); A(q('.shR'), { cx: 160 + hw - 5, cy: shY });
   A(q('.level'), { y1: shY, y2: shY });
-  const bx = 160 + hw + 26;
+  const bx = 160 + hw + 28;
   A(q('.bv'), { x1: bx, y1: earY, x2: bx, y2: shY });
   A(q('.bt1'), { x1: bx - 7, y1: earY, x2: bx + 7, y2: earY });
   A(q('.bt2'), { x1: bx - 7, y1: shY, x2: bx + 7, y2: shY });
@@ -805,30 +1228,35 @@ function setFigure(svg, p, level) {
 (function animateFigures() {
   for (const [svg, st] of figState) {
     const d = st.target - st.cur;
-    if (Math.abs(d) > 0.002) { st.cur += d * 0.16; drawFigure(svg, st.cur); }
+    if (Math.abs(d) > 0.002) { st.cur += d * 0.14; drawFigure(svg, st.cur); }
   }
   requestAnimationFrame(animateFigures);
 })();
 
-/* camera overlay (camera view only) */
-const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+/* live camera overlay */
+const LVL_COLOR = { ok: '#30D158', warn: '#FF9F0A', bad: '#FF453A', away: '#8E8E93' };
 function drawOverlay(obs) {
   const c = S.overlay;
   if (document.hidden || $('#camFrame').hidden) return;
   if (c.width !== S.frameW) { c.width = S.frameW; c.height = S.frameH; }
   const g = c.getContext('2d'); g.clearRect(0, 0, c.width, c.height);
   if (S.view === 'calib' || !obs.face) return;
-  const col = cssVar(S.level === 'bad' ? '--red' : S.level === 'warn' ? '--orange' : '--green');
-  g.fillStyle = col; g.strokeStyle = col; g.lineWidth = 4; g.lineCap = 'round';
+  const col = LVL_COLOR[S.level] || LVL_COLOR.away;
+  g.strokeStyle = col; g.fillStyle = col; g.lineCap = 'round';
   if (obs.pose) {
-    g.beginPath(); g.moveTo(obs.pose.sL.x, obs.pose.sL.y); g.lineTo(obs.pose.sR.x, obs.pose.sR.y); g.stroke();
-    const sm = mid(obs.pose.sL, obs.pose.sR);
-    g.setLineDash([6, 8]); g.beginPath(); g.moveTo(sm.x, sm.y); g.lineTo(sm.x, obs.pose.earMid.y); g.stroke(); g.setLineDash([]);
+    const { sL, sR, sm, earMid } = obs.pose;
+    g.lineWidth = 3; g.setLineDash([2, 10]); g.globalAlpha = .9;
+    g.beginPath(); g.moveTo(0, sm.y); g.lineTo(c.width, sm.y); g.stroke();
+    g.setLineDash([]); g.lineWidth = 4;
+    g.beginPath(); g.moveTo(sm.x, sm.y); g.lineTo(sm.x, earMid.y); g.stroke();
+    for (const pt of [sL, sR]) { g.globalAlpha = .25; g.beginPath(); g.arc(pt.x, pt.y, 14, 0, 7); g.fill(); g.globalAlpha = 1; g.beginPath(); g.arc(pt.x, pt.y, 6, 0, 7); g.fill(); }
   }
-  for (const pt of [...obs.face.eyes, obs.face.nose, obs.face.chin]) { g.beginPath(); g.arc(pt.x, pt.y, 5, 0, 7); g.fill(); }
+  g.globalAlpha = 1; g.fillStyle = '#fff';
+  for (const pt of [...obs.face.eyes, obs.face.nose, obs.face.chin]) { g.beginPath(); g.arc(pt.x, pt.y, 3.5, 0, 7); g.fill(); }
 }
 
-/* timeline (Health-style line) */
+/* 5-minute trend */
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function drawTimeline() {
   const c = $('#timeline'); const r = c.getBoundingClientRect(); if (!r.width) return;
   const dpr = devicePixelRatio || 1;
@@ -839,64 +1267,70 @@ function drawTimeline() {
   g.strokeStyle = cssVar('--sep'); g.lineWidth = .5;
   for (const p of [0, .5, 1]) { g.beginPath(); g.moveTo(0, y(p)); g.lineTo(W, y(p)); g.stroke(); }
   g.strokeStyle = cssVar('--red'); g.setLineDash([3, 3]); g.lineWidth = 1;
-  g.beginPath(); g.moveTo(0, y(S.settings.threshold / 100)); g.lineTo(W, y(S.settings.threshold / 100)); g.stroke(); g.setLineDash([]);
+  const ty = y(S.settings.threshold / 100); g.beginPath(); g.moveTo(0, ty); g.lineTo(W, ty); g.stroke(); g.setLineDash([]);
   const h = S.history; if (h.length < 2) return;
   const t1 = Date.now(), t0 = t1 - 300000, x = t => (t - t0) / 300000 * W;
   g.beginPath(); h.forEach((d, i) => i ? g.lineTo(x(d.t), y(d.p)) : g.moveTo(x(d.t), y(d.p)));
-  g.strokeStyle = cssVar('--blue'); g.lineWidth = 2; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke();
+  g.strokeStyle = cssVar('--tint'); g.lineWidth = 2.2; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke();
   g.lineTo(x(h.at(-1).t), H); g.lineTo(x(h[0].t), H); g.closePath();
-  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, cssVar('--blue') + '40'); grad.addColorStop(1, cssVar('--blue') + '00');
+  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, cssVar('--tint') + '44'); grad.addColorStop(1, cssVar('--tint') + '00');
   g.fillStyle = grad; g.fill();
 }
 
-/* ---------- render ---------- */
-const STATUS = { ok: 'Good', warn: 'Leaning', bad: 'Turtle Neck', away: 'Away', look: 'Look Here', nocal: 'Not Calibrated', paused: 'Paused' };
-const RING_C = 2 * Math.PI * 55;
+/* =====================================================================
+   Render
+   ===================================================================== */
+const STATUS = { ok: 'Good posture', warn: 'Drifting forward', bad: 'Turtle neck', away: 'Away', look: 'Looking away', nocal: 'Not calibrated', paused: 'Paused' };
+const RING_C = 2 * Math.PI * 50;
+function setRing(el, frac, label) {
+  el.querySelector('.prog').style.strokeDashoffset = (RING_C * (1 - clamp(frac || 0, 0, 1))).toFixed(1);
+  el.querySelector('.num').innerHTML = label == null ? '–' : `<span>${Math.min(label, 99)}<small>%</small></span>`;
+}
+function subText(mode) {
+  if (mode === 'away') return 'Sit in front of the camera.';
+  if (mode === 'look') return 'Face the screen to resume.';
+  if (mode === 'nocal') return `Calibrate ${curPlace().name} on ${thisDeviceLabel()}.`;
+  if (mode === 'paused') return 'Tracking is paused.';
+  if (S.fwd == null) return '';
+  return S.fwd > S.fwdDz ? `Head ${S.fwd.toFixed(1)} cm forward` : 'Head over your shoulders';
+}
 function render() {
   if (S.pip) renderWidget();
+  renderNudge();
   if (document.hidden || S.view !== 'monitor') return;
   const on = S.mode === 'on' && !S.paused;
   const mode = S.paused ? 'paused' : on ? S.level : (S.mode || 'away');
-  $('#nowCard').dataset.level = on ? S.level : 'away';
-  const p = on && S.smooth != null ? S.smooth : 0;
-  const prog = $('#ring .prog'); prog.style.strokeDasharray = RING_C; prog.style.strokeDashoffset = RING_C * (1 - Math.max(p, on ? 0.02 : 0));
-  $('#ringNum').innerHTML = on && S.smooth != null ? `<span>${Math.round(S.smooth * 100)}<small>%</small></span>` : '–';
-  $('#mStatus').textContent = STATUS[mode] || STATUS.away;
-  $('#mSub').textContent = on && S.neck != null ? `Neck ${Math.round(clamp(S.neck, 0, 1.5) * 100)}%` : '';
-  $('#mCal').hidden = S.mode !== 'nocal';
-  const fig = $('#figBox svg'); if (fig) setFigure(fig, on ? S.smooth : null, on ? S.level : 'away');
+  const lvl = on ? S.level : 'away';
+  $('#scan').dataset.level = lvl; $('#statusCard').dataset.level = lvl;
+  $('#scan').classList.toggle('live', on);
+  const label = on && S.smooth != null ? Math.round(S.smooth * 100) : null;
+  setRing($('#ringSm'), on ? S.smooth : 0, label); setRing($('#ringLg'), on ? S.smooth : 0, label);
+  $$('.js-status').forEach(el => el.textContent = STATUS[mode]);
+  const sub = subText(mode); $$('.js-sub').forEach(el => el.textContent = sub);
+  const nocal = S.mode === 'nocal';
+  $('#scanCal').hidden = !nocal; $('#cardCal').hidden = !nocal;
+  const fig = $('#scan .fig'); if (fig) setFigure(fig, on ? S.smooth : null, lvl);
   const st = statToday(), tot = st.good + st.bad;
   $('#stGood').innerHTML = tot > 5 ? `${Math.round(st.good / tot * 100)}<small>%</small>` : '–';
+  $('#stBad').innerHTML = `${mins(st.bad)}<small>m</small>`;
   $('#stAlerts').textContent = st.alerts;
+  $('#thrLabel').textContent = `Alert at ${S.settings.threshold}%`;
+  if (Date.now() - (render.barsAt || 0) > 5000) renderBars();
   drawTimeline();
 }
-function renderCalib() {
-  const good = C.step === 'good', capture = C.step === 'good' || C.step === 'bad';
-  const busy = C.state !== 'idle';
-  $('#calCancel').hidden = !currentProfile();
-  $('#camSlotCalib').hidden = !capture && C.state !== 'training';
-  const done = $('#calDone'), b1 = $('#calBtn'), b2 = $('#calBtn2');
-  b2.hidden = true; done.hidden = true;
-  if (capture) {
-    $('#calTitle').textContent = good ? 'Sit up straight' : 'Now slump forward';
-    $('#calSub').textContent = good ? 'Keep your face in the circle.' : 'Let your head sink toward the screen.';
-    setTicks(C[C.step].length);
-    b1.hidden = false; b1.disabled = busy;
-    b1.innerHTML = C.state === 'capturing' ? 'Hold still' : C.state === 'countdown' ? 'Get ready' : 'Start';
-  } else if (C.state === 'training') {
-    $('#calTitle').textContent = 'Learning your posture';
-    $('#calSub').textContent = '';
-    setTicks(SAMPLES_PER_POSE);
-    b1.hidden = false; b1.disabled = true; b1.innerHTML = '<span class="spin"></span>';
-  } else if (C.result) {
-    const acc = Math.round(C.result.valAcc * 100), ok = acc >= 80;
-    done.hidden = false; done.innerHTML = ok ? CHECK_SVG : WARN_SVG;
-    $('#calTitle').textContent = ok ? 'All set' : 'Try again';
-    $('#calSub').textContent = ok ? `Accuracy ${acc}%` : `Accuracy ${acc}%. Slump a bit more.`;
-    setTicks(SAMPLES_PER_POSE);
-    b1.hidden = false; b1.disabled = false; b1.textContent = ok ? 'Done' : 'Try Again';
-    b2.hidden = false; b2.textContent = ok ? 'Redo' : 'Use Anyway';
-  }
+function renderBars() {
+  render.barsAt = Date.now();
+  const h = statToday().h || [], now = new Date().getHours();
+  $('#bars').innerHTML = Array.from({ length: 24 }, (_, i) => {
+    const [g, b] = h[i] || [0, 0];
+    return `<i class="${i === now ? 'now' : ''}"><b style="height:${clamp(g / 36, 0, 100).toFixed(1)}%"></b><b style="height:${clamp(b / 36, 0, 100).toFixed(1)}%"></b></i>`;
+  }).join('');
+}
+function renderHeader() {
+  const p = curPlace();
+  $('#placeIco').innerHTML = placeSquare(p.icon, 30);
+  $('#placeName').textContent = p.name;
+  $('#livePill').textContent = `${p.name} · ${DEV[S.device]}`;
 }
 function renderDevices() {
   const d = today(), local = S.stats[d] || {}, cloud = S.cloudDaily || {};
@@ -906,24 +1340,133 @@ function renderDevices() {
     if (a || b) merged[k] = (a && b) ? ((a.good + a.bad) >= (b.good + b.bad) ? a : b) : (a || b);
   }
   let g = 0, t = 0; Object.values(merged).forEach(s => { g += s.good; t += s.good + s.bad; });
-  $('#totPct').innerHTML = t > 5 ? `${Math.round(g / t * 100)}<small>%</small>` : '–';
-  const pct = s => s && s.good + s.bad > 5 ? Math.round(s.good / (s.good + s.bad) * 100) + '%' : '–';
-  const ico = k => `<span class="ico" style="background:${DEV_ICON[k][0]}">${DEV_ICON[k][1]}</span>`;
-  const rows = ['laptop', 'tablet', 'phone'].map(dev => `<div class="cell">${ico(dev)}<span class="t">${DEV[dev]}${dev === S.device ? '<span class="sub2">This device</span>' : ''}</span><span class="v">${pct(merged[dev])}</span></div>`);
-  rows.push(`<button class="cell" data-act="cushion">${ico('cushion')}<span class="t">Cushion</span><span class="v">${S.cushion.dev ? '<span class="dot"></span>Connected' : '<span style="color:var(--blue)">Connect</span>'}</span></button>`);
-  $('#devList').innerHTML = rows.join('');
+  const totFrac = t > 5 ? g / t : 0;
+  setRing($('#ringTot'), totFrac, null); $('#ringTot .num').textContent = '';
+  $('#totPct').textContent = t > 5 ? `${Math.round(totFrac * 100)}%` : '–';
+  const nDev = Object.values(merged).filter(s => s.good + s.bad > 5).length;
+  const nPl = Object.values(S.pstats[d] || {}).filter(([a, b]) => a + b > 5).length;
+  $('#totSub').textContent = t > 5 ? `upright today on ${nDev} device${nDev === 1 ? '' : 's'} in ${nPl} place${nPl === 1 ? '' : 's'}` : 'upright today';
+  const pctTxt = s => s && s.good + s.bad > 5 ? `${Math.round(s.good / (s.good + s.bad) * 100)}%` : '–';
+  const tile = (k, name, sub, val, here, act = '') => `<button class="tile${here ? ' here' : ''}" ${act}><span class="tv">${val}</span><span class="tic" style="background:${DEV_ICON[k][0]}">${svgIcon(DEV_ICON[k][1])}</span><b>${name}</b><span>${sub}</span></button>`;
+  const tiles = ['laptop', 'tablet', 'phone'].map(k => {
+    const s = merged[k], tracked = s && s.good + s.bad > 5;
+    return tile(k, DEV[k], k === S.device ? 'This device' : tracked ? `${mins(s.good + s.bad)} min today` : 'No data today', pctTxt(s), k === S.device);
+  });
+  tiles.push(tile('cushion', 'Cushion', S.cushion.dev ? '<span class="badge"><i></i>Connected</span>' : 'Tap to connect', '', false, 'data-act="cushion"'));
+  $('#devTiles').innerHTML = tiles.join('');
+  const ps = S.pstats[d] || {};
+  $('#placeStats').innerHTML = S.places.map(p => {
+    const [a, b] = ps[p.id] || [0, 0];
+    return `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(p.name)}<small>${SEATS[p.seat] || ''} · ${placeCalibrated(p.id) ? 'Calibrated' : 'Not calibrated'}</small></span><span class="v">${a + b > 5 ? Math.round(a / (a + b) * 100) + '%' : '–'}</span>${p.id === S.place ? `<span class="v tick">${ICO.check}</span>` : ''}</button>`;
+  }).join('');
 }
 
-/* mini widget (Document Picture-in-Picture): just the ring */
+/* =====================================================================
+   Places: menu, sheet, action sheet
+   ===================================================================== */
+function savePlaces() { Store.set('places', S.places); Store.set('place', S.place); }
+function usePlace(id) {
+  if (!S.places.some(p => p.id === id)) return;
+  S.place = id; savePlaces();
+  S.smooth = null; S.fwd = null; S.badSince = null; S.mode = currentProfile() ? '' : 'nocal';
+  renderHeader(); refreshView();
+}
+function openMenu() {
+  const m = $('#placeMenu'), btn = $('#placeBtn');
+  const ps = S.pstats[today()] || {};
+  m.innerHTML = S.places.map(p => {
+    const [a, b] = ps[p.id] || [0, 0];
+    const sub = a + b > 5 ? `${Math.round(a / (a + b) * 100)}% upright today` : (placeCalibrated(p.id) ? SEATS[p.seat] : 'Not calibrated');
+    return `<button class="mi" role="menuitemradio" aria-checked="${p.id === S.place}" data-place="${p.id}"><span class="chk">${p.id === S.place ? ICO.check : ''}</span><span class="t">${esc(p.name)}<small>${sub}</small></span>${svgIcon(PLACE_ICONS[p.icon]?.svg || '', 'class="mic"')}</button>`;
+  }).join('') + `<div class="msep"></div><button class="mi" data-mact="new"><span class="chk"></span><span class="t">New Place</span>${ICO.plus}</button><button class="mi" data-mact="recal"><span class="chk"></span><span class="t">Recalibrate ${esc(curPlace().name)}</span>${ICO.recal}</button>`;
+  const r = btn.getBoundingClientRect();
+  m.style.left = Math.max(8, Math.min(r.left, innerWidth - 266)) + 'px';
+  m.style.top = (r.bottom + 8) + 'px';
+  m.classList.add('open');
+  $('#backdrop').classList.add('open', 'clear');
+}
+function closeOverlays() {
+  $('#placeMenu').classList.remove('open'); $('#placeSheet').classList.remove('open'); $('#actionSheet').classList.remove('open');
+  $('#backdrop').classList.remove('open', 'clear');
+}
+$('#backdrop').onclick = closeOverlays;
+addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlays(); });
+$('#placeBtn').onclick = openMenu;
+$('#placeMenu').onclick = e => {
+  const b = e.target.closest('.mi'); if (!b) return;
+  closeOverlays();
+  if (b.dataset.place) usePlace(b.dataset.place);
+  if (b.dataset.mact === 'new') openPlaceSheet();
+  if (b.dataset.mact === 'recal') startCalibration();
+};
+let sheetEdit = null, sheetIcon = 'home', sheetSeat = 'chair';
+$('#psIcons').innerHTML = Object.entries(PLACE_ICONS).map(([k, v]) => `<button data-icon="${k}" aria-pressed="false">${placeSquare(k, 40)}<span>${v.label}</span></button>`).join('');
+$('#psSeat').innerHTML = Object.entries(SEATS).map(([k, v]) => `<button data-seat="${k}" aria-pressed="false">${v}</button>`).join('');
+function paintSheet() {
+  $$('#psIcons button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.icon === sheetIcon)));
+  $$('#psSeat button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.seat === sheetSeat)));
+  $('#psSave').disabled = !$('#psName').value.trim();
+}
+function openPlaceSheet(place = null) {
+  sheetEdit = place;
+  sheetIcon = place?.icon || 'home'; sheetSeat = place?.seat || 'chair';
+  $('#psTitle').textContent = place ? 'Edit Place' : 'New Place';
+  $('#psSave').textContent = place ? 'Done' : 'Add';
+  $('#psName').value = place?.name || '';
+  paintSheet();
+  $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
+  $('#placeSheet').classList.add('open');
+  if (!place) setTimeout(() => $('#psName').focus(), 350);
+}
+$('#psIcons').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const prev = PLACE_ICONS[sheetIcon]?.label, name = $('#psName').value.trim();
+  sheetIcon = b.dataset.icon;
+  if (!name || name === prev) $('#psName').value = PLACE_ICONS[sheetIcon].label;
+  paintSheet();
+};
+$('#psSeat').onclick = e => { const b = e.target.closest('button'); if (!b) return; sheetSeat = b.dataset.seat; paintSheet(); };
+$('#psName').oninput = paintSheet;
+$('#psCancel').onclick = closeOverlays;
+$('#psSave').onclick = () => {
+  const name = $('#psName').value.trim(); if (!name) return;
+  if (sheetEdit) { Object.assign(sheetEdit, { name, icon: sheetIcon, seat: sheetSeat }); savePlaces(); closeOverlays(); renderHeader(); refreshView(); toast('Saved'); return; }
+  const id = 'p' + Date.now().toString(36);
+  S.places.push({ id, name, icon: sheetIcon, seat: sheetSeat });
+  closeOverlays(); usePlace(id); toast(`Added ${name}`);
+  if (S.started) setTimeout(startCalibration, 350);
+};
+function showActions(title, actions) {
+  const a = $('#actionSheet');
+  a.innerHTML = `<div class="agroup">${title ? `<p>${esc(title)}</p>` : ''}${actions.map((x, i) => `<button data-i="${i}" class="${x.danger ? 'danger' : ''}">${esc(x.label)}</button>`).join('')}</div><div class="agroup"><button class="cancel" data-i="-1">Cancel</button></div>`;
+  a.onclick = e => { const b = e.target.closest('button'); if (!b) return; closeOverlays(); const i = +b.dataset.i; if (i >= 0) actions[i].fn(); };
+  $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
+  a.classList.add('open');
+}
+function placeActions(id) {
+  const p = S.places.find(x => x.id === id); if (!p) return;
+  const acts = [];
+  if (id !== S.place) acts.push({ label: 'Use This Place', fn: () => { usePlace(id); toast(p.name); } });
+  acts.push({ label: 'Recalibrate', fn: () => { usePlace(id); startCalibration(); } });
+  acts.push({ label: 'Edit', fn: () => openPlaceSheet(p) });
+  if (S.places.length > 1) acts.push({ label: 'Delete Place', danger: true, fn: () => {
+    S.places = S.places.filter(x => x.id !== id);
+    for (const k of Object.keys(S.profiles)) if (k.startsWith(id + '|')) delete S.profiles[k];
+    Store.set('profiles', S.profiles);
+    if (S.place === id) S.place = S.places[0].id;
+    savePlaces(); renderHeader(); refreshView(); toast(`Deleted ${p.name}`);
+  } });
+  showActions(p.name, acts);
+}
+
+/* mini widget (Document Picture-in-Picture) */
 async function openWidget() {
   if (S.pip) { S.pip.close(); return; }
-  const pip = await documentPictureInPicture.requestWindow({ width: 200, height: 220 });
-  [...document.styleSheets].forEach(ss => {
-    try { const st = pip.document.createElement('style'); st.textContent = [...ss.cssRules].map(r => r.cssText).join('\n'); pip.document.head.append(st); } catch {}
-  });
-  pip.document.body.style.cssText = 'margin:0;height:100vh;display:grid;place-items:center;background:var(--card)';
-  pip.document.body.innerHTML = `<div id="w" data-level="ok" style="display:grid;justify-items:center;gap:8px">
-    <div class="ring"><svg viewBox="0 0 128 128"><circle class="track" cx="64" cy="64" r="55"/><circle class="prog" cx="64" cy="64" r="55"/></svg><div class="num" id="wn">–</div></div>
+  const pip = await documentPictureInPicture.requestWindow({ width: 220, height: 250 });
+  [...document.styleSheets].forEach(ss => { try { const st = pip.document.createElement('style'); st.textContent = [...ss.cssRules].map(r => r.cssText).join('\n'); pip.document.head.append(st); } catch {} });
+  pip.document.body.style.cssText = 'margin:0;height:100vh;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 0%,#1D2D3E,#06090D);color:#fff;font-family:var(--font)';
+  pip.document.body.innerHTML = `<div id="w" data-level="away" style="display:grid;justify-items:center;gap:10px;--green:#30D158;--orange:#FF9F0A;--red:#FF453A">
+    <div class="ring" style="--size:120px;--sw:12"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50" style="stroke:#fff;opacity:.16"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
     <div id="ws" style="font-size:15px;font-weight:600"></div></div>`;
   S.pip = pip;
   pip.addEventListener('pagehide', () => { S.pip = null; });
@@ -932,37 +1475,41 @@ async function openWidget() {
 function renderWidget() {
   const d = S.pip.document, on = S.mode === 'on' && !S.paused;
   d.getElementById('w').dataset.level = on ? S.level : 'away';
-  const p = on && S.smooth != null ? S.smooth : 0;
-  const prog = d.querySelector('.prog'); prog.style.strokeDasharray = RING_C; prog.style.strokeDashoffset = RING_C * (1 - p);
-  d.getElementById('wn').innerHTML = on && S.smooth != null ? `<span>${Math.round(S.smooth * 100)}<small>%</small></span>` : '–';
+  setRing(d.querySelector('.ring'), on ? S.smooth : 0, on && S.smooth != null ? Math.round(S.smooth * 100) : null);
   d.getElementById('ws').textContent = STATUS[S.paused ? 'paused' : on ? S.level : (S.mode || 'away')];
 }
 
-/* ---------- navigation ---------- */
+/* =====================================================================
+   Navigation
+   ===================================================================== */
 function mountCamera() {
   const f = $('#camFrame');
   if (S.view === 'calib') { $('#camSlotCalib').append(f); f.hidden = !(S.stream || SIM); }
   else if (S.view === 'monitor') { $('#camSlotMonitor').append(f); f.hidden = !((S.stream || SIM) && S.settings.camView); }
   else f.hidden = true;
-  $('#figBox svg')?.toggleAttribute('hidden', S.view === 'monitor' && S.settings.camView);
+  const fig = $('#scan .fig'); if (fig) fig.style.visibility = S.view === 'monitor' && S.settings.camView ? 'hidden' : 'visible';
   $('#segFig').setAttribute('aria-pressed', String(!S.settings.camView));
   $('#segCam').setAttribute('aria-pressed', String(S.settings.camView));
   if (S.stream) S.video.play().catch(() => {});
 }
 function goto(view) {
-  if (view === 'monitor' && !S.started) view = 'onboard';
+  if ((view === 'monitor' || view === 'calib') && !S.started) view = 'onboard';
   S.view = view;
+  closeOverlays();
   $$('section[data-view]').forEach(s => s.hidden = s.dataset.view !== view);
   $('#tabbar').hidden = view === 'onboard' || view === 'calib';
   $$('.tabbar button').forEach(b => b.dataset.go === view ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   if (S.started) setTickRate(view === 'calib' ? TICK_CALIB : TICK_MONITOR);
+  if (view !== 'calib') stopDemo();
   mountCamera();
   if (view === 'calib') renderCalib();
-  if (view === 'monitor') { if (S.level !== 'bad') hideAlert(); render(); requestWake(); }
+  if (view === 'monitor') { renderHeader(); if (S.level !== 'bad') hideAlert(); renderBars(); render(); requestWake(); }
   if (view === 'devices') { renderDevices(); refreshCloudDaily(); }
   if (view === 'settings') renderSettings();
   scrollTo({ top: 0 });
 }
+function refreshView() { if (S.view === 'devices') renderDevices(); else if (S.view === 'settings') renderSettings(); else if (S.view === 'monitor') render(); }
+function startCalibration() { if (!S.started) { goto('onboard'); return; } calibReset(); goto('calib'); }
 async function begin() {
   const btn = $('#btnBegin'), out = $('#obStatus');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; out.className = 'foot'; out.textContent = '';
@@ -972,8 +1519,7 @@ async function begin() {
     if (!S.vision) S.vision = await initVision();
     registerSW();
     S.started = true;
-    if (!currentProfile()) calibReset();
-    goto(currentProfile() ? 'monitor' : 'calib');
+    if (currentProfile()) goto('monitor'); else startCalibration();
   } catch (e) {
     console.error(e); out.className = 'foot err'; out.textContent = e.message || String(e);
   } finally { btn.disabled = false; btn.textContent = 'Continue'; }
@@ -981,21 +1527,27 @@ async function begin() {
 document.addEventListener('click', e => {
   const go = e.target.closest('[data-go]');
   if (go) { e.preventDefault(); goto(go.dataset.go); return; }
+  const pl = e.target.closest('#placeStats [data-place], #placeList [data-place]');
+  if (pl) { placeActions(pl.dataset.place); return; }
   const act = e.target.closest('[data-act]')?.dataset.act;
-  if (!act) return;
-  if (act === 'calib') { if (!S.started) { goto('onboard'); return; } calibReset(); goto('calib'); }
+  if (act === 'calib') startCalibration();
   if (act === 'cushion') toggleCushion();
+  if (act === 'newplace') openPlaceSheet();
 });
 $('#btnBegin').onclick = begin;
+const calOk = () => { const v = C.result.val; return v.good >= .8 && v.turtle >= .8 && v.slouch >= .8; };
 $('#calBtn').onclick = () => {
-  if (C.step === 'good' || C.step === 'bad') calibCapture();
-  else if (C.step === 'done') { if (C.result.valAcc >= 0.8) { S.smooth = null; goto('monitor'); } else calibReset(); }
+  if (!C.result) { calibCapture(); return; }
+  if (calOk()) { S.smooth = null; goto('monitor'); } else calibReset();
 };
-$('#calBtn2').onclick = () => { if (C.step !== 'done') return; if (C.result.valAcc >= 0.8) calibReset(); else { S.smooth = null; goto('monitor'); } };
+$('#calBtn2').onclick = () => {
+  if (!C.result) return;
+  if (calOk()) calibReset(); else { S.smooth = null; goto('monitor'); }
+};
 $('#calCancel').onclick = () => goto('monitor');
 $('#segFig').onclick = () => { S.settings.camView = false; saveSettings(); mountCamera(); };
 $('#segCam').onclick = () => { S.settings.camView = true; saveSettings(); mountCamera(); };
-function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? PLAY_SVG : PAUSE_SVG; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause'; }
+function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? ICO.play : ICO.pause; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause'; }
 $('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(); };
 if ('documentPictureInPicture' in window) { $('#btnWidget').hidden = false; $('#btnWidget').onclick = () => openWidget().catch(e => toast(e.message)); }
 function onOrientation() {
@@ -1007,7 +1559,9 @@ if (screen.orientation?.addEventListener) screen.orientation.addEventListener('c
 else addEventListener('orientationchange', onOrientation);
 addEventListener('resize', () => { if (S.view === 'monitor') drawTimeline(); });
 
-/* ---------- vibration cushion (Web Bluetooth, output only) ---------- */
+/* =====================================================================
+   Vibration cushion (Web Bluetooth, output only)
+   ===================================================================== */
 async function toggleCushion() {
   const cu = S.cushion;
   if (cu.dev) { try { cu.dev.gatt.disconnect(); } catch {} cu.dev = null; cu.ch = null; renderCushion(); return; }
@@ -1031,19 +1585,24 @@ async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   } catch (e) { console.warn(e); }
 }
 function renderCushion() {
-  $('#cushionVal').innerHTML = S.cushion.dev ? '<span class="dot"></span>Connected' : 'Connect';
-  $('#cushionVal').style.color = S.cushion.dev ? '' : 'var(--blue)';
+  $('#cushionVal').innerHTML = S.cushion.dev ? '<span class="badge"><i></i>Connected</span>' : 'Connect';
+  $('#cushionVal').style.color = S.cushion.dev ? '' : 'var(--tint)';
   if (S.view === 'devices') renderDevices();
 }
 $('#btnCushion').onclick = toggleCushion;
 
-/* ---------- settings ---------- */
+/* =====================================================================
+   Settings
+   ===================================================================== */
 function saveSettings() { Store.set('settings', S.settings); }
 function paintSlider() { const el = $('#setThr'); el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
 function renderSettings() {
   const s = S.settings;
+  $('#placeList').innerHTML = S.places.map(p => `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(p.name)}<small>${SEATS[p.seat] || ''} · ${placeCalibrated(p.id) ? 'Calibrated' : 'Not calibrated'}</small></span>${p.id === S.place ? '<span class="v">In use</span>' : ''}${ICO.chev}</button>`).join('')
+    + `<button class="cell action" data-act="newplace"><span class="ico" style="background:var(--tint)">${svgIcon('<path d="M12 5v14M5 12h14"/>', 'stroke-width="2.6"')}</span><span class="t">Add Place</span></button>`;
   $('#devSel').value = S.device;
   $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold + '%'; paintSlider();
+  $$('#nudgeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === s.nudge)));
   $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz;
   const c = Cloud.cfg() || {};
   $('#dbUrl').value = c.url || ''; $('#dbKey').value = c.key || ''; $('#dbUser').value = c.user || '';
@@ -1059,13 +1618,14 @@ function renderNotif() {
   v.textContent = p === 'granted' ? 'On' : p === 'denied' ? 'Blocked' : 'Off';
 }
 $('#btnNotif').onclick = async () => {
-  if (!('Notification' in window)) { toast(/iPhone|iPad/.test(navigator.userAgent) ? 'Share → Add to Home Screen, then open from there' : 'Not supported here'); return; }
+  if (!('Notification' in window)) { toast(/iPhone|iPad/.test(navigator.userAgent) ? 'Share, then Add to Home Screen, and open it from there' : 'Not supported here'); return; }
   if (Notification.permission === 'denied') { toast('Turn on notifications in browser settings'); return; }
   await Notification.requestPermission(); renderNotif();
   if (Notification.permission === 'granted') pushNotify('Earline', 'Notifications are on.');
 };
-$('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; };
+$('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; S.mode = ''; renderSettings(); renderHeader(); };
 $('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThrOut').textContent = e.target.value + '%'; paintSlider(); saveSettings(); };
+$('#nudgeSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.nudge = b.dataset.v; saveSettings(); renderSettings(); renderNudge(); };
 $('#setSound').onchange = e => { S.settings.sound = e.target.checked; saveSettings(); if (e.target.checked) { unlockAudio(); chime(); } };
 $('#setBuzz').onchange = e => { S.settings.buzz = e.target.checked; saveSettings(); };
 $('#btnDbSave').onclick = async () => {
@@ -1098,7 +1658,7 @@ async function refreshCloudDaily() {
   } catch (e) { console.warn(e); }
 }
 $('#btnExport').onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: 'earline', version: 4, profiles: S.profiles, stats: S.stats }, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({ app: 'earline', version: PROFILE_V, places: S.places, profiles: S.profiles, stats: S.stats, pstats: S.pstats }, null, 2)], { type: 'application/json' });
   const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `earline-${today()}.json` });
   a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
@@ -1107,54 +1667,77 @@ $('#importFile').onchange = async e => {
   try {
     const d = JSON.parse(await f.text());
     if (d.app !== 'earline') throw new Error('Not an Earline file');
-    Object.assign(S.profiles, d.profiles || {}); Store.set('profiles', S.profiles); toast('Imported');
+    for (const p of d.places || []) if (!S.places.some(x => x.id === p.id)) S.places.push(p);
+    Object.assign(S.profiles, d.profiles || {}); Store.set('profiles', S.profiles); savePlaces();
+    toast('Imported'); refreshView();
   } catch (err) { toast(err.message); }
   e.target.value = '';
 };
-$('#btnReset').onclick = () => {
-  if (!confirm('Erase all data on this device?')) return;
-  Store.clear(); S.profiles = {}; S.stats = {}; S.history = []; toast('Erased'); renderSettings();
-};
+$('#btnReset').onclick = () => showActions('This erases models, places and history on this device.', [{ label: 'Erase All Data', danger: true, fn: () => {
+  Store.clear(); S.profiles = {}; S.stats = {}; S.pstats = {}; S.history = []; S.places = DEFAULT_PLACES.map(p => ({ ...p })); S.place = S.places[0].id;
+  toast('Erased'); renderHeader(); renderSettings();
+} }]);
 
 let toastTimer;
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2400); }
 
-/* ---------- simulation (?sim) ---------- */
+/* =====================================================================
+   Simulation (?sim): head = how far the head pokes forward, torso = how far you lean in
+   keys: t = head forward only, s = slouch, a = away
+   ===================================================================== */
 function makeSimVision() {
-  window.__sim = window.__sim || { slouch: 0, present: true };
-  addEventListener('keydown', e => { if (e.key === 't') __sim.slouch = __sim.slouch > .5 ? 0 : 1; if (e.key === 'a') __sim.present = !__sim.present; });
-  const nz = (a = 0.006) => (Math.random() - .5) * a;
+  window.__sim = window.__sim || { head: 0, torso: 0, present: true, drift: 0 };
+  addEventListener('keydown', e => {
+    if (e.key === 't') { __sim.head = __sim.head > .5 ? 0 : 1; __sim.torso = 0; }
+    if (e.key === 's') { const on = __sim.torso < .5; __sim.torso = on ? 1 : 0; __sim.head = on ? .5 : 0; }
+    if (e.key === 'a') __sim.present = !__sim.present;
+  });
+  const W = 640, H = 480, F = 500, rn = a => (Math.random() - .5) * 2 * a;
+  const wander = { h: 0, t: 0 };
   return {
     detect() {
-      const s = __sim.slouch;
       if (!__sim.present) return { face: { faceLandmarks: [] }, pose: { landmarks: [] } };
-      const sc = 1 + 0.22 * s, cy = 0.40 + 0.09 * s + nz(), cx = 0.5 + nz();
-      const lm = Array.from({ length: 478 }, () => ({ x: cx, y: cy, z: 0 }));
-      const set = (i, dx, dy) => lm[i] = { x: cx + dx * sc + nz(), y: cy + dy * sc + nz(), z: 0 };
-      set(33, -0.06, -0.03); set(263, 0.06, -0.03); set(1, 0, 0.02 + 0.01 * s); set(152, 0, 0.12 - 0.015 * s);
-      set(10, 0, -0.13 + 0.01 * s); set(234, -0.1, 0); set(454, 0.1, 0);
-      const pitch = (6 + 20 * s + nz(3)) * Math.PI / 180, yaw = nz(4) * Math.PI / 180;
-      const cp = Math.cos(pitch), sp = Math.sin(pitch);
-      const data = [1, 0, -Math.sin(yaw), 0, 0, cp, sp, 0, 0, -sp, cp, 0, 0, 0, 0, 1];
-      const pl = Array.from({ length: 33 }, () => ({ x: .5, y: .5, z: 0, visibility: 0.2 }));
-      const P = (i, x, y) => pl[i] = { x: x + nz(), y: y + nz(), z: 0, visibility: 0.95 };
-      P(11, 0.68, 0.80); P(12, 0.32, 0.80); P(0, cx, cy + 0.02 * sc); P(7, cx + 0.1 * sc, cy); P(8, cx - 0.1 * sc, cy);
+      const dr = __sim.drift || 0;
+      wander.h = clamp(wander.h * .96 + rn(.03), -1, 1); wander.t = clamp(wander.t * .96 + rn(.03), -1, 1);
+      const h = Math.max(0, __sim.head + wander.h * dr), t = Math.max(-.3, __sim.torso + wander.t * dr);
+      const Zh = 56 - 6 * h - 8 * t + rn(.3), Zt = 58 - 8 * t, k = F / Zh, ks = F / Zt;
+      const cx = 320 + rn(1), ey = 205 + 14 * h + 42 * t + rn(1);
+      const pitch = 4 - 5 * h + 18 * t + rn(1.2), yaw = rn(3);
+      const P = (x, y) => ({ x: (x + rn(.8)) / W, y: (y + rn(.8)) / H, z: 0 });
+      const lm = Array.from({ length: 478 }, () => ({ x: cx / W, y: ey / H, z: 0 }));
+      const cp = Math.cos(pitch * Math.PI / 180);
+      lm[33] = P(cx - 3.15 * k, ey); lm[263] = P(cx + 3.15 * k, ey);
+      lm[1] = P(cx, ey + 4.5 * k * cp); lm[152] = P(cx, ey + 11.5 * k * cp); lm[10] = P(cx, ey - 7.5 * k * cp);
+      lm[234] = P(cx - 7 * k, ey + 2 * k); lm[454] = P(cx + 7 * k, ey + 2 * k);
+      const pr = pitch * Math.PI / 180, yr = yaw * Math.PI / 180;
+      const data = [1, 0, -Math.sin(yr), 0, 0, Math.cos(pr), Math.sin(pr), 0, 0, -Math.sin(pr), Math.cos(pr), 0, 0, 0, -Zh, 1];
+      const sy = 405 + 12 * t;
+      const pl = Array.from({ length: 33 }, () => ({ x: .5, y: .5, z: 0, visibility: .2 }));
+      const V = (x, y) => ({ ...P(x, y), visibility: .95 });
+      pl[11] = V(cx + 19 * ks, sy); pl[12] = V(cx - 19 * ks, sy); pl[0] = V(cx, ey + 4.5 * k); pl[7] = V(cx + 7.5 * k, ey + 1.5 * k); pl[8] = V(cx - 7.5 * k, ey + 1.5 * k);
       const wl = Array.from({ length: 33 }, () => ({ x: 0, y: 0, z: 0 }));
-      wl[11] = { x: .17, y: -.45, z: 0 }; wl[12] = { x: -.17, y: -.45, z: 0 };
-      wl[7] = { x: .07, y: -.62 + .03 * s, z: -.02 - .08 * s + nz(.01) }; wl[8] = { x: -.07, y: -.62 + .03 * s, z: -.02 - .08 * s + nz(.01) };
+      wl[11] = { x: .19, y: -.45, z: -.08 * t }; wl[12] = { x: -.19, y: -.45, z: -.08 * t };
+      wl[7] = { x: .075, y: -.63 + .015 * h + .04 * t, z: -.03 - .06 * h - .12 * t + rn(.006) }; wl[8] = { ...wl[7], x: -.075 };
       return { face: { faceLandmarks: [lm], facialTransformationMatrixes: [{ data }] }, pose: { landmarks: [pl], worldLandmarks: [wl] } };
     }
   };
 }
 
 /* ---------- boot ---------- */
-$('#figBox').insertAdjacentHTML('afterbegin', figureMarkup());
-{ const svg = $('#figBox svg'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
-setPauseIcon();
-{ const pr = $('#ring .prog'); pr.style.strokeDasharray = RING_C; pr.style.strokeDashoffset = RING_C; }
+$('#heroFig').innerHTML = figureMarkup();
+$('#scan').insertAdjacentHTML('afterbegin', figureMarkup());
+{ // welcome: a slow move between turtle neck and upright, on repeat
+  const svg = $('#heroFig svg'); drawFigure(svg, 1); svg.dataset.level = 'bad'; figState.set(svg, { cur: 1, target: 1 });
+  let up = false;
+  const flip = () => { if (S.view !== 'onboard') return; up = !up; setFigure(svg, up ? 0 : 1, up ? 'ok' : 'bad'); };
+  setTimeout(flip, 700); setInterval(flip, 3200);
+}
+{ const svg = $('#scan .fig'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
+$('#todayDate').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+setPauseIcon(); renderHeader();
 goto('onboard');
 if (Cloud.on()) syncFromCloud().catch(e => console.warn(e));
-window.__earline = { S, C, LR, trainProfile, predict };
+window.__earline = { S, C, LR, trainProfile, predictCore, toSample, extract };
 </script>
 </body>
 </html>
