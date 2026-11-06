@@ -2,13 +2,13 @@
 
 ## Dorso (formerly Posturr)
 
-Earline's forward-head rule is adapted from the camera posture detector in Dorso
+Earline's optional head-only check (Settings → Head-only check, off by default) is
+adapted from the camera posture detector in Dorso
 (https://github.com/tldev/dorso, `Sources/Detectors/CameraPostureDetector.swift`):
-a baseline taken from upright calibration samples, a dead zone around it, a
-forward-head check based on face size growing past its upright size (+5% starts,
-+15% more is full severity), a slouch check based on the nose dropping, hysteresis,
-and progressive on-screen nudges (glow / blur). Earline re-implements these ideas in
-JavaScript and combines them with its own personal model; no Swift code is copied.
+a baseline taken from upright calibration samples, a dead zone around it, and a
+forward-head check based on face size growing past its upright size. The progressive
+on-screen nudges (glow / blur) follow Dorso too. Earline re-implements these ideas in
+JavaScript next to its own personal model; no Swift code is copied.
 
 ```
 MIT License

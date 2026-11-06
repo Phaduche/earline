@@ -359,8 +359,8 @@ details[open] summary .chev{transform:rotate(90deg)}
     <h1>Earline</h1>
     <p class="sub">Turtle-neck alerts that learn you.</p>
     <ul class="feats">
-      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b>Learns your posture</b><span>Three quick poses train a model just for you.</span></div></li>
-      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b>Catches turtle neck</b><span>Even when only your head drifts forward.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b>Learns your posture</b><span>Two quick poses train a model just for you.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b>Catches turtle neck</b><span>Alerts you in seconds, even in the background.</span></div></li>
       <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="20" height="14" rx="2.2"/><path d="M8 25.5h11"/><rect x="25.5" y="11" width="7" height="17" rx="2"/></svg><div><b>Every place you sit</b><span>Laptop, tablet, phone and cushion, together.</span></div></li>
     </ul>
     <div class="bottom">
@@ -376,7 +376,7 @@ details[open] summary .chev{transform:rotate(90deg)}
   <div class="enroll">
     <div class="navbar">
       <button class="nbtext" id="calCancel">Cancel</button>
-      <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i></div>
       <span class="nbspacer"></span>
     </div>
     <p class="calfor" id="calFor"></p>
@@ -504,6 +504,7 @@ details[open] summary .chev{transform:rotate(90deg)}
         <input class="slider" type="range" id="setThr" min="60" max="99" step="1"></div>
       <div class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><rect x="7.5" y="7.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></span><span class="t">Nudge</span>
         <div class="seg" role="group" aria-label="Nudge style" id="nudgeSeg"><button data-v="glow">Glow</button><button data-v="blur">Blur</button><button data-v="off">Off</button></div></div>
+      <label class="cell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M15 8h6M18 5l3 3-3 3M3 21c.5-3.5 2.8-5.5 6-5.5"/></svg></span><span class="t">Head-only check<small>Beta. Also alerts when only your head moves forward.</small></span><input class="sw" type="checkbox" id="setHead"></label>
       <label class="cell"><span class="ico" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5h3.2L12 5.2v13.6l-4.8-4.3H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="t">Sound</span><input class="sw" type="checkbox" id="setSound"></label>
       <button class="cell" id="btnNotif"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="3.6"/></svg></span><span class="t">Notifications</span><span class="v" id="notifVal">Off</span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
     </div>
@@ -529,7 +530,7 @@ details[open] summary .chev{transform:rotate(90deg)}
       <label class="cell action" for="importFile" style="cursor:pointer"><span class="t">Import Data</span></label>
       <button class="cell danger" id="btnReset"><span class="t">Erase All Data</span></button>
     </div>
-    <p class="footer">Pose tracking by MediaPipe. Forward-head rule adapted from Dorso (MIT).</p>
+    <p class="footer">Pose tracking by MediaPipe. Head-only check adapted from Dorso (MIT).</p>
   </div>
 </section>
 
@@ -568,10 +569,10 @@ details[open] summary .chev{transform:rotate(90deg)}
 /* =====================================================================
    Earline
    Same three steps as the Face-id project: collect samples -> train a
-   personal model -> live probability vs. threshold. Detection combines
-   (1) a personal logistic model trained on upright / head-forward / slouch
-   samples and (2) a forward-head rule adapted from Dorso (MIT):
-   your face growing past its upright size means your head moved forward.
+   personal model -> live probability vs. threshold. Detection is a personal
+   logistic model trained on upright / turtle-neck samples. An optional
+   head-only check (Settings, off by default) adds a forward-head rule adapted
+   from Dorso (MIT): your face growing past its upright size.
    ===================================================================== */
 const MP_VER = '0.10.14';
 const MP_URL = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}`;
@@ -583,7 +584,7 @@ const BUZZ_STRENGTH = 205;
 const HOLD_SEC = 3, COOLDOWN_SEC = 60;
 const SAMPLES_PER_POSE = 60;
 const TICK_MONITOR = 200, TICK_CALIB = 100;
-const PROFILE_V = 5;
+const PROFILE_V = 6;
 const SIM = new URLSearchParams(location.search).has('sim');   // dev: run without camera/models
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -692,7 +693,7 @@ const S = {
   places: Store.get('places', null) || DEFAULT_PLACES.map(p => ({ ...p })),
   place: Store.get('place', 'dorm'),
   view: 'onboard', started: false, paused: false,
-  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false, nudge: 'glow' }, Store.get('settings', {})),
+  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false, nudge: 'glow', headCheck: false }, Store.get('settings', {})),
   profiles: Store.get('profiles', {}),
   stats: Store.get('stats', {}),
   pstats: Store.get('pstats', {}),
@@ -747,7 +748,7 @@ function faceFeatures(lm, matrix, W, H) {
   const scale = iod / W * 100, noseY = nose.y / H * 100;
   return { vec: [pitch, scale, noseY, fh / fw, (chin.y - nose.y) / iod], yaw, iod, scale, noseY, tz, nose, eyes: [eR, eL], chin };
 }
-/* shoulders: torso distance, neck height, nose height, head-vs-torso size, chin-to-shoulders, ear depth vs shoulders, 3D neck angle */
+/* shoulders (same 5 features as the version that tested well): torso distance, neck height, nose height, head-vs-torso size, 3D neck angle */
 function poseFeatures(lm, world, W, H, face) {
   const vis = i => lm[i] && (lm[i].visibility ?? 1) > 0.6 && lm[i].y < 1.02;
   if (!vis(11) || !vis(12)) return null;
@@ -756,14 +757,13 @@ function poseFeatures(lm, world, W, H, face) {
   if (sw < W * 0.08) return null;
   const earPts = [7, 8].filter(i => lm[i] && (lm[i].visibility ?? 1) > 0.3).map(P);
   const earMid = earPts.length === 2 ? mid(earPts[0], earPts[1]) : earPts[0] || P(0);
-  let cva = 0, earFwd = 0;
+  const nose = P(0);
+  let cva = 0;
   if (world?.[11] && world?.[12] && world?.[7] && world?.[8]) {
     const ws = mid(world[11], world[12]), we = mid(world[7], world[8]);
     cva = deg(Math.atan2(ws.y - we.y, Math.abs(we.z - ws.z) + 1e-3));
-    earFwd = (ws.z - we.z) * 100;                            // cm the ears sit in front of the shoulders
   }
-  const ht = face.iod / sw;                                  // head size vs torso size: grows when only the head moves forward
-  return { vec: [sw / W * 100, (sm.y - earMid.y) / sw, (sm.y - face.nose.y) / sw, ht, (sm.y - face.chin.y) / sw, earFwd, cva], sw, ht, sL, sR, sm, earMid };
+  return { vec: [sw / W * 100, (sm.y - earMid.y) / sw, (sm.y - nose.y) / sw, face.iod / sw, cva], sw, sL, sR, sm, earMid };
 }
 function extract(r) {
   const W = S.frameW, H = S.frameH;
@@ -774,13 +774,10 @@ function extract(r) {
   if (pl && face) pose = poseFeatures(pl, r.pose.worldLandmarks?.[0], W, H, face);
   return { face, pose };
 }
-const toSample = obs => ({
-  f: obs.face.vec, p: obs.pose ? obs.pose.vec : null, yaw: obs.face.yaw, scale: obs.face.scale, noseY: obs.face.noseY,
-  tz: obs.face.tz, ht: obs.pose ? obs.pose.ht : null, neck: obs.pose ? obs.pose.vec[1] : null
-});
+const toSample = obs => ({ f: obs.face.vec, p: obs.pose ? obs.pose.vec : null, yaw: obs.face.yaw, scale: obs.face.scale, tz: obs.face.tz });
 
 /* =====================================================================
-   Personal model
+   Personal model: upright vs turtle neck, standardized features + L2 logistic regression
    ===================================================================== */
 const LR = {
   train(X, y, { l2 = 0.02, epochs = 500, lr = 0.3 } = {}) {
@@ -808,85 +805,54 @@ const LR = {
   },
   prob(m, x) { if (!m) return 0; let z = m.b; for (let j = 0; j < m.w.length; j++) z += m.w[j] * ((x[j] - m.mu[j]) / m.sd[j]); return sigmoid(z); }
 };
-
-/* Forward-head rule. Adapted from Dorso's camera detector (MIT, (c) Posturr Contributors):
-   a baseline from your upright samples, a dead zone around it, and a severity that ramps up
-   to the poses you recorded. Indicators: face size (Dorso's forward-head check),
-   nose drop (Dorso's slouch check), head distance in cm, head-vs-torso size, neck height. */
-const RULE_MIN_DZ = { grow: .04, drop: 1.5, fwd: 1.0, ht: .03, neck: .05 };
-const RULE_DEFAULT = { grow: { dz: .05, ref: .20 }, fwd: { dz: 1.5, ref: 5 } };   // Dorso: +5% face size starts, +15% more is full severity
-const RULE_CAP = { grow: .15, fwd: 6 };   // a head ~6 cm forward always counts as turtle neck, even after a weak head-forward recording
-function indicators(base, s) {
-  const o = { grow: s.scale / base.scaleMax - 1, drop: s.noseY - base.noseYMax };
-  o.fwd = base.tz0 && s.tz ? base.tz0 - s.tz : 55 * (1 - base.scaleMed / s.scale);
-  if (base.ht0 && s.ht != null) o.ht = s.ht / base.ht0 - 1;
-  if (base.neck0 && s.neck != null) o.neck = 1 - s.neck / base.neck0;
-  return o;
-}
-function buildRule(good, turtle, slouch) {
-  const nums = a => a.filter(v => v != null && Number.isFinite(v));
-  const base = {
-    scaleMax: pct(good.map(s => s.scale), .97), scaleMed: median(good.map(s => s.scale)),
-    noseYMax: pct(good.map(s => s.noseY), .97),
-    tz0: median(nums(good.map(s => s.tz))), ht0: median(nums(good.map(s => s.ht))), neck0: median(nums(good.map(s => s.neck)))
-  };
-  const ind = arr => arr.map(s => indicators(base, s));
-  const G = ind(good), T = ind(turtle), L = ind(slouch);
-  const rule = {};
-  for (const k of Object.keys(RULE_MIN_DZ)) {
-    const gv = nums(G.map(o => o[k]));
-    if (gv.length < good.length * .6) continue;
-    const spread = (pct(gv, .75) - pct(gv, .25)) || 0;
-    const dz = Math.max(pct(gv, .97) + spread * .5, RULE_MIN_DZ[k]);
-    const refs = [T, L].map(R => median(nums(R.map(o => o[k])))).filter(r => r != null && r > dz * 1.5 + RULE_MIN_DZ[k]);
-    if (refs.length) rule[k] = { dz, ref: Math.min(...refs) };
-    else if (RULE_DEFAULT[k]) rule[k] = { dz: Math.max(dz, RULE_DEFAULT[k].dz), ref: Math.max(RULE_DEFAULT[k].ref, dz * 2.5) };
-    if (rule[k] && RULE_CAP[k]) rule[k].ref = Math.max(Math.min(rule[k].ref, RULE_CAP[k]), rule[k].dz * 1.6);
-  }
-  return { base, rule };
-}
-function ruleEval(R, s) {
-  const o = indicators(R.base, s); let sev = 0, by = null;
-  for (const k in R.rule) {
-    const v = o[k]; if (!Number.isFinite(v)) continue;
-    const { dz, ref } = R.rule[k];
-    const sv = clamp((v - dz) / (ref - dz), 0, 1.5);
-    if (sv > sev) { sev = sv; by = k; }
-  }
-  return { sev, by, fwd: o.fwd, fwdDz: R.rule.fwd?.dz ?? 1.5 };
-}
-function predictCore(prof, s) {
-  const pLR = prof.full && s.p ? LR.prob(prof.full, [...s.f, ...s.p]) : LR.prob(prof.face, s.f);
-  const r = ruleEval(prof.R, s);
-  const pRule = sigmoid(10 * (r.sev - .62));
-  return { p: Math.max(pLR, pRule), pLR, pRule, fwd: r.fwd, fwdDz: r.fwdDz, by: r.by };
-}
-function fitAll(good, turtle, slouch) {
-  const bad = [...turtle, ...slouch];
+function fitModels(good, bad) {
   const share = a => a.filter(x => x.p).length / Math.max(a.length, 1);
-  const useFull = share(good) >= .6 && share(turtle) >= .6 && share(slouch) >= .6;
+  const useFull = share(good) >= .6 && share(bad) >= .6;
   const fit = sel => {
     const X = [], y = [];
     for (const s of good) { const x = sel(s); if (x) { X.push(x); y.push(0); } }
     for (const s of bad) { const x = sel(s); if (x) { X.push(x); y.push(1); } }
     return X.length >= 10 && y.includes(0) && y.includes(1) ? LR.train(X, y) : null;
   };
+  return { face: fit(s => s.f), full: useFull ? fit(s => s.p ? [...s.f, ...s.p] : null) : null };
+}
+/* upright baseline for the optional head-only check and the "Head x cm forward" readout */
+function headBase(good) {
+  const sc = good.map(s => s.scale), scaleMed = median(sc);
+  const grow = sc.map(v => v / scaleMed - 1);
   return {
-    face: fit(s => s.f), full: useFull ? fit(s => s.p ? [...s.f, ...s.p] : null) : null,
-    R: buildRule(good, turtle, slouch), yaw0: good.reduce((a, s) => a + s.yaw, 0) / Math.max(good.length, 1)
+    scaleMed,
+    dz: Math.max(.05, pct(grow, .97) + .5 * ((pct(grow, .75) - pct(grow, .25)) || 0)),
+    tz0: median(good.map(s => s.tz).filter(v => v != null && Number.isFinite(v)))
   };
+}
+/* Optional head-only check (Settings, off by default). Adapted from Dorso's forward-head rule (MIT,
+   (c) Posturr Contributors): your face growing past its upright size means your head moved toward the screen. */
+function headEval(H, s) {
+  const grow = s.scale / H.scaleMed - 1;
+  const sev = clamp((grow - H.dz) / .08, 0, 1.5);
+  const fwd = H.tz0 && s.tz ? H.tz0 - s.tz : 55 * (1 - H.scaleMed / s.scale);
+  return { pHead: sigmoid(10 * (sev - .45)), fwd };
+}
+function predictCore(prof, s) {
+  const pLR = prof.full && s.p ? LR.prob(prof.full, [...s.f, ...s.p]) : LR.prob(prof.face, s.f);
+  const h = headEval(prof.H, s);
+  const pHead = S.settings.headCheck ? h.pHead : 0;
+  return { p: Math.max(pLR, pHead), pLR, pHead, fwd: h.fwd };
 }
 function trainProfile(rec) {
   const split = a => { const k = Math.max(1, Math.floor(a.length * .8)); return [a.slice(0, k), a.slice(k)]; };
-  const [g1, g2] = split(rec.good), [t1, t2] = split(rec.turtle), [s1, s2] = split(rec.slouch);
-  const tmp = fitAll(g1, t1, s1);
-  const rate = (arr, want) => arr.length ? arr.filter(x => (predictCore(tmp, x).p >= .5) === want).length / arr.length : 1;
-  const val = { good: rate(g2, false), turtle: rate(t2, true), slouch: rate(s2, true) };
+  const [g1, g2] = split(rec.good), [b1, b2] = split(rec.bad);
+  const tmp = fitModels(g1, b1);
+  const pr = s => tmp.full && s.p ? LR.prob(tmp.full, [...s.f, ...s.p]) : LR.prob(tmp.face, s.f);
+  const rate = (arr, want) => arr.length ? arr.filter(x => (pr(x) >= .5) === want).length / arr.length : 1;
+  const val = { good: rate(g2, false), bad: rate(b2, true) };
   const now = Date.now();
   return {
     v: PROFILE_V, key: profileKey(), place: S.place, device: S.device, createdAt: now, updatedAt: now,
-    ...fitAll(rec.good, rec.turtle, rec.slouch), val, valAcc: (val.good + val.turtle + val.slouch) / 3,
-    samples: { good: rec.good.length, turtle: rec.turtle.length, slouch: rec.slouch.length }
+    ...fitModels(rec.good, rec.bad), H: headBase(rec.good),
+    yaw0: rec.good.reduce((a, s) => a + s.yaw, 0) / Math.max(rec.good.length, 1),
+    val, valAcc: (val.good + val.bad) / 2, samples: { good: rec.good.length, bad: rec.bad.length }
   };
 }
 
@@ -952,14 +918,13 @@ async function tick() {
 }
 
 /* =====================================================================
-   Calibration: three poses (Face ID-style ring)
+   Calibration: two poses (Face ID-style ring)
    ===================================================================== */
 const STEPS = [
-  { key: 'good',   title: 'Sit up straight',        sub: 'Back against the chair, eyes on the screen.' },
-  { key: 'turtle', title: 'Push your head forward', sub: 'Keep your back still. Only your head moves.' },
-  { key: 'slouch', title: 'Now slouch',             sub: 'Round your shoulders and lean in.' }
+  { key: 'good', title: 'Sit up straight',   sub: 'Back against the chair, eyes on the screen.', demo: 'up' },
+  { key: 'bad',  title: 'Now slump forward', sub: 'Let your head sink toward the screen.',      demo: 'slouch' }
 ];
-const C = { i: 0, state: 'idle', rec: { good: [], turtle: [], slouch: [] }, result: null };
+const C = { i: 0, state: 'idle', rec: { good: [], bad: [] }, result: null };
 (function buildTicks() {
   let h = '';
   for (let i = 0; i < SAMPLES_PER_POSE; i++) {
@@ -969,7 +934,7 @@ const C = { i: 0, state: 'idle', rec: { good: [], turtle: [], slouch: [] }, resu
   $('#calTicks').innerHTML = h;
 })();
 const setTicks = n => $$('#calTicks line').forEach((l, i) => l.classList.toggle('on', i < n));
-function calibReset() { C.i = 0; C.state = 'idle'; C.rec = { good: [], turtle: [], slouch: [] }; C.result = null; renderCalib(); }
+function calibReset() { C.i = 0; C.state = 'idle'; C.rec = { good: [], bad: [] }; C.result = null; renderCalib(); }
 async function calibCapture() {
   if (C.state !== 'idle') return;
   C.state = 'countdown'; renderCalib();
@@ -987,7 +952,7 @@ function calibTick(obs) {
   setTicks(arr.length);
   if (arr.length >= SAMPLES_PER_POSE) {
     navigator.vibrate?.(30);
-    if (C.i < 2) { C.i++; C.state = 'idle'; renderCalib(); }
+    if (C.i < STEPS.length - 1) { C.i++; C.state = 'idle'; renderCalib(); }
     else trainNow();
   }
 }
@@ -1000,6 +965,7 @@ async function trainNow() {
   C.result = prof; C.state = 'idle';
   renderCalib();
 }
+const calOk = () => C.result.val.good >= .8 && C.result.val.bad >= .8;
 
 /* side-view pose demo shown during calibration */
 const SIDE = {
@@ -1032,7 +998,7 @@ function runDemo(kind) {
 function stopDemo() { cancelAnimationFrame(demoRaf); demoRaf = 0; }
 
 function renderCalib() {
-  const done = !!C.result, step = STEPS[Math.min(C.i, 2)];
+  const done = !!C.result, step = STEPS[Math.min(C.i, STEPS.length - 1)];
   $('.enroll').classList.toggle('done', done);
   $('#calCancel').style.visibility = currentProfile() ? 'visible' : 'hidden';
   $('#calFor').textContent = `${curPlace().name} · ${DEV[S.device]}`;
@@ -1042,12 +1008,12 @@ function renderCalib() {
   $('#camSlotCalib').style.visibility = done ? 'hidden' : 'visible';
   b2.hidden = true;
   if (done) {
-    const v = C.result.val, ok = v.good >= .8 && v.turtle >= .8 && v.slouch >= .8;
+    const v = C.result.val, ok = calOk();
     $('#calDone').innerHTML = ok ? ICO.okc : ICO.warnc;
     $('#calTitle').textContent = ok ? 'All set' : 'Almost there';
-    $('#calSub').textContent = ok ? `Your model for ${curPlace().name} is ready.` : (v.turtle < .8 ? 'Head forward looked too close to upright. Push further.' : 'Some poses looked too similar. Try bigger moves.');
+    $('#calSub').textContent = ok ? `Your model for ${curPlace().name} is ready.` : 'Your two poses looked too similar. Slump a bit more and try again.';
     const row = (name, r) => `<div class="cell"><span class="ico ${r >= .8 ? 'ok' : 'no'}">${r >= .8 ? ICO.rowOk : ICO.rowNo}</span><span class="t">${name}</span><span class="v">${Math.round(r * 100)}%</span></div>`;
-    $('#calVals').innerHTML = row('Upright', v.good) + row('Head forward', v.turtle) + row('Slouch', v.slouch);
+    $('#calVals').innerHTML = row('Upright', v.good) + row('Turtle neck', v.bad);
     setTicks(SAMPLES_PER_POSE);
     b1.disabled = false; b1.textContent = ok ? 'Done' : 'Try Again';
     b2.hidden = false; b2.textContent = ok ? 'Redo' : 'Use Anyway';
@@ -1065,7 +1031,7 @@ function renderCalib() {
   $('#calTitle').textContent = step.title;
   $('#calSub').textContent = step.sub;
   setTicks(C.rec[step.key].length);
-  runDemo(['up', 'turtle', 'slouch'][C.i]);
+  runDemo(step.demo);
   b1.disabled = C.state !== 'idle';
   b1.textContent = C.state === 'capturing' ? 'Hold still' : C.state === 'countdown' ? 'Get ready' : C.i === 0 ? 'Start' : 'Continue';
 }
@@ -1085,7 +1051,6 @@ function monitorTick(obs) {
   S.mode = 'on';
   S.smooth = S.smooth == null ? r.p : S.smooth + 0.3 * (r.p - S.smooth);
   S.fwd = S.fwd == null ? r.fwd : S.fwd + 0.2 * (r.fwd - S.fwd);
-  S.fwdDz = r.fwdDz;
   S.disp.sumP += S.smooth; S.disp.sumF += S.fwd; S.disp.n++;
   const thr = S.settings.threshold / 100;
   S.level = S.smooth >= thr ? 'bad' : S.smooth >= 0.5 ? 'warn' : 'ok';
@@ -1319,8 +1284,8 @@ function subText(mode) {
   if (mode === 'nocal') return `Calibrate ${curPlace().name} on ${thisDeviceLabel()}.`;
   if (mode === 'paused') return 'Tracking is paused.';
   if (Date.now() < S.snoozeUntil) return 'Alerts snoozed';
-  if (S.disp.fwd == null) return '';
-  return S.disp.fwd > S.fwdDz ? `Head ${S.disp.fwd.toFixed(1)} cm forward` : 'Head over your shoulders';
+  if (S.disp.level === 'ok' || S.disp.fwd == null) return 'Head over your shoulders';
+  return S.disp.fwd > S.fwdDz ? `Head ${S.disp.fwd.toFixed(1)} cm forward` : 'Sit back and lift your chin';
 }
 /* The model runs 5x a second; the readout (%, status, head cm, figure, nudges) shows the
    average of each second so the number is steady and readable. */
@@ -1574,7 +1539,6 @@ document.addEventListener('click', e => {
   if (act === 'newplace') openPlaceSheet();
 });
 $('#btnBegin').onclick = begin;
-const calOk = () => { const v = C.result.val; return v.good >= .8 && v.turtle >= .8 && v.slouch >= .8; };
 $('#calBtn').onclick = () => {
   if (!C.result) { calibCapture(); return; }
   if (calOk()) { S.smooth = null; goto('monitor'); } else calibReset();
@@ -1642,7 +1606,7 @@ function renderSettings() {
   $('#devSel').value = S.device;
   $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold + '%'; paintSlider();
   $$('#nudgeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === s.nudge)));
-  $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz;
+  $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz; $('#setHead').checked = s.headCheck;
   const c = Cloud.cfg() || {};
   $('#dbUrl').value = c.url || ''; $('#dbKey').value = c.key || ''; $('#dbUser').value = c.user || '';
   $('#dbState').textContent = Cloud.on() ? 'On' : 'Off';
@@ -1690,6 +1654,7 @@ $('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThr
 $('#nudgeSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.nudge = b.dataset.v; saveSettings(); renderSettings(); renderNudge(); };
 $('#setSound').onchange = e => { S.settings.sound = e.target.checked; saveSettings(); if (e.target.checked) { unlockAudio(); chime(); } };
 $('#setBuzz').onchange = e => { S.settings.buzz = e.target.checked; saveSettings(); };
+$('#setHead').onchange = e => { S.settings.headCheck = e.target.checked; saveSettings(); S.smooth = null; };
 $('#btnDbSave').onclick = async () => {
   const url = $('#dbUrl').value.trim(), key = $('#dbKey').value.trim(), user = $('#dbUser').value.trim();
   if (!url || !key || !user) { toast('Fill in all three fields'); return; }
@@ -1799,7 +1764,7 @@ $('#todayDate').textContent = new Date().toLocaleDateString('en-US', { month: 's
 setPauseIcon(); renderHeader();
 goto('onboard');
 if (Cloud.on()) syncFromCloud().catch(e => console.warn(e));
-window.__earline = { S, C, LR, trainProfile, predictCore, toSample, extract };
+window.__earline = { S, C, LR, trainProfile, predictCore, toSample, extract, headEval };
 </script>
 </body>
 </html>
