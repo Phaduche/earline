@@ -23,7 +23,7 @@
   --cyan:#32ADE6; --indigo:#5856D6; --brown:#A2845E; --mint:#00C7BE;
   --glass:rgba(255,255,255,.62); --glass-strong:rgba(250,250,252,.86); --glass-line:rgba(255,255,255,.8);
   --glass-shadow:0 12px 32px rgba(0,0,0,.10),0 1px 3px rgba(0,0,0,.06);
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Segoe UI",Roboto,system-ui,sans-serif;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Apple SD Gothic Neo","Segoe UI","Malgun Gothic","Noto Sans KR",Roboto,system-ui,sans-serif;
   --round:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --lvl:var(--gray);
   color-scheme:light;
@@ -108,6 +108,7 @@ details[open] summary .chev{transform:rotate(90deg)}
 .slider{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:linear-gradient(to right,var(--tint) var(--p,50%),var(--fill2) var(--p,50%));margin:0;cursor:pointer}
 .slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
 .slider::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:#fff;box-shadow:0 .5px 4px rgba(0,0,0,.12),0 6px 13px rgba(0,0,0,.12)}
+:lang(ko){word-break:keep-all}
 .seg{display:flex;background:var(--fill);border-radius:9px;padding:2px}
 .seg button{flex:1;height:30px;border:0;background:none;border-radius:7px;font-size:13px;font-weight:500;padding:0 10px;white-space:nowrap}
 .seg button[aria-pressed="true"]{background:var(--segsel);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
@@ -357,15 +358,15 @@ details[open] summary .chev{transform:rotate(90deg)}
   <div class="welcome">
     <div class="hero" id="heroFig"></div>
     <h1>Earline</h1>
-    <p class="sub">Turtle-neck alerts that learn you.</p>
+    <p class="sub" data-i18n="ob.tag">Turtle-neck alerts that learn you.</p>
     <ul class="feats">
-      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b>Learns your posture</b><span>Two quick poses train a model just for you.</span></div></li>
-      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b>Catches turtle neck</b><span>Alerts you in seconds, even in the background.</span></div></li>
-      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="20" height="14" rx="2.2"/><path d="M8 25.5h11"/><rect x="25.5" y="11" width="7" height="17" rx="2"/></svg><div><b>Every place you sit</b><span>Laptop, tablet, phone and cushion, together.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b data-i18n="ob.f1">Learns your posture</b><span data-i18n="ob.f1s">Two quick poses train a model just for you.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b data-i18n="ob.f2">Catches turtle neck</b><span data-i18n="ob.f2s">Alerts you in seconds, even in the background.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="20" height="14" rx="2.2"/><path d="M8 25.5h11"/><rect x="25.5" y="11" width="7" height="17" rx="2"/></svg><div><b data-i18n="ob.f3">Every place you sit</b><span data-i18n="ob.f3s">Laptop, tablet, phone and cushion, together.</span></div></li>
     </ul>
     <div class="bottom">
-      <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg>Video never leaves this device.</p>
-      <button class="btn" id="btnBegin">Continue</button>
+      <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg><span data-i18n="ob.privacy">Video never leaves this device.</span></p>
+      <button class="btn" id="btnBegin" data-i18n="continue">Continue</button>
       <p class="foot" id="obStatus" role="status" aria-live="polite"></p>
     </div>
   </div>
@@ -375,7 +376,7 @@ details[open] summary .chev{transform:rotate(90deg)}
 <section data-view="calib" hidden>
   <div class="enroll">
     <div class="navbar">
-      <button class="nbtext" id="calCancel">Cancel</button>
+      <button class="nbtext" id="calCancel" data-i18n="cancel">Cancel</button>
       <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i></div>
       <span class="nbspacer"></span>
     </div>
@@ -401,7 +402,7 @@ details[open] summary .chev{transform:rotate(90deg)}
     <div class="list noicon vals" id="calVals" hidden></div>
     <p class="foot" id="calHint" style="margin-top:12px;min-height:18px"></p>
     <div class="bottom">
-      <button class="btn" id="calBtn">Start</button>
+      <button class="btn" id="calBtn" data-i18n="start">Start</button>
       <button class="plain" id="calBtn2" hidden></button>
     </div>
   </div>
@@ -412,15 +413,15 @@ details[open] summary .chev{transform:rotate(90deg)}
   <div class="navbar">
     <button class="placebtn glass" id="placeBtn" aria-haspopup="menu"><span id="placeIco"></span><span class="nm" id="placeName"></span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg></button>
     <span class="grow"></span>
-    <button class="gbtn glass" id="btnWidget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="3"/><rect x="12" y="11" width="7" height="5.5" rx="1.4" fill="currentColor"/></svg></button>
+    <button class="gbtn glass" id="btnWidget" data-i18n-title="widget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="3"/><rect x="12" y="11" width="7" height="5.5" rx="1.4" fill="currentColor"/></svg></button>
     <button class="gbtn glass" id="btnPause" aria-label="Pause" title="Pause"></button>
   </div>
-  <h1 class="large">Posture</h1>
+  <h1 class="large" data-i18n="posture">Posture</h1>
   <div class="notice glass" id="notice" hidden>
     <span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span>
     <div class="t"><b id="noticeTitle"></b><span class="s" id="noticeSub"></span></div>
-    <button class="btn small" id="noticeBtn">Turn On</button>
-    <button class="x" id="noticeX" aria-label="Dismiss"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button>
+    <button class="btn small" id="noticeBtn" data-i18n="turnon">Turn On</button>
+    <button class="x" id="noticeX" aria-label="Dismiss" data-i18n-aria="dismiss"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg></button>
   </div>
   <div class="pgrid">
     <div class="left">
@@ -429,13 +430,13 @@ details[open] summary .chev{transform:rotate(90deg)}
         <div class="vig"></div>
         <div class="scanline"></div>
         <div class="topbar">
-          <span class="pill"><i class="dot"></i><span id="livePill">Live</span></span>
+          <span class="pill"><i class="dot"></i><span id="livePill" data-i18n="live">Live</span></span>
           <div class="seg dark" role="group" aria-label="View">
-            <button id="segFig" aria-pressed="true" aria-label="Figure" title="Figure"><svg viewBox="0 0 16 16" fill="currentColor"><ellipse cx="8" cy="5" rx="2.8" ry="3.3"/><path d="M2.5 15c.4-3 2.2-4.8 5.5-4.8s5.1 1.8 5.5 4.8z"/></svg></button>
-            <button id="segCam" aria-pressed="false" aria-label="Camera" title="Camera"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 5.2c0-.9.7-1.6 1.6-1.6h6.4c.9 0 1.6.7 1.6 1.6v5.6c0 .9-.7 1.6-1.6 1.6H3.1c-.9 0-1.6-.7-1.6-1.6zM11.8 6.5l2.7-1.7v6.4l-2.7-1.7z"/></svg></button>
+            <button id="segFig" aria-pressed="true" aria-label="Figure" title="Figure" data-i18n-title="figure"><svg viewBox="0 0 16 16" fill="currentColor"><ellipse cx="8" cy="5" rx="2.8" ry="3.3"/><path d="M2.5 15c.4-3 2.2-4.8 5.5-4.8s5.1 1.8 5.5 4.8z"/></svg></button>
+            <button id="segCam" aria-pressed="false" aria-label="Camera" title="Camera" data-i18n-title="camera"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 5.2c0-.9.7-1.6 1.6-1.6h6.4c.9 0 1.6.7 1.6 1.6v5.6c0 .9-.7 1.6-1.6 1.6H3.1c-.9 0-1.6-.7-1.6-1.6zM11.8 6.5l2.7-1.7v6.4l-2.7-1.7z"/></svg></button>
           </div>
         </div>
-        <button class="btn small calbtn" data-act="calib" id="scanCal" hidden>Calibrate</button>
+        <button class="btn small calbtn" data-act="calib" id="scanCal" hidden data-i18n="calibrate">Calibrate</button>
         <div class="panel">
           <div class="ring" id="ringSm" style="--size:64px;--sw:13"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
           <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p></div>
@@ -445,24 +446,24 @@ details[open] summary .chev{transform:rotate(90deg)}
     <div class="right pgrid" style="gap:16px;grid-template-columns:minmax(0,1fr)">
       <div class="card statuscard deskonly" id="statusCard" data-level="away">
         <div class="ring" id="ringLg"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
-        <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p><button class="btn small" data-act="calib" id="cardCal" hidden style="margin-top:12px">Calibrate</button></div>
+        <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p><button class="btn small" data-act="calib" id="cardCal" hidden style="margin-top:12px" data-i18n="calibrate">Calibrate</button></div>
       </div>
       <div class="card">
-        <div class="cardhead"><h2>Today</h2><span id="todayDate"></span></div>
+        <div class="cardhead"><h2 data-i18n="today">Today</h2><span id="todayDate"></span></div>
         <div class="metrics">
-          <div class="g"><span class="cap">Upright</span><b id="stGood">–</b></div>
-          <div class="r"><span class="cap">Turtle neck</span><b id="stBad">0<small>m</small></b></div>
-          <div><span class="cap">Alerts</span><b id="stAlerts">0</b></div>
+          <div class="g"><span class="cap" data-i18n="upright">Upright</span><b id="stGood">–</b></div>
+          <div class="r"><span class="cap" data-i18n="turtle">Turtle neck</span><b id="stBad">0<small>m</small></b></div>
+          <div><span class="cap" data-i18n="alerts">Alerts</span><b id="stAlerts">0</b></div>
         </div>
         <div class="chart">
           <div class="bars" id="bars"></div>
-          <span class="yl" style="top:0">60m</span><span class="yl" style="top:48px">30m</span>
-          <div class="xlabels"><span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span></div>
+          <span class="yl" style="top:0" data-i18n="y60">60m</span><span class="yl" style="top:48px" data-i18n="y30">30m</span>
+          <div class="xlabels"><span data-i18n="x0">12 AM</span><span data-i18n="x6">6 AM</span><span data-i18n="x12">12 PM</span><span data-i18n="x18">6 PM</span></div>
         </div>
       </div>
       <div class="card">
-        <div class="cardhead"><h2>Last 5 Minutes</h2><span id="thrLabel"></span></div>
-        <canvas id="timeline" aria-label="Turtle-neck risk over the last five minutes"></canvas>
+        <div class="cardhead"><h2 data-i18n="last5">Last 5 Minutes</h2><span id="thrLabel"></span></div>
+        <canvas id="timeline" aria-label="Turtle-neck risk over the last five minutes" data-i18n-aria="timelineA11y"></canvas>
       </div>
     </div>
   </div>
@@ -472,14 +473,14 @@ details[open] summary .chev{transform:rotate(90deg)}
 <section data-view="devices" class="screen" hidden>
   <div class="narrow">
     <div class="navbar"></div>
-    <h1 class="large">Devices</h1>
+    <h1 class="large" data-i18n="devices">Devices</h1>
     <div class="card summary" data-level="ok">
       <div class="ring" id="ringTot"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num"></div></div>
-      <div><b id="totPct">–</b><span id="totSub">upright today</span></div>
+      <div><b id="totPct">–</b><span id="totSub" data-i18n="uprighttoday">upright today</span></div>
     </div>
-    <h2 class="sechead">Devices</h2>
+    <h2 class="sechead" data-i18n="devices">Devices</h2>
     <div class="tiles" id="devTiles"></div>
-    <h2 class="sechead">Places</h2>
+    <h2 class="sechead" data-i18n="places">Places</h2>
     <div class="list" id="placeStats"></div>
   </div>
 </section>
@@ -488,58 +489,62 @@ details[open] summary .chev{transform:rotate(90deg)}
 <section data-view="settings" class="screen" hidden>
   <div class="narrow">
     <div class="navbar"></div>
-    <h1 class="large">Settings</h1>
+    <h1 class="large" data-i18n="settings">Settings</h1>
 
     <div class="list" id="placeList"></div>
 
     <div class="list">
-      <label class="cell"><span class="ico" style="background:var(--gray)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><span class="t">This Device</span>
-        <select id="devSel"><option value="laptop">Laptop</option><option value="tablet">Tablet</option><option value="phone">Phone</option></select>
+      <div class="cell"><span class="ico" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></span><span class="t" data-i18n="language">Language</span>
+        <div class="seg" role="group" aria-label="Language" id="langSeg"><button data-v="en">English</button><button data-v="ko">한국어</button></div></div>
+      <label class="cell"><span class="ico" style="background:var(--gray)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></span><span class="t" data-i18n="thisDevice">This Device</span>
+        <select id="devSel"><option value="laptop" data-i18n="dev.laptop">Laptop</option><option value="tablet" data-i18n="dev.tablet">Tablet</option><option value="phone" data-i18n="dev.phone">Phone</option></select>
         <svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></label>
-      <button class="cell action" data-act="calib"><span class="ico" style="background:var(--tint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></span><span class="t">Recalibrate</span></button>
+      <div class="cell" id="tiltCell" hidden><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5h18M6 17.5 14.5 5h4l-5.5 12.5"/></svg></span><span class="t"><span data-i18n="tabletpos">Tablet Position</span><small id="tiltNote">Separate model for each position.</small></span>
+        <div class="seg" role="group" aria-label="Tablet position" id="tiltSeg"><button data-v="propped" data-i18n="tilt.propped">Propped</button><button data-v="flat" data-i18n="tilt.flat">Flat</button></div></div>
+      <button class="cell action" data-act="calib"><span class="ico" style="background:var(--tint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/></svg></span><span class="t" data-i18n="recalibrate">Recalibrate</span></button>
     </div>
 
     <div class="list">
-      <div class="cell slidercell"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span><span class="t"><label for="setThr">Alert at</label></span><span class="v" id="setThrOut">90%</span>
+      <div class="cell slidercell"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg></span><span class="t"><label for="setThr" data-i18n="alertatLbl">Alert at</label></span><span class="v" id="setThrOut">90%</span>
         <input class="slider" type="range" id="setThr" min="60" max="99" step="1"></div>
-      <div class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><rect x="7.5" y="7.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></span><span class="t">Nudge</span>
-        <div class="seg" role="group" aria-label="Nudge style" id="nudgeSeg"><button data-v="glow">Glow</button><button data-v="blur">Blur</button><button data-v="off">Off</button></div></div>
-      <label class="cell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M15 8h6M18 5l3 3-3 3M3 21c.5-3.5 2.8-5.5 6-5.5"/></svg></span><span class="t">Head-only check<small>Beta. Also alerts when only your head moves forward.</small></span><input class="sw" type="checkbox" id="setHead"></label>
-      <label class="cell"><span class="ico" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5h3.2L12 5.2v13.6l-4.8-4.3H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="t">Sound</span><input class="sw" type="checkbox" id="setSound"></label>
-      <button class="cell" id="btnNotif"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="3.6"/></svg></span><span class="t">Notifications</span><span class="v" id="notifVal">Off</span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
+      <div class="cell"><span class="ico" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><rect x="7.5" y="7.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></span><span class="t" data-i18n="nudge">Nudge</span>
+        <div class="seg" role="group" aria-label="Nudge style" id="nudgeSeg"><button data-v="glow" data-i18n="glow">Glow</button><button data-v="blur" data-i18n="blur">Blur</button><button data-v="off" data-i18n="off">Off</button></div></div>
+      <label class="cell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M15 8h6M18 5l3 3-3 3M3 21c.5-3.5 2.8-5.5 6-5.5"/></svg></span><span class="t"><span data-i18n="headcheck">Head-only check</span><small data-i18n="headcheckSub">Beta. Also alerts when only your head moves forward.</small></span><input class="sw" type="checkbox" id="setHead"></label>
+      <label class="cell"><span class="ico" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9.5h3.2L12 5.2v13.6l-4.8-4.3H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="t" data-i18n="sound">Sound</span><input class="sw" type="checkbox" id="setSound"></label>
+      <button class="cell" id="btnNotif"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="3.6"/></svg></span><span class="t" data-i18n="notifications">Notifications</span><span class="v" id="notifVal">Off</span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
     </div>
 
     <div class="list">
-      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
-      <label class="cell"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
+      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t" data-i18n="cushion">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
+      <label class="cell"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t" data-i18n="buzz">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
     </div>
 
     <div class="list">
       <details>
-        <summary class="cell"><span class="ico" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 19h10.5a4 4 0 0 0 .6-8A6 6 0 0 0 6.6 9.6 4.7 4.7 0 0 0 7 19z"/></svg></span><span class="t">Cloud Sync</span><span class="v" id="dbState"></span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></summary>
-        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUrl" placeholder="Supabase URL" autocomplete="off" spellcheck="false" aria-label="Supabase URL"></div>
-        <div class="cell fieldcell" style="padding-left:57px"><input type="password" id="dbKey" placeholder="Anon key" autocomplete="off" spellcheck="false" aria-label="Anon key"></div>
-        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUser" placeholder="Your code" autocomplete="off" spellcheck="false" aria-label="Your code"></div>
-        <button class="cell action" id="btnDbSave" style="padding-left:57px"><span class="t">Sync Now</span></button>
-        <button class="cell danger" id="btnDbOff" style="padding-left:57px"><span class="t">Disconnect</span></button>
+        <summary class="cell"><span class="ico" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 19h10.5a4 4 0 0 0 .6-8A6 6 0 0 0 6.6 9.6 4.7 4.7 0 0 0 7 19z"/></svg></span><span class="t" data-i18n="cloud">Cloud Sync</span><span class="v" id="dbState"></span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></summary>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUrl" placeholder="Supabase URL" autocomplete="off" spellcheck="false" aria-label="Supabase URL" data-i18n-ph="ph.url"></div>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="password" id="dbKey" placeholder="Anon key" autocomplete="off" spellcheck="false" aria-label="Anon key" data-i18n-ph="ph.key"></div>
+        <div class="cell fieldcell" style="padding-left:57px"><input type="text" id="dbUser" placeholder="Your code" autocomplete="off" spellcheck="false" aria-label="Your code" data-i18n-ph="ph.code"></div>
+        <button class="cell action" id="btnDbSave" style="padding-left:57px"><span class="t" data-i18n="syncnow">Sync Now</span></button>
+        <button class="cell danger" id="btnDbOff" style="padding-left:57px"><span class="t" data-i18n="disconnect">Disconnect</span></button>
       </details>
     </div>
 
     <div class="list noicon">
-      <button class="cell action" id="btnExport"><span class="t">Export Data</span></button>
-      <label class="cell action" for="importFile" style="cursor:pointer"><span class="t">Import Data</span></label>
-      <button class="cell danger" id="btnReset"><span class="t">Erase All Data</span></button>
+      <button class="cell action" id="btnExport"><span class="t" data-i18n="export">Export Data</span></button>
+      <label class="cell action" for="importFile" style="cursor:pointer"><span class="t" data-i18n="import">Import Data</span></label>
+      <button class="cell danger" id="btnReset"><span class="t" data-i18n="erase">Erase All Data</span></button>
     </div>
-    <p class="footer">Pose tracking by MediaPipe. Head-only check adapted from Dorso (MIT).</p>
+    <p class="footer" data-i18n="footer">Pose tracking by MediaPipe. Head-only check adapted from Dorso (MIT).</p>
   </div>
 </section>
 
 <input type="file" id="importFile" accept="application/json" hidden>
 
 <nav class="tabbar glass" id="tabbar" aria-label="Main" hidden>
-  <button data-go="monitor" aria-label="Posture" title="Posture"><svg viewBox="0 0 28 28" fill="currentColor"><ellipse cx="14" cy="8.6" rx="4.6" ry="5.4"/><path d="M11.6 14h4.8v3.4h-4.8z"/><path d="M4.5 25.5c.6-4.6 3.3-7.6 7.5-8.4h4c4.2.8 6.9 3.8 7.5 8.4z"/></svg></button>
-  <button data-go="devices" aria-label="Devices" title="Devices"><svg viewBox="0 0 28 28" fill="currentColor"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h12A2.5 2.5 0 0 1 20 6.5V7h-2.2v-.3a.7.7 0 0 0-.7-.7H5.9a.7.7 0 0 0-.7.7v9.6c0 .4.3.7.7.7H15V19H5.5A2.5 2.5 0 0 1 3 16.5z"/><path d="M6 21h9v2H6z"/><rect x="17" y="9" width="8.5" height="15" rx="2"/></svg></button>
-  <button data-go="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="9.6" fill="none" stroke="currentColor" stroke-width="3.6" stroke-dasharray="3.77 3.77"/><circle cx="14" cy="14" r="7.1" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="14" r="2.6" fill="currentColor"/></svg></button>
+  <button data-go="monitor" aria-label="Posture" title="Posture" data-i18n-title="posture"><svg viewBox="0 0 28 28" fill="currentColor"><ellipse cx="14" cy="8.6" rx="4.6" ry="5.4"/><path d="M11.6 14h4.8v3.4h-4.8z"/><path d="M4.5 25.5c.6-4.6 3.3-7.6 7.5-8.4h4c4.2.8 6.9 3.8 7.5 8.4z"/></svg></button>
+  <button data-go="devices" aria-label="Devices" title="Devices" data-i18n-title="devices"><svg viewBox="0 0 28 28" fill="currentColor"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h12A2.5 2.5 0 0 1 20 6.5V7h-2.2v-.3a.7.7 0 0 0-.7-.7H5.9a.7.7 0 0 0-.7.7v9.6c0 .4.3.7.7.7H15V19H5.5A2.5 2.5 0 0 1 3 16.5z"/><path d="M6 21h9v2H6z"/><rect x="17" y="9" width="8.5" height="15" rx="2"/></svg></button>
+  <button data-go="settings" aria-label="Settings" title="Settings" data-i18n-title="settings"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="9.6" fill="none" stroke="currentColor" stroke-width="3.6" stroke-dasharray="3.77 3.77"/><circle cx="14" cy="14" r="7.1" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="14" cy="14" r="2.6" fill="currentColor"/></svg></button>
 </nav>
 
 <div id="camFrame" class="cam" hidden>
@@ -547,20 +552,20 @@ details[open] summary .chev{transform:rotate(90deg)}
   <canvas id="overlay"></canvas>
 </div>
 
-<div id="blurN"><div class="msg glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v4M12 3 9 6M12 3l3 3"/><ellipse cx="12" cy="12.5" rx="3" ry="3.4"/><path d="M5.5 21c.6-3 3-4.8 6.5-4.8s5.9 1.8 6.5 4.8"/></svg>Sit up to clear the screen</div></div>
+<div id="blurN"><div class="msg glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v4M12 3 9 6M12 3l3 3"/><ellipse cx="12" cy="12.5" rx="3" ry="3.4"/><path d="M5.5 21c.6-3 3-4.8 6.5-4.8s5.9 1.8 6.5 4.8"/></svg><span data-i18n="blurmsg">Sit up to clear the screen</span></div></div>
 <div id="glow"></div>
-<button class="banner glass" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt">Turtle neck<span>now</span></div><p>Bring your head back over your shoulders.</p></div></button>
+<button class="banner glass" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt"><span data-i18n="turtle">Turtle neck</span><span data-i18n="alert.now">now</span></div><p data-i18n="alert.body">Bring your head back over your shoulders.</p></div></button>
 <div class="hud glass" id="toast" role="status" aria-live="polite"></div>
 
 <div class="menu" id="placeMenu" role="menu"></div>
 <div class="backdrop" id="backdrop"></div>
 <div class="sheet" id="placeSheet" role="dialog" aria-modal="true" aria-labelledby="psTitle">
   <div class="grab"></div>
-  <header><button class="nbtext" id="psCancel">Cancel</button><h2 id="psTitle">New Place</h2><button class="nbtext strong" id="psSave">Add</button></header>
-  <div class="list noicon"><div class="cell fieldcell"><input id="psName" placeholder="Name" maxlength="24" autocomplete="off" aria-label="Place name"></div></div>
-  <p class="lbl">Icon</p>
+  <header><button class="nbtext" id="psCancel" data-i18n="cancel">Cancel</button><h2 id="psTitle">New Place</h2><button class="nbtext strong" id="psSave">Add</button></header>
+  <div class="list noicon"><div class="cell fieldcell"><input id="psName" placeholder="Name" maxlength="24" autocomplete="off" aria-label="Place name" data-i18n-ph="ph.name"></div></div>
+  <p class="lbl" data-i18n="icon">Icon</p>
   <div class="iconpick" id="psIcons"></div>
-  <p class="lbl">Seat</p>
+  <p class="lbl" data-i18n="seat">Seat</p>
   <div class="seg" id="psSeat" role="group" aria-label="Seat"></div>
 </div>
 <div class="actions" id="actionSheet" role="dialog" aria-modal="true"></div>
@@ -608,6 +613,91 @@ const Store = {
   clear() { try { Object.keys(localStorage).filter(k => k.startsWith('earline.')).forEach(k => localStorage.removeItem(k)); } catch {} }
 };
 
+/* ---------- language (English / Korean) ---------- */
+const I18N = {
+  en: {
+    'ob.tag': 'Turtle-neck alerts that learn you.', 'ob.f1': 'Learns your posture', 'ob.f1s': 'Two quick poses train a model just for you.',
+    'ob.f2': 'Catches turtle neck', 'ob.f2s': 'Alerts you in seconds, even in the background.', 'ob.f3': 'Every place you sit', 'ob.f3s': 'Laptop, tablet, phone and cushion, together.',
+    'ob.privacy': 'Video never leaves this device.', 'continue': 'Continue', 'cancel': 'Cancel', 'start': 'Start', 'done': 'Done', 'add': 'Add', 'edit': 'Edit', 'on': 'On', 'off': 'Off',
+    'cal.good': 'Sit up straight', 'cal.goodSub': 'Back against the chair, eyes on the screen.', 'cal.bad': 'Now slump forward', 'cal.badSub': 'Let your head sink toward the screen.',
+    'cal.face': 'Move your face into the circle', 'cal.allset': 'All set', 'cal.almost': 'Almost there', 'cal.ready': 'Your model for {place} is ready.',
+    'cal.similar': 'Your two poses looked too similar. Slump a bit more and try again.', 'cal.tryagain': 'Try Again', 'cal.redo': 'Redo', 'cal.useanyway': 'Use Anyway',
+    'cal.learning': 'Learning your posture', 'cal.training': 'Training a model just for you.', 'cal.hold': 'Hold still', 'cal.getready': 'Get ready',
+    'upright': 'Upright', 'turtle': 'Turtle neck', 'posture': 'Posture', 'turnon': 'Turn On', 'dismiss': 'Dismiss', 'live': 'Live', 'calibrate': 'Calibrate', 'today': 'Today', 'alerts': 'Alerts',
+    'last5': 'Last 5 Minutes', 'alertat': 'Alert at {n}%', 'alertatLbl': 'Alert at', 'x0': '12 AM', 'x6': '6 AM', 'x12': '12 PM', 'x18': '6 PM', 'y60': '60m', 'y30': '30m', 'timelineA11y': 'Turtle-neck risk over the last five minutes',
+    'status.ok': 'Good posture', 'status.warn': 'Drifting forward', 'status.bad': 'Turtle neck', 'status.away': 'Away', 'status.look': 'Looking away', 'status.nocal': 'Not calibrated', 'status.paused': 'Paused',
+    'sub.away': 'Sit in front of the camera.', 'sub.look': 'Face the screen to resume.', 'sub.nocal': 'Calibrate {place} on {dev}.', 'sub.paused': 'Tracking is paused.', 'sub.snoozed': 'Alerts snoozed',
+    'sub.good': 'Head over your shoulders', 'sub.fwd': 'Head {cm} cm forward', 'sub.sitback': 'Sit back and lift your chin',
+    'dev.laptop': 'Laptop', 'dev.tablet': 'Tablet', 'dev.phone': 'Phone', 'cushion': 'Cushion', 'dev.thislaptop': 'this laptop', 'dev.thistablet': 'this tablet ({tilt}, {ori})', 'dev.thisphone': 'this phone ({ori})',
+    'ori.portrait': 'portrait', 'ori.landscape': 'landscape', 'tilt.propped': 'Propped', 'tilt.flat': 'Flat', 'tilt.note': 'Separate model for each position.', 'tilt.auto': 'Switches automatically from the motion sensor.',
+    'tilt.toastFlat': 'Tablet is flat', 'tilt.toastProp': 'Tablet is propped up', 'tabletpos': 'Tablet Position',
+    'devices': 'Devices', 'places': 'Places', 'uprighttoday': 'upright today', 'uprightOn': 'upright today on {d} device{ds} in {p} place{ps}', 'thisdevice': 'This device', 'mintoday': '{n} min today', 'nodata': 'No data today',
+    'connected': 'Connected', 'taptoconnect': 'Tap to connect', 'connect': 'Connect', 'calibrated': 'Calibrated', 'notcalibrated': 'Not calibrated', 'pctupright': '{n}% upright today',
+    'settings': 'Settings', 'language': 'Language', 'thisDevice': 'This Device', 'recalibrate': 'Recalibrate', 'recalPlace': 'Recalibrate {place}', 'nudge': 'Nudge', 'glow': 'Glow', 'blur': 'Blur',
+    'headcheck': 'Head-only check', 'headcheckSub': 'Beta. Also alerts when only your head moves forward.', 'sound': 'Sound', 'notifications': 'Notifications', 'blocked': 'Blocked', 'buzz': 'Buzz on alert',
+    'cloud': 'Cloud Sync', 'syncnow': 'Sync Now', 'disconnect': 'Disconnect', 'ph.url': 'Supabase URL', 'ph.key': 'Anon key', 'ph.code': 'Your code',
+    'export': 'Export Data', 'import': 'Import Data', 'erase': 'Erase All Data', 'eraseConfirm': 'This erases models, places and history on this device.', 'erased': 'Erased', 'imported': 'Imported', 'notfile': 'Not an Earline file',
+    'footer': 'Pose tracking by MediaPipe. Head-only check adapted from Dorso (MIT).', 'fillall': 'Fill in all three fields', 'synced': 'Synced', 'syncerr': 'Sync error {n}',
+    'seat.chair': 'Desk chair', 'seat.stool': 'Stool', 'seat.sofa': 'Sofa', 'seat.floor': 'Floor',
+    'place.dorm': 'Dorm', 'place.study': 'Study Hall', 'place.library': 'Library', 'place.home': 'Home', 'place.class': 'Classroom', 'place.cafe': 'Café',
+    'newplace': 'New Place', 'addplace': 'Add Place', 'inuse': 'In use', 'editplace': 'Edit Place', 'ph.name': 'Name', 'icon': 'Icon', 'seat': 'Seat', 'usethis': 'Use This Place', 'deleteplace': 'Delete Place', 'saved': 'Saved', 'added': 'Added {name}', 'deleted': 'Deleted {name}',
+    'notif.allow': 'Allow notifications for this site in your browser settings', 'notif.onTitle': 'Notifications are on', 'notif.onBody': 'Earline will alert you here when your head drifts forward.',
+    'notif.test': 'Test notification sent. Not seeing it? Allow your browser in your computer\'s notification settings.',
+    'notice.iosT': 'Get alerts on iPhone', 'notice.iosS': 'Tap Share, then Add to Home Screen, and open Earline from there.', 'notice.bgT': 'Background alerts', 'notice.bgS': 'Get notified when Earline isn\'t on screen.',
+    'notice.blkT': 'Notifications are blocked', 'notice.blkS': 'Allow them for this site in your browser settings.',
+    'alert.now': 'now', 'alert.body': 'Bring your head back over your shoulders.', 'push.cm': 'Your head is {cm} cm forward. ', 'push.body': 'Sit back and bring your head over your shoulders.',
+    'snooze': 'Snooze 15 min', 'snoozed': 'Alerts snoozed for {n} minutes', 'blurmsg': 'Sit up to clear the screen', 'pause': 'Pause', 'resume': 'Resume', 'widget': 'Mini widget', 'figure': 'Figure', 'camera': 'Camera',
+    'cam.denied': 'Camera access is off. Allow it in your browser settings.', 'cam.none': 'No camera found.', 'cam.busy': 'Another app is using the camera.', 'cam.err': 'Camera error ({e})', 'cam.unsupported': 'This browser can\'t use the camera.', 'cam.https': 'Open this page over https.',
+    'bt.none': 'Bluetooth isn\'t available in this browser', 'bt.off': 'Cushion disconnected', 'bt.on': 'Cushion connected', 'bt.fail': 'Couldn\'t connect'
+  },
+  ko: {
+    'ob.tag': '나를 학습하는 거북목 알림', 'ob.f1': '내 자세를 학습해요', 'ob.f1s': '두 자세만 찍으면 나만의 모델이 만들어져요.',
+    'ob.f2': '거북목을 잡아내요', 'ob.f2s': '몇 초 안에, 백그라운드에서도 알려줘요.', 'ob.f3': '앉는 곳 어디서나', 'ob.f3s': '노트북·태블릿·휴대폰·방석을 하나로.',
+    'ob.privacy': '영상은 이 기기 밖으로 나가지 않아요.', 'continue': '계속', 'cancel': '취소', 'start': '시작', 'done': '완료', 'add': '추가', 'edit': '편집', 'on': '켬', 'off': '끔',
+    'cal.good': '바르게 앉으세요', 'cal.goodSub': '등을 의자에 붙이고 화면을 보세요.', 'cal.bad': '이제 거북목 자세로', 'cal.badSub': '머리를 화면 쪽으로 쭉 내미세요.',
+    'cal.face': '얼굴을 원 안에 맞춰 주세요', 'cal.allset': '준비 완료', 'cal.almost': '조금만 더', 'cal.ready': '{place} 모델이 준비됐어요.',
+    'cal.similar': '두 자세가 너무 비슷했어요. 거북목 자세를 더 확실히 해 보세요.', 'cal.tryagain': '다시 하기', 'cal.redo': '다시 학습', 'cal.useanyway': '그냥 사용',
+    'cal.learning': '자세를 학습하는 중', 'cal.training': '나만의 모델을 만들고 있어요.', 'cal.hold': '가만히 계세요', 'cal.getready': '준비',
+    'upright': '바른 자세', 'turtle': '거북목', 'posture': '자세', 'turnon': '켜기', 'dismiss': '닫기', 'live': '실시간', 'calibrate': '학습하기', 'today': '오늘', 'alerts': '알림',
+    'last5': '최근 5분', 'alertat': '{n}%에서 알림', 'alertatLbl': '알림 기준', 'x0': '0시', 'x6': '6시', 'x12': '12시', 'x18': '18시', 'y60': '60분', 'y30': '30분', 'timelineA11y': '최근 5분 거북목 위험도',
+    'status.ok': '좋은 자세', 'status.warn': '앞으로 쏠리는 중', 'status.bad': '거북목', 'status.away': '자리 비움', 'status.look': '딴 곳 보는 중', 'status.nocal': '학습 전', 'status.paused': '일시정지',
+    'sub.away': '카메라 앞에 앉아 주세요.', 'sub.look': '화면을 보면 다시 시작돼요.', 'sub.nocal': '{dev}에서 {place} 자세를 학습하세요.', 'sub.paused': '감지가 멈춰 있어요.', 'sub.snoozed': '알림 잠시 끔',
+    'sub.good': '머리가 어깨 위에 있어요', 'sub.fwd': '머리가 {cm} cm 앞으로', 'sub.sitback': '등을 기대고 턱을 드세요',
+    'dev.laptop': '노트북', 'dev.tablet': '태블릿', 'dev.phone': '휴대폰', 'cushion': '방석', 'dev.thislaptop': '이 노트북', 'dev.thistablet': '이 태블릿({tilt}, {ori})', 'dev.thisphone': '이 휴대폰({ori})',
+    'ori.portrait': '세로', 'ori.landscape': '가로', 'tilt.propped': '세움', 'tilt.flat': '눕힘', 'tilt.note': '위치마다 따로 학습해요.', 'tilt.auto': '움직임 센서로 자동 전환돼요.',
+    'tilt.toastFlat': '태블릿 눕힘 모드', 'tilt.toastProp': '태블릿 세움 모드', 'tabletpos': '태블릿 위치',
+    'devices': '기기', 'places': '장소', 'uprighttoday': '오늘 바른 자세', 'uprightOn': '오늘 바른 자세 · 기기 {d}개, 장소 {p}곳', 'thisdevice': '이 기기', 'mintoday': '오늘 {n}분', 'nodata': '오늘 기록 없음',
+    'connected': '연결됨', 'taptoconnect': '눌러서 연결', 'connect': '연결', 'calibrated': '학습 완료', 'notcalibrated': '학습 전', 'pctupright': '오늘 바른 자세 {n}%',
+    'settings': '설정', 'language': '언어', 'thisDevice': '이 기기', 'recalibrate': '다시 학습', 'recalPlace': '{place} 다시 학습', 'nudge': '화면 경고', 'glow': '테두리', 'blur': '흐림',
+    'headcheck': '머리만 내밀기 감지', 'headcheckSub': '베타. 몸은 그대로, 머리만 앞으로 나와도 알려요.', 'sound': '소리', 'notifications': '알림', 'blocked': '차단됨', 'buzz': '알림 때 진동',
+    'cloud': '클라우드 동기화', 'syncnow': '지금 동기화', 'disconnect': '연결 끊기', 'ph.url': 'Supabase URL', 'ph.key': 'Anon 키', 'ph.code': '내 코드',
+    'export': '데이터 내보내기', 'import': '데이터 가져오기', 'erase': '모든 데이터 지우기', 'eraseConfirm': '이 기기의 모델, 장소, 기록을 모두 지워요.', 'erased': '지웠어요', 'imported': '가져왔어요', 'notfile': 'Earline 파일이 아니에요',
+    'footer': '자세 추적: MediaPipe. 머리만 내밀기 감지: Dorso(MIT) 참고.', 'fillall': '세 칸을 모두 채워 주세요', 'synced': '동기화됨', 'syncerr': '동기화 오류 {n}',
+    'seat.chair': '책상 의자', 'seat.stool': '스툴', 'seat.sofa': '소파', 'seat.floor': '바닥',
+    'place.dorm': '기숙사', 'place.study': '면학실', 'place.library': '도서관', 'place.home': '집', 'place.class': '교실', 'place.cafe': '카페',
+    'newplace': '새 장소', 'addplace': '장소 추가', 'inuse': '사용 중', 'editplace': '장소 편집', 'ph.name': '이름', 'icon': '아이콘', 'seat': '의자', 'usethis': '이 장소 사용', 'deleteplace': '장소 삭제', 'saved': '저장됨', 'added': '{name} 추가됨', 'deleted': '{name} 삭제됨',
+    'notif.allow': '브라우저 설정에서 이 사이트의 알림을 허용해 주세요', 'notif.onTitle': '알림이 켜졌어요', 'notif.onBody': '머리가 앞으로 나오면 여기로 알려드릴게요.',
+    'notif.test': '테스트 알림을 보냈어요. 안 보이면 컴퓨터 알림 설정에서 브라우저를 허용해 주세요.',
+    'notice.iosT': '아이폰에서 알림 받기', 'notice.iosS': '공유 → 홈 화면에 추가한 뒤, 그 아이콘으로 열어 주세요.', 'notice.bgT': '백그라운드 알림', 'notice.bgS': 'Earline이 화면에 없을 때도 알림을 받아요.',
+    'notice.blkT': '알림이 차단되어 있어요', 'notice.blkS': '브라우저 설정에서 이 사이트의 알림을 허용해 주세요.',
+    'alert.now': '지금', 'alert.body': '머리를 어깨 위로 다시 가져오세요.', 'push.cm': '머리가 {cm} cm 앞으로 나왔어요. ', 'push.body': '등을 기대고 머리를 어깨 위로 가져오세요.',
+    'snooze': '15분 끄기', 'snoozed': '{n}분 동안 알림을 꺼요', 'blurmsg': '바르게 앉으면 화면이 선명해져요', 'pause': '일시정지', 'resume': '다시 시작', 'widget': '미니 위젯', 'figure': '그림', 'camera': '카메라',
+    'cam.denied': '카메라 권한이 꺼져 있어요. 브라우저 설정에서 허용해 주세요.', 'cam.none': '카메라를 찾을 수 없어요.', 'cam.busy': '다른 앱이 카메라를 쓰고 있어요.', 'cam.err': '카메라 오류 ({e})', 'cam.unsupported': '이 브라우저에서는 카메라를 쓸 수 없어요.', 'cam.https': 'https로 열어 주세요.',
+    'bt.none': '이 브라우저에서는 블루투스를 쓸 수 없어요', 'bt.off': '방석 연결 끊김', 'bt.on': '방석 연결됨', 'bt.fail': '연결 실패'
+  }
+};
+let LANG = Store.get('lang', null) || ((navigator.language || '').toLowerCase().startsWith('ko') ? 'ko' : 'en');
+const t = (k, v) => { let x = I18N[LANG]?.[k] ?? I18N.en[k] ?? k; if (v) for (const [a, b] of Object.entries(v)) x = x.split(`{${a}}`).join(b); return x; };
+function applyLang() {
+  document.documentElement.lang = LANG;
+  $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  $$('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  $$('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); el.setAttribute('aria-label', t(el.dataset.i18nTitle)); });
+  $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  $$('#langSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === LANG)));
+  $('#todayDate').textContent = new Date().toLocaleDateString(LANG === 'ko' ? 'ko-KR' : 'en-US', { month: 'short', day: 'numeric' });
+}
+
 /* ---------- cloud DB (Supabase REST, optional) ---------- */
 const Cloud = {
   cfg() { return Store.get('cloud', null); },
@@ -617,7 +707,7 @@ const Cloud = {
     const r = await fetch(c.url.replace(/\/+$/, '') + '/rest/v1/' + path, {
       ...opts, headers: { apikey: c.key, Authorization: 'Bearer ' + c.key, 'Content-Type': 'application/json', ...(opts.headers || {}) }
     });
-    if (!r.ok) throw new Error(`Sync error ${r.status}`);
+    if (!r.ok) throw new Error(t('syncerr', { n: r.status }));
     const t = await r.text(); return t ? JSON.parse(t) : null;
   },
   async pushProfile(p) {
@@ -639,7 +729,10 @@ const Cloud = {
 };
 
 /* ---------- devices, places, icons ---------- */
-const DEV = { laptop: 'Laptop', tablet: 'Tablet', phone: 'Phone' };
+const DEV_KEYS = ['laptop', 'tablet', 'phone'];
+const devName = k => t('dev.' + k);
+const tiltName = k => t('tilt.' + k);
+const seatName = k => t('seat.' + k);
 const DEV_ICON = {
   laptop: ['var(--gray)', '<path d="M4 5.5h16v10.5H4zM2 19h20"/>'],
   tablet: ['var(--indigo)', '<rect x="5" y="3" width="14" height="18" rx="2.2"/><path d="M11 18h2"/>'],
@@ -654,7 +747,7 @@ const PLACE_ICONS = {
   class:   { label: 'Classroom',  color: 'var(--tint)',   svg: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11v4.8c3.2 2.2 7.8 2.2 11 0V11M21.5 9v5"/>' },
   cafe:    { label: 'Café',       color: 'var(--pink)',   svg: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5V6M12 3.5V6"/>' }
 };
-const SEATS = { chair: 'Desk chair', stool: 'Stool', sofa: 'Sofa', floor: 'Floor' };
+const SEAT_KEYS = ['chair', 'stool', 'sofa', 'floor'];
 const DEFAULT_PLACES = [
   { id: 'dorm', name: 'Dorm', icon: 'dorm', seat: 'chair' },
   { id: 'study', name: 'Study Hall', icon: 'study', seat: 'chair' },
@@ -690,6 +783,7 @@ function orientation() {
 /* ---------- state ---------- */
 const S = {
   device: Store.get('device', null) || detectDevice(),
+  tilt: Store.get('tilt', 'propped'), tiltSensor: false,
   places: Store.get('places', null) || DEFAULT_PLACES.map(p => ({ ...p })),
   place: Store.get('place', 'dorm'),
   view: 'onboard', started: false, paused: false,
@@ -707,12 +801,16 @@ const S = {
 if (!S.places.length) S.places = DEFAULT_PLACES.map(p => ({ ...p }));
 if (!S.places.some(p => p.id === S.place)) S.place = S.places[0].id;
 const curPlace = () => S.places.find(p => p.id === S.place) || S.places[0];
-// one model per place x device (x orientation for tablets and phones: the camera sits somewhere else)
-const keyFor = (placeId, device = S.device) => `${placeId}|${device === 'laptop' ? 'laptop' : `${device}-${orientation()}`}`;
+// one model per place x device (x orientation for tablets and phones: the camera sits somewhere else; x flat/propped for tablets: the camera looks up at you from the desk)
+const devKey = (device = S.device) => device === 'laptop' ? 'laptop' : device === 'tablet' ? `tablet-${orientation()}-${S.tilt}` : `phone-${orientation()}`;
+const keyFor = (placeId, device = S.device) => `${placeId}|${devKey(device)}`;
+const devLabel = (device = S.device) => device === 'tablet' ? `${devName('tablet')} · ${tiltName(S.tilt)}` : devName(device);
+// default places keep their English name in storage and show up translated until the user renames them
+const pname = p => DEFAULT_PLACES.some(d => d.id === p.id && d.name === p.name) ? t('place.' + p.id) : p.name;
 const profileKey = () => keyFor(S.place);
 const currentProfile = () => { const p = S.profiles[profileKey()]; return p && p.v === PROFILE_V ? p : null; };
 const placeCalibrated = id => Object.entries(S.profiles).some(([k, p]) => k.startsWith(id + '|') && p.v === PROFILE_V);
-const thisDeviceLabel = () => S.device === 'laptop' ? 'this laptop' : `this ${S.device} (${orientation()})`;
+const thisDeviceLabel = () => S.device === 'laptop' ? t('dev.thislaptop') : S.device === 'tablet' ? t('dev.thistablet', { tilt: tiltName(S.tilt).toLowerCase(), ori: t('ori.' + orientation()) }) : t('dev.thisphone', { ori: t('ori.' + orientation()) });
 
 /* =====================================================================
    Vision: MediaPipe face + pose landmarkers, on-device
@@ -860,14 +958,14 @@ function trainProfile(rec) {
    Camera + loop (Worker timer keeps running in background tabs)
    ===================================================================== */
 function cameraError(e) {
-  const m = { NotAllowedError: 'Camera access is off. Allow it in your browser settings.', NotFoundError: 'No camera found.', NotReadableError: 'Another app is using the camera.' };
-  return new Error(m[e.name] || `Camera error (${e.name || e.message})`);
+  const m = { NotAllowedError: t('cam.denied'), NotFoundError: t('cam.none'), NotReadableError: t('cam.busy') };
+  return new Error(m[e.name] || t('cam.err', { e: e.name || e.message }));
 }
 async function startCamera() {
   if (S.stream) return;
   if (!navigator.mediaDevices?.getUserMedia) {
     if (SIM) return;
-    throw new Error(isSecureContext ? 'This browser can\'t use the camera.' : 'Open this page over https.');
+    throw new Error(isSecureContext ? t('cam.unsupported') : t('cam.https'));
   }
   try { S.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false }); }
   catch (e) { if (SIM) return; throw cameraError(e); }
@@ -921,8 +1019,8 @@ async function tick() {
    Calibration: two poses (Face ID-style ring)
    ===================================================================== */
 const STEPS = [
-  { key: 'good', title: 'Sit up straight',   sub: 'Back against the chair, eyes on the screen.', demo: 'up' },
-  { key: 'bad',  title: 'Now slump forward', sub: 'Let your head sink toward the screen.',      demo: 'slouch' }
+  { key: 'good', title: 'cal.good', sub: 'cal.goodSub', demo: 'up' },
+  { key: 'bad',  title: 'cal.bad',  sub: 'cal.badSub',  demo: 'slouch' }
 ];
 const C = { i: 0, state: 'idle', rec: { good: [], bad: [] }, result: null };
 (function buildTicks() {
@@ -945,7 +1043,7 @@ async function calibCapture() {
 }
 function calibTick(obs) {
   const capture = !C.result && C.state !== 'training';
-  $('#calHint').textContent = capture && !obs.face ? 'Move your face into the circle' : '';
+  $('#calHint').textContent = capture && !obs.face ? t('cal.face') : '';
   if (C.state !== 'capturing' || !obs.face) return;
   const arr = C.rec[STEPS[C.i].key];
   arr.push(toSample(obs));
@@ -1001,7 +1099,7 @@ function renderCalib() {
   const done = !!C.result, step = STEPS[Math.min(C.i, STEPS.length - 1)];
   $('.enroll').classList.toggle('done', done);
   $('#calCancel').style.visibility = currentProfile() ? 'visible' : 'hidden';
-  $('#calFor').textContent = `${curPlace().name} · ${DEV[S.device]}`;
+  $('#calFor').textContent = `${pname(curPlace())} · ${devLabel()}`;
   $$('#calSteps i').forEach((el, i) => el.className = done || i < C.i ? 'done' : i === C.i ? 'now' : '');
   const b1 = $('#calBtn'), b2 = $('#calBtn2');
   $('#calDone').hidden = !done; $('#calVals').hidden = !done; $('#calDemo').hidden = done || C.state === 'training';
@@ -1010,30 +1108,30 @@ function renderCalib() {
   if (done) {
     const v = C.result.val, ok = calOk();
     $('#calDone').innerHTML = ok ? ICO.okc : ICO.warnc;
-    $('#calTitle').textContent = ok ? 'All set' : 'Almost there';
-    $('#calSub').textContent = ok ? `Your model for ${curPlace().name} is ready.` : 'Your two poses looked too similar. Slump a bit more and try again.';
+    $('#calTitle').textContent = ok ? t('cal.allset') : t('cal.almost');
+    $('#calSub').textContent = ok ? t('cal.ready', { place: pname(curPlace()) }) : t('cal.similar');
     const row = (name, r) => `<div class="cell"><span class="ico ${r >= .8 ? 'ok' : 'no'}">${r >= .8 ? ICO.rowOk : ICO.rowNo}</span><span class="t">${name}</span><span class="v">${Math.round(r * 100)}%</span></div>`;
-    $('#calVals').innerHTML = row('Upright', v.good) + row('Turtle neck', v.bad);
+    $('#calVals').innerHTML = row(t('upright'), v.good) + row(t('turtle'), v.bad);
     setTicks(SAMPLES_PER_POSE);
-    b1.disabled = false; b1.textContent = ok ? 'Done' : 'Try Again';
-    b2.hidden = false; b2.textContent = ok ? 'Redo' : 'Use Anyway';
+    b1.disabled = false; b1.textContent = ok ? t('done') : t('cal.tryagain');
+    b2.hidden = false; b2.textContent = ok ? t('cal.redo') : t('cal.useanyway');
     stopDemo();
     return;
   }
   if (C.state === 'training') {
-    $('#calTitle').textContent = 'Learning your posture';
-    $('#calSub').textContent = 'Training a model just for you.';
+    $('#calTitle').textContent = t('cal.learning');
+    $('#calSub').textContent = t('cal.training');
     setTicks(SAMPLES_PER_POSE);
     b1.disabled = true; b1.innerHTML = '<span class="spin"></span>';
     stopDemo();
     return;
   }
-  $('#calTitle').textContent = step.title;
-  $('#calSub').textContent = step.sub;
+  $('#calTitle').textContent = t(step.title);
+  $('#calSub').textContent = t(step.sub);
   setTicks(C.rec[step.key].length);
   runDemo(step.demo);
   b1.disabled = C.state !== 'idle';
-  b1.textContent = C.state === 'capturing' ? 'Hold still' : C.state === 'countdown' ? 'Get ready' : C.i === 0 ? 'Start' : 'Continue';
+  b1.textContent = C.state === 'capturing' ? t('cal.hold') : C.state === 'countdown' ? t('cal.getready') : C.i === 0 ? t('start') : t('continue');
 }
 
 /* =====================================================================
@@ -1111,14 +1209,14 @@ async function pushNotify(title, body, withSnooze = false) {
   const base = { body, icon: 'icon-192.png', badge: 'icon-192.png', tag: 'earline', renotify: true, vibrate: [120, 60, 120], data: { url: location.href } };
   try {
     const reg = swReg || (navigator.serviceWorker ? await navigator.serviceWorker.getRegistration() : null);
-    if (reg) { await reg.showNotification(title, withSnooze ? { ...base, actions: [{ action: 'snooze', title: 'Snooze 15 min' }] } : base); return true; }
+    if (reg) { await reg.showNotification(title, withSnooze ? { ...base, actions: [{ action: 'snooze', title: t('snooze') }] } : base); return true; }
     const n = new Notification(title, base);
     n.onclick = () => { window.focus(); n.close(); };
     return true;
   } catch (e) { console.warn(e); return false; }
 }
 navigator.serviceWorker?.addEventListener('message', e => {
-  if (e.data?.type === 'snooze') { S.snoozeUntil = Date.now() + e.data.minutes * 60000; hideAlert(); toast(`Alerts snoozed for ${e.data.minutes} minutes`); }
+  if (e.data?.type === 'snooze') { S.snoozeUntil = Date.now() + e.data.minutes * 60000; hideAlert(); toast(t('snoozed', { n: e.data.minutes })); }
 });
 function fireAlert() {
   if (Date.now() < S.snoozeUntil) return;
@@ -1126,8 +1224,8 @@ function fireAlert() {
   statToday().alerts++;
   // Earline is in the background (another app, another tab, desktop): send a system notification
   if (document.hidden || !document.hasFocus()) {
-    const cm = S.fwd > S.fwdDz ? `Your head is ${S.fwd.toFixed(1)} cm forward. ` : '';
-    pushNotify('Turtle neck', `${cm}Sit back and bring your head over your shoulders.`, true);
+    const cm = S.fwd > S.fwdDz ? t('push.cm', { cm: S.fwd.toFixed(1) }) : '';
+    pushNotify(t('status.bad'), cm + t('push.body'), true);
   }
   if (S.settings.buzz) buzz(1);
   $('#alert').classList.add('show');
@@ -1136,7 +1234,7 @@ function fireAlert() {
   navigator.vibrate?.([120, 60, 120]);
   if (document.hidden) {
     clearInterval(titleTimer); let on = false;
-    titleTimer = setInterval(() => { document.title = (on = !on) ? 'Turtle neck' : 'Earline'; }, 900);
+    titleTimer = setInterval(() => { document.title = (on = !on) ? t('status.bad') : 'Earline'; }, 900);
   }
 }
 function hideAlert() { $('#alert').classList.remove('show'); }
@@ -1272,20 +1370,20 @@ function drawTimeline() {
 /* =====================================================================
    Render
    ===================================================================== */
-const STATUS = { ok: 'Good posture', warn: 'Drifting forward', bad: 'Turtle neck', away: 'Away', look: 'Looking away', nocal: 'Not calibrated', paused: 'Paused' };
+const statusText = k => t('status.' + k);
 const RING_C = 2 * Math.PI * 50;
 function setRing(el, frac, label) {
   el.querySelector('.prog').style.strokeDashoffset = (RING_C * (1 - clamp(frac || 0, 0, 1))).toFixed(1);
   el.querySelector('.num').innerHTML = label == null ? '–' : `<span>${Math.min(label, 99)}<small>%</small></span>`;
 }
 function subText(mode) {
-  if (mode === 'away') return 'Sit in front of the camera.';
-  if (mode === 'look') return 'Face the screen to resume.';
-  if (mode === 'nocal') return `Calibrate ${curPlace().name} on ${thisDeviceLabel()}.`;
-  if (mode === 'paused') return 'Tracking is paused.';
-  if (Date.now() < S.snoozeUntil) return 'Alerts snoozed';
-  if (S.disp.level === 'ok' || S.disp.fwd == null) return 'Head over your shoulders';
-  return S.disp.fwd > S.fwdDz ? `Head ${S.disp.fwd.toFixed(1)} cm forward` : 'Sit back and lift your chin';
+  if (mode === 'away') return t('sub.away');
+  if (mode === 'look') return t('sub.look');
+  if (mode === 'nocal') return t('sub.nocal', { place: pname(curPlace()), dev: thisDeviceLabel() });
+  if (mode === 'paused') return t('sub.paused');
+  if (Date.now() < S.snoozeUntil) return t('sub.snoozed');
+  if (S.disp.level === 'ok' || S.disp.fwd == null) return t('sub.good');
+  return S.disp.fwd > S.fwdDz ? t('sub.fwd', { cm: S.disp.fwd.toFixed(1) }) : t('sub.sitback');
 }
 /* The model runs 5x a second; the readout (%, status, head cm, figure, nudges) shows the
    average of each second so the number is steady and readable. */
@@ -1309,7 +1407,7 @@ function render(force = false) {
   $('#scan').classList.toggle('live', on);
   const label = shown ? Math.round(D.p * 100) : null;
   setRing($('#ringSm'), shown ? D.p : 0, label); setRing($('#ringLg'), shown ? D.p : 0, label);
-  $$('.js-status').forEach(el => el.textContent = STATUS[mode]);
+  $$('.js-status').forEach(el => el.textContent = statusText(mode));
   const sub = subText(mode); $$('.js-sub').forEach(el => el.textContent = sub);
   const nocal = S.mode === 'nocal';
   $('#scanCal').hidden = !nocal; $('#cardCal').hidden = !nocal;
@@ -1318,7 +1416,7 @@ function render(force = false) {
   $('#stGood').innerHTML = tot > 5 ? `${Math.round(st.good / tot * 100)}<small>%</small>` : '–';
   $('#stBad').innerHTML = `${mins(st.bad)}<small>m</small>`;
   $('#stAlerts').textContent = st.alerts;
-  $('#thrLabel').textContent = `Alert at ${S.settings.threshold}%`;
+  $('#thrLabel').textContent = t('alertat', { n: S.settings.threshold });
   if (Date.now() - (render.barsAt || 0) > 5000) renderBars();
   drawTimeline();
 }
@@ -1333,8 +1431,8 @@ function renderBars() {
 function renderHeader() {
   const p = curPlace();
   $('#placeIco').innerHTML = placeSquare(p.icon, 30);
-  $('#placeName').textContent = p.name;
-  $('#livePill').textContent = `${p.name} · ${DEV[S.device]}`;
+  $('#placeName').textContent = pname(p);
+  $('#livePill').textContent = `${pname(p)} · ${devLabel()}`;
 }
 function renderDevices() {
   const d = today(), local = S.stats[d] || {}, cloud = S.cloudDaily || {};
@@ -1343,25 +1441,25 @@ function renderDevices() {
     const a = local[k], b = cloud[k];
     if (a || b) merged[k] = (a && b) ? ((a.good + a.bad) >= (b.good + b.bad) ? a : b) : (a || b);
   }
-  let g = 0, t = 0; Object.values(merged).forEach(s => { g += s.good; t += s.good + s.bad; });
-  const totFrac = t > 5 ? g / t : 0;
+  let g = 0, tot = 0; Object.values(merged).forEach(s => { g += s.good; tot += s.good + s.bad; });
+  const totFrac = tot > 5 ? g / tot : 0;
   setRing($('#ringTot'), totFrac, null); $('#ringTot .num').textContent = '';
-  $('#totPct').textContent = t > 5 ? `${Math.round(totFrac * 100)}%` : '–';
+  $('#totPct').textContent = tot > 5 ? `${Math.round(totFrac * 100)}%` : '–';
   const nDev = Object.values(merged).filter(s => s.good + s.bad > 5).length;
   const nPl = Object.values(S.pstats[d] || {}).filter(([a, b]) => a + b > 5).length;
-  $('#totSub').textContent = t > 5 ? `upright today on ${nDev} device${nDev === 1 ? '' : 's'} in ${nPl} place${nPl === 1 ? '' : 's'}` : 'upright today';
+  $('#totSub').textContent = tot > 5 ? t('uprightOn', { d: nDev, p: nPl, ds: nDev === 1 ? '' : 's', ps: nPl === 1 ? '' : 's' }) : t('uprighttoday');
   const pctTxt = s => s && s.good + s.bad > 5 ? `${Math.round(s.good / (s.good + s.bad) * 100)}%` : '–';
   const tile = (k, name, sub, val, here, act = '') => `<button class="tile${here ? ' here' : ''}" ${act}><span class="tv">${val}</span><span class="tic" style="background:${DEV_ICON[k][0]}">${svgIcon(DEV_ICON[k][1])}</span><b>${name}</b><span>${sub}</span></button>`;
   const tiles = ['laptop', 'tablet', 'phone'].map(k => {
     const s = merged[k], tracked = s && s.good + s.bad > 5;
-    return tile(k, DEV[k], k === S.device ? 'This device' : tracked ? `${mins(s.good + s.bad)} min today` : 'No data today', pctTxt(s), k === S.device);
+    return tile(k, devName(k), k === S.device ? t('thisdevice') : tracked ? t('mintoday', { n: mins(s.good + s.bad) }) : t('nodata'), pctTxt(s), k === S.device);
   });
-  tiles.push(tile('cushion', 'Cushion', S.cushion.dev ? '<span class="badge"><i></i>Connected</span>' : 'Tap to connect', '', false, 'data-act="cushion"'));
+  tiles.push(tile('cushion', t('cushion'), S.cushion.dev ? `<span class="badge"><i></i>${t('connected')}</span>` : t('taptoconnect'), '', false, 'data-act="cushion"'));
   $('#devTiles').innerHTML = tiles.join('');
   const ps = S.pstats[d] || {};
   $('#placeStats').innerHTML = S.places.map(p => {
     const [a, b] = ps[p.id] || [0, 0];
-    return `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(p.name)}<small>${SEATS[p.seat] || ''} · ${placeCalibrated(p.id) ? 'Calibrated' : 'Not calibrated'}</small></span><span class="v">${a + b > 5 ? Math.round(a / (a + b) * 100) + '%' : '–'}</span>${p.id === S.place ? `<span class="v tick">${ICO.check}</span>` : ''}</button>`;
+    return `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(pname(p))}<small>${seatName(p.seat)} · ${placeCalibrated(p.id) ? t('calibrated') : t('notcalibrated')}</small></span><span class="v">${a + b > 5 ? Math.round(a / (a + b) * 100) + '%' : '–'}</span>${p.id === S.place ? `<span class="v tick">${ICO.check}</span>` : ''}</button>`;
   }).join('');
 }
 
@@ -1380,9 +1478,9 @@ function openMenu() {
   const ps = S.pstats[today()] || {};
   m.innerHTML = S.places.map(p => {
     const [a, b] = ps[p.id] || [0, 0];
-    const sub = a + b > 5 ? `${Math.round(a / (a + b) * 100)}% upright today` : (placeCalibrated(p.id) ? SEATS[p.seat] : 'Not calibrated');
-    return `<button class="mi" role="menuitemradio" aria-checked="${p.id === S.place}" data-place="${p.id}"><span class="chk">${p.id === S.place ? ICO.check : ''}</span><span class="t">${esc(p.name)}<small>${sub}</small></span>${svgIcon(PLACE_ICONS[p.icon]?.svg || '', 'class="mic"')}</button>`;
-  }).join('') + `<div class="msep"></div><button class="mi" data-mact="new"><span class="chk"></span><span class="t">New Place</span>${ICO.plus}</button><button class="mi" data-mact="recal"><span class="chk"></span><span class="t">Recalibrate ${esc(curPlace().name)}</span>${ICO.recal}</button>`;
+    const sub = a + b > 5 ? t('pctupright', { n: Math.round(a / (a + b) * 100) }) : (placeCalibrated(p.id) ? seatName(p.seat) : t('notcalibrated'));
+    return `<button class="mi" role="menuitemradio" aria-checked="${p.id === S.place}" data-place="${p.id}"><span class="chk">${p.id === S.place ? ICO.check : ''}</span><span class="t">${esc(pname(p))}<small>${sub}</small></span>${svgIcon(PLACE_ICONS[p.icon]?.svg || '', 'class="mic"')}</button>`;
+  }).join('') + `<div class="msep"></div><button class="mi" data-mact="new"><span class="chk"></span><span class="t">${t('newplace')}</span>${ICO.plus}</button><button class="mi" data-mact="recal"><span class="chk"></span><span class="t">${t('recalPlace', { place: esc(pname(curPlace())) })}</span>${ICO.recal}</button>`;
   const r = btn.getBoundingClientRect();
   m.style.left = Math.max(8, Math.min(r.left, innerWidth - 266)) + 'px';
   m.style.top = (r.bottom + 8) + 'px';
@@ -1404,8 +1502,8 @@ $('#placeMenu').onclick = e => {
   if (b.dataset.mact === 'recal') startCalibration();
 };
 let sheetEdit = null, sheetIcon = 'home', sheetSeat = 'chair';
-$('#psIcons').innerHTML = Object.entries(PLACE_ICONS).map(([k, v]) => `<button data-icon="${k}" aria-pressed="false">${placeSquare(k, 40)}<span>${v.label}</span></button>`).join('');
-$('#psSeat').innerHTML = Object.entries(SEATS).map(([k, v]) => `<button data-seat="${k}" aria-pressed="false">${v}</button>`).join('');
+function paintIconPicker() { $('#psIcons').innerHTML = Object.keys(PLACE_ICONS).map(k => `<button data-icon="${k}" aria-pressed="false">${placeSquare(k, 40)}<span>${t('place.' + k)}</span></button>`).join(''); $('#psSeat').innerHTML = SEAT_KEYS.map(k => `<button data-seat="${k}" aria-pressed="false">${seatName(k)}</button>`).join(''); }
+paintIconPicker();
 function paintSheet() {
   $$('#psIcons button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.icon === sheetIcon)));
   $$('#psSeat button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.seat === sheetSeat)));
@@ -1414,9 +1512,9 @@ function paintSheet() {
 function openPlaceSheet(place = null) {
   sheetEdit = place;
   sheetIcon = place?.icon || 'home'; sheetSeat = place?.seat || 'chair';
-  $('#psTitle').textContent = place ? 'Edit Place' : 'New Place';
-  $('#psSave').textContent = place ? 'Done' : 'Add';
-  $('#psName').value = place?.name || '';
+  $('#psTitle').textContent = place ? t('editplace') : t('newplace');
+  $('#psSave').textContent = place ? t('done') : t('add');
+  $('#psName').value = place ? pname(place) : '';
   paintSheet();
   $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
   $('#placeSheet').classList.add('open');
@@ -1424,25 +1522,26 @@ function openPlaceSheet(place = null) {
 }
 $('#psIcons').onclick = e => {
   const b = e.target.closest('button'); if (!b) return;
-  const prev = PLACE_ICONS[sheetIcon]?.label, name = $('#psName').value.trim();
+  const prev = t('place.' + sheetIcon), name = $('#psName').value.trim();
   sheetIcon = b.dataset.icon;
-  if (!name || name === prev) $('#psName').value = PLACE_ICONS[sheetIcon].label;
+  if (!name || name === prev) $('#psName').value = t('place.' + sheetIcon);
   paintSheet();
 };
 $('#psSeat').onclick = e => { const b = e.target.closest('button'); if (!b) return; sheetSeat = b.dataset.seat; paintSheet(); };
 $('#psName').oninput = paintSheet;
 $('#psCancel').onclick = closeOverlays;
 $('#psSave').onclick = () => {
-  const name = $('#psName').value.trim(); if (!name) return;
-  if (sheetEdit) { Object.assign(sheetEdit, { name, icon: sheetIcon, seat: sheetSeat }); savePlaces(); closeOverlays(); renderHeader(); refreshView(); toast('Saved'); return; }
+  let name = $('#psName').value.trim(); if (!name) return;
+  if (sheetEdit && name === pname(sheetEdit)) name = sheetEdit.name; // unchanged default name stays translatable
+  if (sheetEdit) { Object.assign(sheetEdit, { name, icon: sheetIcon, seat: sheetSeat }); savePlaces(); closeOverlays(); renderHeader(); refreshView(); toast(t('saved')); return; }
   const id = 'p' + Date.now().toString(36);
   S.places.push({ id, name, icon: sheetIcon, seat: sheetSeat });
-  closeOverlays(); usePlace(id); toast(`Added ${name}`);
+  closeOverlays(); usePlace(id); toast(t('added', { name }));
   if (S.started) setTimeout(startCalibration, 350);
 };
 function showActions(title, actions) {
   const a = $('#actionSheet');
-  a.innerHTML = `<div class="agroup">${title ? `<p>${esc(title)}</p>` : ''}${actions.map((x, i) => `<button data-i="${i}" class="${x.danger ? 'danger' : ''}">${esc(x.label)}</button>`).join('')}</div><div class="agroup"><button class="cancel" data-i="-1">Cancel</button></div>`;
+  a.innerHTML = `<div class="agroup">${title ? `<p>${esc(title)}</p>` : ''}${actions.map((x, i) => `<button data-i="${i}" class="${x.danger ? 'danger' : ''}">${esc(x.label)}</button>`).join('')}</div><div class="agroup"><button class="cancel" data-i="-1">${t('cancel')}</button></div>`;
   a.onclick = e => { const b = e.target.closest('button'); if (!b) return; closeOverlays(); const i = +b.dataset.i; if (i >= 0) actions[i].fn(); };
   $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
   a.classList.add('open');
@@ -1450,17 +1549,17 @@ function showActions(title, actions) {
 function placeActions(id) {
   const p = S.places.find(x => x.id === id); if (!p) return;
   const acts = [];
-  if (id !== S.place) acts.push({ label: 'Use This Place', fn: () => { usePlace(id); toast(p.name); } });
-  acts.push({ label: 'Recalibrate', fn: () => { usePlace(id); startCalibration(); } });
-  acts.push({ label: 'Edit', fn: () => openPlaceSheet(p) });
-  if (S.places.length > 1) acts.push({ label: 'Delete Place', danger: true, fn: () => {
+  if (id !== S.place) acts.push({ label: t('usethis'), fn: () => { usePlace(id); toast(pname(p)); } });
+  acts.push({ label: t('recalibrate'), fn: () => { usePlace(id); startCalibration(); } });
+  acts.push({ label: t('edit'), fn: () => openPlaceSheet(p) });
+  if (S.places.length > 1) acts.push({ label: t('deleteplace'), danger: true, fn: () => {
     S.places = S.places.filter(x => x.id !== id);
     for (const k of Object.keys(S.profiles)) if (k.startsWith(id + '|')) delete S.profiles[k];
     Store.set('profiles', S.profiles);
     if (S.place === id) S.place = S.places[0].id;
-    savePlaces(); renderHeader(); refreshView(); toast(`Deleted ${p.name}`);
+    savePlaces(); renderHeader(); refreshView(); toast(t('deleted', { name: pname(p) }));
   } });
-  showActions(p.name, acts);
+  showActions(pname(p), acts);
 }
 
 /* mini widget (Document Picture-in-Picture) */
@@ -1480,7 +1579,7 @@ function renderWidget() {
   const d = S.pip.document, D = S.disp, shown = S.mode === 'on' && !S.paused && D.p != null;
   d.getElementById('w').dataset.level = shown ? D.level : 'away';
   setRing(d.querySelector('.ring'), shown ? D.p : 0, shown ? Math.round(D.p * 100) : null);
-  d.getElementById('ws').textContent = STATUS[S.paused ? 'paused' : shown ? D.level : (S.mode || 'away')];
+  d.getElementById('ws').textContent = statusText(S.paused ? 'paused' : shown ? D.level : (S.mode || 'away'));
 }
 
 /* =====================================================================
@@ -1518,7 +1617,7 @@ async function begin() {
   const btn = $('#btnBegin'), out = $('#obStatus');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; out.className = 'foot'; out.textContent = '';
   try {
-    unlockAudio();
+    unlockAudio(); enableTiltSensor();
     await startCamera();
     if (!S.vision) S.vision = await initVision();
     registerSW();
@@ -1526,7 +1625,7 @@ async function begin() {
     if (currentProfile()) goto('monitor'); else startCalibration();
   } catch (e) {
     console.error(e); out.className = 'foot err'; out.textContent = e.message || String(e);
-  } finally { btn.disabled = false; btn.textContent = 'Continue'; }
+  } finally { btn.disabled = false; btn.textContent = t('continue'); }
 }
 document.addEventListener('click', e => {
   const go = e.target.closest('[data-go]');
@@ -1550,7 +1649,7 @@ $('#calBtn2').onclick = () => {
 $('#calCancel').onclick = () => goto('monitor');
 $('#segFig').onclick = () => { S.settings.camView = false; saveSettings(); mountCamera(); };
 $('#segCam').onclick = () => { S.settings.camView = true; saveSettings(); mountCamera(); };
-function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? ICO.play : ICO.pause; b.ariaLabel = b.title = S.paused ? 'Resume' : 'Pause'; }
+function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? ICO.play : ICO.pause; b.ariaLabel = b.title = S.paused ? t('resume') : t('pause'); }
 $('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(true); };
 if ('documentPictureInPicture' in window) { $('#btnWidget').hidden = false; $('#btnWidget').onclick = () => openWidget().catch(e => toast(e.message)); }
 function onOrientation() {
@@ -1560,6 +1659,36 @@ function onOrientation() {
 }
 if (screen.orientation?.addEventListener) screen.orientation.addEventListener('change', onOrientation);
 else addEventListener('orientationchange', onOrientation);
+/* tablets: flat on the desk vs. propped up are different camera angles, so each gets its own model */
+function setTilt(v, auto = false) {
+  if (!['propped', 'flat'].includes(v) || v === S.tilt) return;
+  S.tilt = v; Store.set('tilt', v);
+  onOrientation(); renderSettings(); renderHeader();
+  if (auto) toast(v === 'flat' ? t('tilt.toastFlat') : t('tilt.toastProp'));
+}
+let tiltAngle = null;
+function onDeviceTilt(e) {
+  if (S.device !== 'tablet' || e.beta == null || e.gamma == null) return;
+  const a = Math.max(Math.abs(e.beta), Math.abs(e.gamma));
+  tiltAngle = tiltAngle == null ? a : tiltAngle * .85 + a * .15;
+  if (!S.tiltSensor) { S.tiltSensor = true; if (S.view === 'settings') renderSettings(); }
+  if (tiltAngle < 22) setTilt('flat', true); else if (tiltAngle > 40) setTilt('propped', true);
+}
+function enableTiltSensor() {
+  if (S.device !== 'tablet' || !('DeviceOrientationEvent' in window) || S.tiltSensor) return;
+  const listen = () => addEventListener('deviceorientation', onDeviceTilt);
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') listen(); }).catch(() => {});
+  else listen();
+}
+$$('#tiltSeg button').forEach(b => b.onclick = () => { setTilt(b.dataset.v); enableTiltSensor(); });
+function setLang(v) {
+  if (!I18N[v] || v === LANG) return;
+  LANG = v; Store.set('lang', v);
+  applyLang(); paintIconPicker(); setPauseIcon(); renderHeader(); renderCushion(); renderNotice();
+  if (S.view === 'calib') renderCalib(); else refreshView();
+  render(true);
+}
+$$('#langSeg button').forEach(b => b.onclick = () => setLang(b.dataset.v));
 addEventListener('resize', () => { if (S.view === 'monitor') drawTimeline(); });
 
 /* =====================================================================
@@ -1568,15 +1697,15 @@ addEventListener('resize', () => { if (S.view === 'monitor') drawTimeline(); });
 async function toggleCushion() {
   const cu = S.cushion;
   if (cu.dev) { try { cu.dev.gatt.disconnect(); } catch {} cu.dev = null; cu.ch = null; renderCushion(); return; }
-  if (!navigator.bluetooth) { toast('Bluetooth isn\'t available in this browser'); return; }
+  if (!navigator.bluetooth) { toast(t('bt.none')); return; }
   try {
     const dev = await navigator.bluetooth.requestDevice({ filters: [{ services: [CUSHION_SERVICE] }] });
     const server = await dev.gatt.connect();
     cu.ch = await (await server.getPrimaryService(CUSHION_SERVICE)).getCharacteristic(CUSHION_CHAR);
-    dev.addEventListener('gattserverdisconnected', () => { cu.dev = null; cu.ch = null; renderCushion(); toast('Cushion disconnected'); });
-    cu.dev = dev; renderCushion(); toast('Cushion connected');
+    dev.addEventListener('gattserverdisconnected', () => { cu.dev = null; cu.ch = null; renderCushion(); toast(t('bt.off')); });
+    cu.dev = dev; renderCushion(); toast(t('bt.on'));
     buzz(2);
-  } catch (e) { if (e.name !== 'NotFoundError') toast('Couldn\'t connect'); }
+  } catch (e) { if (e.name !== 'NotFoundError') toast(t('bt.fail')); }
 }
 async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   const ch = S.cushion.ch; if (!ch) return;
@@ -1588,7 +1717,7 @@ async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   } catch (e) { console.warn(e); }
 }
 function renderCushion() {
-  $('#cushionVal').innerHTML = S.cushion.dev ? '<span class="badge"><i></i>Connected</span>' : 'Connect';
+  $('#cushionVal').innerHTML = S.cushion.dev ? `<span class="badge"><i></i>${t('connected')}</span>` : t('connect');
   $('#cushionVal').style.color = S.cushion.dev ? '' : 'var(--tint)';
   if (S.view === 'devices') renderDevices();
 }
@@ -1601,34 +1730,37 @@ function saveSettings() { Store.set('settings', S.settings); }
 function paintSlider() { const el = $('#setThr'); el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
 function renderSettings() {
   const s = S.settings;
-  $('#placeList').innerHTML = S.places.map(p => `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(p.name)}<small>${SEATS[p.seat] || ''} · ${placeCalibrated(p.id) ? 'Calibrated' : 'Not calibrated'}</small></span>${p.id === S.place ? '<span class="v">In use</span>' : ''}${ICO.chev}</button>`).join('')
-    + `<button class="cell action" data-act="newplace"><span class="ico" style="background:var(--tint)">${svgIcon('<path d="M12 5v14M5 12h14"/>', 'stroke-width="2.6"')}</span><span class="t">Add Place</span></button>`;
+  $('#placeList').innerHTML = S.places.map(p => `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(pname(p))}<small>${seatName(p.seat)} · ${placeCalibrated(p.id) ? t('calibrated') : t('notcalibrated')}</small></span>${p.id === S.place ? `<span class="v">${t('inuse')}</span>` : ''}${ICO.chev}</button>`).join('')
+    + `<button class="cell action" data-act="newplace"><span class="ico" style="background:var(--tint)">${svgIcon('<path d="M12 5v14M5 12h14"/>', 'stroke-width="2.6"')}</span><span class="t">${t('addplace')}</span></button>`;
   $('#devSel').value = S.device;
+  $('#tiltCell').hidden = S.device !== 'tablet';
+  $$('#tiltSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.tilt)));
+  $('#tiltNote').textContent = S.tiltSensor ? t('tilt.auto') : t('tilt.note');
   $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold + '%'; paintSlider();
   $$('#nudgeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === s.nudge)));
   $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz; $('#setHead').checked = s.headCheck;
   const c = Cloud.cfg() || {};
   $('#dbUrl').value = c.url || ''; $('#dbKey').value = c.key || ''; $('#dbUser').value = c.user || '';
-  $('#dbState').textContent = Cloud.on() ? 'On' : 'Off';
+  $('#dbState').textContent = Cloud.on() ? t('on') : t('off');
   renderNotif(); renderCushion();
 }
 function renderNotif() {
   const v = $('#notifVal');
   if (!('Notification' in window)) { v.textContent = isIOS() && !isStandalone() ? 'Add to Home Screen' : 'Unavailable'; return; }
   const p = Notification.permission;
-  v.textContent = p === 'granted' ? 'On' : p === 'denied' ? 'Blocked' : 'Off';
+  v.textContent = p === 'granted' ? t('on') : p === 'denied' ? t('blocked') : t('off');
 }
 const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
 const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 async function enableNotifications() {
   if (!('Notification' in window)) { toast(isIOS() ? 'Share, then Add to Home Screen, and open Earline from there' : 'This browser can\'t show notifications'); return; }
-  if (Notification.permission === 'denied') { toast('Allow notifications for this site in your browser settings'); return; }
+  if (Notification.permission === 'denied') { toast(t('notif.allow')); return; }
   if (Notification.permission === 'default') await Notification.requestPermission();
   renderNotif(); renderNotice();
   if (Notification.permission === 'granted') {
     if (!swReg) await registerSW();
-    await pushNotify('Notifications are on', 'Earline will alert you here when your head drifts forward.');
-    toast('Test notification sent. Not seeing it? Allow your browser in your computer\'s notification settings.');
+    await pushNotify(t('notif.onTitle'), t('notif.onBody'));
+    toast(t('notif.test'));
   }
 }
 $('#btnNotif').onclick = enableNotifications;
@@ -1638,10 +1770,10 @@ function renderNotice() {
   const dismissed = Store.get('noticeDismissed', null);
   let title = '', sub = '', btn = false;
   if (!('Notification' in window)) {
-    if (isIOS() && !isStandalone()) { title = 'Get alerts on iPhone'; sub = 'Tap Share, then Add to Home Screen, and open Earline from there.'; }
-  } else if (Notification.permission === 'default') { title = 'Background alerts'; sub = 'Get notified when Earline isn\'t on screen.'; btn = true; }
-  else if (Notification.permission === 'denied') { title = 'Notifications are blocked'; sub = 'Allow them for this site in your browser settings.'; }
-  const key = title ? `${title}|${'Notification' in window ? Notification.permission : 'none'}` : null;
+    if (isIOS() && !isStandalone()) { title = t('notice.iosT'); sub = t('notice.iosS'); }
+  } else if (Notification.permission === 'default') { title = t('notice.bgT'); sub = t('notice.bgS'); btn = true; }
+  else if (Notification.permission === 'denied') { title = t('notice.blkT'); sub = t('notice.blkS'); }
+  const key = title ? `${'Notification' in window ? Notification.permission : 'ios'}` : null;
   el.hidden = !title || dismissed === key;
   if (el.hidden) return;
   $('#noticeTitle').textContent = title; $('#noticeSub').textContent = sub; $('#noticeBtn').hidden = !btn;
@@ -1649,7 +1781,7 @@ function renderNotice() {
 }
 $('#noticeBtn').onclick = enableNotifications;
 $('#noticeX').onclick = () => { Store.set('noticeDismissed', $('#notice').dataset.key); $('#notice').hidden = true; };
-$('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; S.mode = ''; renderSettings(); renderHeader(); };
+$('#devSel').onchange = e => { S.device = e.target.value; Store.set('device', S.device); S.smooth = null; S.badSince = null; S.mode = ''; enableTiltSensor(); renderSettings(); renderHeader(); };
 $('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThrOut').textContent = e.target.value + '%'; paintSlider(); saveSettings(); };
 $('#nudgeSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.nudge = b.dataset.v; saveSettings(); renderSettings(); renderNudge(); };
 $('#setSound').onchange = e => { S.settings.sound = e.target.checked; saveSettings(); if (e.target.checked) { unlockAudio(); chime(); } };
@@ -1657,10 +1789,10 @@ $('#setBuzz').onchange = e => { S.settings.buzz = e.target.checked; saveSettings
 $('#setHead').onchange = e => { S.settings.headCheck = e.target.checked; saveSettings(); S.smooth = null; };
 $('#btnDbSave').onclick = async () => {
   const url = $('#dbUrl').value.trim(), key = $('#dbKey').value.trim(), user = $('#dbUser').value.trim();
-  if (!url || !key || !user) { toast('Fill in all three fields'); return; }
+  if (!url || !key || !user) { toast(t('fillall')); return; }
   Store.set('cloud', { url, key, user });
   $('#dbState').textContent = '…';
-  try { await syncFromCloud(); $('#dbState').textContent = 'On'; toast('Synced'); } catch (e) { $('#dbState').textContent = 'Off'; toast(e.message); }
+  try { await syncFromCloud(); $('#dbState').textContent = t('on'); toast(t('synced')); } catch (e) { $('#dbState').textContent = t('off'); toast(e.message); }
 };
 $('#btnDbOff').onclick = () => { Store.set('cloud', null); S.cloudDaily = {}; renderSettings(); };
 async function syncFromCloud() {
@@ -1693,16 +1825,16 @@ $('#importFile').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
     const d = JSON.parse(await f.text());
-    if (d.app !== 'earline') throw new Error('Not an Earline file');
+    if (d.app !== 'earline') throw new Error(t('notfile'));
     for (const p of d.places || []) if (!S.places.some(x => x.id === p.id)) S.places.push(p);
     Object.assign(S.profiles, d.profiles || {}); Store.set('profiles', S.profiles); savePlaces();
-    toast('Imported'); refreshView();
+    toast(t('imported')); refreshView();
   } catch (err) { toast(err.message); }
   e.target.value = '';
 };
-$('#btnReset').onclick = () => showActions('This erases models, places and history on this device.', [{ label: 'Erase All Data', danger: true, fn: () => {
+$('#btnReset').onclick = () => showActions(t('eraseConfirm'), [{ label: t('erase'), danger: true, fn: () => {
   Store.clear(); S.profiles = {}; S.stats = {}; S.pstats = {}; S.history = []; S.places = DEFAULT_PLACES.map(p => ({ ...p })); S.place = S.places[0].id;
-  toast('Erased'); renderHeader(); renderSettings();
+  toast(t('erased')); renderHeader(); renderSettings();
 } }]);
 
 let toastTimer;
@@ -1713,7 +1845,8 @@ function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add
    keys: t = head forward only, s = slouch, a = away
    ===================================================================== */
 function makeSimVision() {
-  window.__sim = window.__sim || { head: 0, torso: 0, present: true, drift: 0 };
+  // head: head-only forward 0..1, torso: slump 0..1, near: scoot toward the screen 0..1 (~10 cm), yaw: head turn deg, pose: shoulders visible, camShift: camera aimed higher/lower (px)
+  window.__sim = window.__sim || { head: 0, torso: 0, present: true, drift: 0, near: 0, yaw: 0, pose: true, camShift: 0 };
   addEventListener('keydown', e => {
     if (e.key === 't') { __sim.head = __sim.head > .5 ? 0 : 1; __sim.torso = 0; }
     if (e.key === 's') { const on = __sim.torso < .5; __sim.torso = on ? 1 : 0; __sim.head = on ? .5 : 0; }
@@ -1727,9 +1860,10 @@ function makeSimVision() {
       const dr = __sim.drift || 0;
       wander.h = clamp(wander.h * .96 + rn(.03), -1, 1); wander.t = clamp(wander.t * .96 + rn(.03), -1, 1);
       const h = Math.max(0, __sim.head + wander.h * dr), t = Math.max(-.3, __sim.torso + wander.t * dr);
-      const Zh = 56 - 6 * h - 8 * t + rn(.3), Zt = 58 - 8 * t, k = F / Zh, ks = F / Zt;
-      const cx = 320 + rn(1), ey = 205 + 14 * h + 42 * t + rn(1);
-      const pitch = 4 - 5 * h + 18 * t + rn(1.2), yaw = rn(3);
+      const nr = __sim.near || 0, sh = __sim.camShift || 0;
+      const Zh = 56 - 6 * h - 8 * t - 10 * nr + rn(.3), Zt = 58 - 8 * t - 10 * nr, k = F / Zh, ks = F / Zt;
+      const cx = 320 + rn(1), ey = 205 + 14 * h + 42 * t - 6 * nr + sh + rn(1);
+      const pitch = 4 - 5 * h + 18 * t + rn(1.2), yaw = (__sim.yaw || 0) + rn(3);
       const P = (x, y) => ({ x: (x + rn(.8)) / W, y: (y + rn(.8)) / H, z: 0 });
       const lm = Array.from({ length: 478 }, () => ({ x: cx / W, y: ey / H, z: 0 }));
       const cp = Math.cos(pitch * Math.PI / 180);
@@ -1738,13 +1872,14 @@ function makeSimVision() {
       lm[234] = P(cx - 7 * k, ey + 2 * k); lm[454] = P(cx + 7 * k, ey + 2 * k);
       const pr = pitch * Math.PI / 180, yr = yaw * Math.PI / 180;
       const data = [1, 0, -Math.sin(yr), 0, 0, Math.cos(pr), Math.sin(pr), 0, 0, -Math.sin(pr), Math.cos(pr), 0, 0, 0, -Zh, 1];
-      const sy = 405 + 12 * t;
+      const sy = 405 + 12 * t + 20 * nr + sh;
       const pl = Array.from({ length: 33 }, () => ({ x: .5, y: .5, z: 0, visibility: .2 }));
       const V = (x, y) => ({ ...P(x, y), visibility: .95 });
       pl[11] = V(cx + 19 * ks, sy); pl[12] = V(cx - 19 * ks, sy); pl[0] = V(cx, ey + 4.5 * k); pl[7] = V(cx + 7.5 * k, ey + 1.5 * k); pl[8] = V(cx - 7.5 * k, ey + 1.5 * k);
       const wl = Array.from({ length: 33 }, () => ({ x: 0, y: 0, z: 0 }));
       wl[11] = { x: .19, y: -.45, z: -.08 * t }; wl[12] = { x: -.19, y: -.45, z: -.08 * t };
       wl[7] = { x: .075, y: -.63 + .015 * h + .04 * t, z: -.03 - .06 * h - .12 * t + rn(.006) }; wl[8] = { ...wl[7], x: -.075 };
+      if (__sim.pose === false) return { face: { faceLandmarks: [lm], facialTransformationMatrixes: [{ data }] }, pose: { landmarks: [] } };
       return { face: { faceLandmarks: [lm], facialTransformationMatrixes: [{ data }] }, pose: { landmarks: [pl], worldLandmarks: [wl] } };
     }
   };
@@ -1760,8 +1895,7 @@ $('#scan').insertAdjacentHTML('afterbegin', figureMarkup());
   setTimeout(flip, 700); setInterval(flip, 3200);
 }
 { const svg = $('#scan .fig'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
-$('#todayDate').textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-setPauseIcon(); renderHeader();
+applyLang(); setPauseIcon(); renderHeader();
 goto('onboard');
 if (Cloud.on()) syncFromCloud().catch(e => console.warn(e));
 window.__earline = { S, C, LR, trainProfile, predictCore, toSample, extract, headEval };
