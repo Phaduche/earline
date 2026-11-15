@@ -1,14 +1,20 @@
-// Earline 진동 방석 (ESP32 + 진동 모터 모듈 3개)
-// 웹앱에서 거북목 알림이 나가면 블루투스(BLE)로 신호를 받아 모듈 3개를 울린다. 센서는 없음.
+// Earline 진동 방석 (ESP32 + 진동 모터 모듈 10개)
+// 웹앱에서 거북목 알림이 나가면 블루투스(BLE)로 신호를 받아 방석 속 모듈을 울린다. 센서는 없음.
 //
-// 사용 부품: "진동 모터 모듈 PWM DC 모터 드라이버 3.3V 5V" (핀 IN · VCC · GND)
+// 사용 부품: "진동 모터 모듈 PWM DC 모터 드라이버 3.3V 5V" (핀 IN · VCC · GND) × 10
 //   모듈 안에 드라이버(트랜지스터)가 있어서 ESP32 핀에 바로 연결한다.
 //
+// 구역: 방석을 왼쪽→오른쪽 5구역으로 나누고, 구역마다 모듈 2개(앞·뒤)를 같은 핀에 연결
+//   구역1 GPIO 32 · 구역2 GPIO 33 · 구역3 GPIO 25 · 구역4 GPIO 26 · 구역5 GPIO 27
+//   (브레드보드에 꽂은 ESP32에서 한쪽 줄만 쓸 수 있어서, 그 줄의 출력 핀 5개를 쓴다)
+//
 // 배선 (모듈마다)
-//   모듈 IN  ── ESP32 GPIO 25 / 26 / 27
+//   모듈 IN  ── 자기 구역의 GPIO (앞·뒤 모듈 IN 둘 다 같은 핀)
 //   모듈 VCC ── + 레일 = AA 2개 배터리(3V) +
 //   모듈 GND ── − 레일 = 배터리 − = ESP32 GND   (GND는 꼭 서로 연결)
 //   ESP32 전원은 USB 케이블. ESP32의 3V3, 5V 핀은 배터리 레일에 연결하지 말 것.
+//
+// 전원 때문에 한 번에 최대 3구역(모듈 6개)까지만 같이 켠다. 10개를 동시에 켜면 AA 2개가 버거움.
 //
 // 웹앱과 맞춘 BLE 형식 (바꾸면 index.html의 CUSHION_* 도 같이 바꿀 것)
 //   Service UUID        4fafc201-1fb5-459e-8fcc-c5c9c331914b
@@ -18,7 +24,7 @@
 //     strength 0~255 (웹앱은 205를 보냄)
 //
 // 웹앱 없이 테스트: 시리얼 모니터(115200)에서 1 = 알림, 2 = 테스트, 0 = 멈춤
-// 전원을 켜면 모듈 1 → 2 → 3 → 셋 다 순서로 한 번씩 울려서 배선을 확인할 수 있다.
+// 전원을 켜면 구역 1 → 2 → 3 → 4 → 5 순서로 한 번씩 울려서 배선을 확인할 수 있다.
 
 #include <BLEDevice.h>
 #include <BLEServer.h>
@@ -26,19 +32,20 @@
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHAR_UUID    "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
-const uint8_t MOTORS[3] = {25, 26, 27};  // 모듈1(왼쪽), 모듈2(가운데), 모듈3(오른쪽)
+const uint8_t ZONES = 5;
+const uint8_t PINS[ZONES] = {32, 33, 25, 26, 27};  // 구역1(왼쪽 끝) ~ 구역5(오른쪽 끝)
 // 보통 모듈은 IN이 HIGH일 때 울린다. 꺼져 있어야 할 때 계속 울리면 true로 바꿀 것.
 const bool ACTIVE_LOW = false;
-const uint8_t ALL = 0b111;
 
-// 진동 패턴: {켤 모터(비트), 시간 ms}. 시간이 0이면 끝.
+// 진동 패턴: {켤 구역(비트, 1번 비트 = 구역1), 시간 ms}. 시간이 0이면 끝.
 struct Step { uint8_t mask; uint16_t ms; };
-// 거북목 알림: 왼쪽 → 가운데 → 오른쪽 물결, 그다음 셋이 같이 두 번
-const Step ALERT[] = { {0b001, 140}, {0b010, 140}, {0b100, 140}, {0, 120},
-                       {ALL, 280}, {0, 160}, {ALL, 280}, {0, 0} };
-// 테스트: 모듈을 하나씩 울려서 어느 선이 어느 모듈인지 확인
-const Step TEST[]  = { {0b001, 350}, {0, 150}, {0b010, 350}, {0, 150},
-                       {0b100, 350}, {0, 150}, {ALL, 400}, {0, 0} };
+// 거북목 알림: 왼쪽 → 오른쪽 물결, 오른쪽 → 왼쪽 물결, 그다음 1·3·5 / 2·4 구역이 번갈아 진동
+const Step ALERT[] = { {0b00001, 120}, {0b00010, 120}, {0b00100, 120}, {0b01000, 120}, {0b10000, 120}, {0, 80},
+                       {0b10000, 120}, {0b01000, 120}, {0b00100, 120}, {0b00010, 120}, {0b00001, 120}, {0, 140},
+                       {0b10101, 260}, {0, 140}, {0b01010, 260}, {0, 0} };
+// 테스트: 구역을 하나씩 울려서 어느 선이 어느 구역인지 확인
+const Step TEST[]  = { {0b00001, 350}, {0, 150}, {0b00010, 350}, {0, 150}, {0b00100, 350}, {0, 150},
+                       {0b01000, 350}, {0, 150}, {0b10000, 350}, {0, 0} };
 
 // 작은 진동 모터는 약한 PWM으로는 잘 안 돌기 시작해서, 켤 때 잠깐 최대로 밀어 준다
 const uint16_t KICK_MS = 40;
@@ -53,9 +60,9 @@ unsigned long stepStart = 0;
 bool          kicking = false;
 
 void setMotors(uint8_t mask, uint8_t duty) {
-  for (uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < ZONES; i++) {
     uint8_t d = ((mask >> i) & 1) ? duty : 0;
-    analogWrite(MOTORS[i], ACTIVE_LOW ? 255 - d : d);
+    analogWrite(PINS[i], ACTIVE_LOW ? 255 - d : d);
   }
 }
 
@@ -102,7 +109,7 @@ class WriteCB : public BLECharacteristicCallbacks {
 };
 
 void setup() {
-  for (uint8_t pin : MOTORS) {
+  for (uint8_t pin : PINS) {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, ACTIVE_LOW ? HIGH : LOW);
   }
@@ -121,7 +128,7 @@ void setup() {
   ad->setScanResponse(true);
   BLEDevice::startAdvertising();
 
-  Serial.println("Earline Cushion 준비 완료. 모듈 1 → 2 → 3 → 전체 순서로 울립니다.");
+  Serial.println("Earline Cushion 준비 완료. 구역 1 → 2 → 3 → 4 → 5 순서로 울립니다.");
   play(2, 205);
 }
 
