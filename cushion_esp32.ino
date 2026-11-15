@@ -10,11 +10,11 @@
 //
 // 배선 (모듈마다)
 //   모듈 IN  ── 자기 구역의 GPIO (앞·뒤 모듈 IN 둘 다 같은 핀)
-//   모듈 VCC ── + 레일 = AA 2개 배터리(3V) +
+//   모듈 VCC ── + 레일 = 배터리 + (AA 2개 = 3V, 또는 AA 3개 = 4.5V)
 //   모듈 GND ── − 레일 = 배터리 − = ESP32 GND   (GND는 꼭 서로 연결)
 //   ESP32 전원은 USB 케이블. ESP32의 3V3, 5V 핀은 배터리 레일에 연결하지 말 것.
 //
-// 전원 때문에 한 번에 최대 3구역(모듈 6개)까지만 같이 켠다. 10개를 동시에 켜면 AA 2개가 버거움.
+// 전원 때문에 한 번에 최대 3구역(모듈 6개)까지만 같이 켠다. 10개를 동시에 켜면 건전지가 버거움.
 //
 // 웹앱과 맞춘 BLE 형식 (바꾸면 index.html의 CUSHION_* 도 같이 바꿀 것)
 //   Service UUID        4fafc201-1fb5-459e-8fcc-c5c9c331914b
@@ -36,6 +36,9 @@ const uint8_t ZONES = 5;
 const uint8_t PINS[ZONES] = {32, 33, 25, 26, 27};  // 구역1(왼쪽 끝) ~ 구역5(오른쪽 끝)
 // 보통 모듈은 IN이 HIGH일 때 울린다. 꺼져 있어야 할 때 계속 울리면 true로 바꿀 것.
 const bool ACTIVE_LOW = false;
+// 모듈 VCC에 연결한 AA 건전지 개수: 2개(3V)면 2, 3개(4.5V)면 3
+//   2개일 때는 전압이 낮아서 앱이 보낸 세기와 상관없이 항상 최대 세기로 울린다.
+const uint8_t AA_CELLS = 2;
 
 // 진동 패턴: {켤 구역(비트, 1번 비트 = 구역1), 시간 ms}. 시간이 0이면 끝.
 struct Step { uint8_t mask; uint16_t ms; };
@@ -83,7 +86,7 @@ void play(uint8_t pattern, uint8_t s) {
     setMotors(0, 0);
     return;
   }
-  strength = s < MIN_STRENGTH ? MIN_STRENGTH : s;
+  strength = AA_CELLS <= 2 ? 255 : (s < MIN_STRENGTH ? MIN_STRENGTH : s);
   pat = pattern == 1 ? ALERT : TEST;
   idx = 0;
   startStep();
