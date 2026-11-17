@@ -1,7 +1,7 @@
 {
   "name": "Earline",
   "short_name": "Earline",
-  "description": "Personal turtle-neck alerts across your laptop, tablet, phone and a vibrating cushion.",
+  "description": "Turtle-neck and drowsiness alerts that learn your chair and posture, with a vibrating cushion.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

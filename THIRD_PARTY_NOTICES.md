@@ -38,3 +38,15 @@ SOFTWARE.
 
 Face and pose landmarks come from Google MediaPipe (`@mediapipe/tasks-vision`),
 Apache License 2.0, loaded at runtime from jsDelivr and Google Cloud Storage.
+
+## Transformers.js
+
+The chair check runs with Hugging Face Transformers.js (`@huggingface/transformers`),
+Apache License 2.0, loaded at runtime from jsDelivr.
+
+## MobileCLIP-S0
+
+The chair check uses the MobileCLIP-S0 image model by Apple (ONNX conversion
+`Xenova/mobileclip_s0`), downloaded at runtime from Hugging Face. It is under
+Apple's own license terms; see the model card at
+https://huggingface.co/apple/MobileCLIP-S0 before any use beyond this project.

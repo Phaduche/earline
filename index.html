@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Earline">
-<meta name="description" content="Turtle-neck alerts that learn your posture, on every device you sit at.">
+<meta name="description" content="Turtle-neck and drowsiness alerts that learn your chair and your posture, with a vibrating cushion.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -46,7 +46,7 @@ button{cursor:pointer}
 p,h1,h2,h3{margin:0}
 [hidden]{display:none!important}
 :focus-visible{outline:2px solid var(--tint);outline-offset:2px;border-radius:8px}
-[data-level="ok"]{--lvl:var(--green)} [data-level="warn"]{--lvl:var(--orange)} [data-level="bad"]{--lvl:var(--red)} [data-level="away"]{--lvl:var(--gray)}
+[data-level="ok"]{--lvl:var(--green)} [data-level="warn"]{--lvl:var(--orange)} [data-level="bad"]{--lvl:var(--red)} [data-level="away"]{--lvl:var(--gray)} [data-level="dz"]{--lvl:var(--indigo)}
 
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 0 0 .5px var(--glass-line),inset 0 1px 0 var(--glass-line),var(--glass-shadow)}
 
@@ -76,7 +76,7 @@ p,h1,h2,h3{margin:0}
 .cell+.cell::before,.cell+details::before,details+.cell::before{content:"";position:absolute;top:0;right:0;left:57px;border-top:.5px solid var(--sep)}
 .list.noicon .cell+.cell::before{left:16px}
 button.cell:active,summary.cell:active,label.cell:active{background:var(--fill)}
-.cell .t{flex:1;min-width:0}
+.cell .t{flex:1;min-width:0;padding:7px 0}
 .cell .t small{display:block;font-size:13px;color:var(--label2);margin-top:1px}
 .cell .v{color:var(--label2);white-space:nowrap}
 .cell .v.tick{color:var(--tint);display:grid}
@@ -191,7 +191,7 @@ details[open] summary .chev{transform:rotate(90deg)}
 .scan{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:4/5;color:#fff;isolation:isolate;
   background:radial-gradient(120% 85% at 50% 0%,#1D2D3E 0%,#0D151E 58%,#06090D 100%);
   box-shadow:0 24px 48px -24px rgba(10,25,45,.55),inset 0 0 0 .5px rgba(255,255,255,.08);
-  --green:#30D158;--orange:#FF9F0A;--red:#FF453A;--gray:#8E8E93}
+  --green:#30D158;--orange:#FF9F0A;--red:#FF453A;--gray:#8E8E93;--indigo:#8E8BFF}
 .scan .fig{position:absolute;inset:0;width:100%;height:100%}
 .camslot{position:absolute;inset:0}
 .camslot .cam{position:absolute;inset:0;height:100%;aspect-ratio:auto}
@@ -236,11 +236,11 @@ details[open] summary .chev{transform:rotate(90deg)}
 .statuscard .ring{--size:132px;--sw:12}
 
 /* today */
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .metrics .cap{font-size:13px;font-weight:600;color:var(--label2)}
-.metrics b{display:block;font:700 28px/1.15 var(--round);font-variant-numeric:tabular-nums;margin-top:2px}
+.metrics b{display:block;font:700 26px/1.15 var(--round);font-variant-numeric:tabular-nums;margin-top:2px}
 .metrics b small{font-size:15px;font-weight:600;margin-left:1px}
-.metrics .g b{color:var(--green)} .metrics .r b{color:var(--red)}
+.metrics .g b{color:var(--green)} .metrics .r b{color:var(--red)} .metrics .d b{color:var(--indigo)}
 .chart{position:relative;margin-top:18px;padding-right:32px}
 .bars{position:relative;display:grid;grid-template-columns:repeat(24,1fr);gap:3px;height:96px;align-items:end;
   background:linear-gradient(var(--sep),var(--sep)) 0 0/100% .5px no-repeat,linear-gradient(var(--sep),var(--sep)) 0 50%/100% .5px no-repeat,linear-gradient(var(--sep),var(--sep)) 0 100%/100% .5px no-repeat}
@@ -323,18 +323,95 @@ details[open] summary .chev{transform:rotate(90deg)}
 .notice .x svg{width:12px;height:12px}
 .banner{position:fixed;z-index:55;left:50%;top:max(8px,env(safe-area-inset-top));width:min(400px,calc(100% - 16px));transform:translate(-50%,-150%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1.08),visibility 0s .45s;display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:24px;cursor:pointer;border:0;text-align:left;color:var(--label)}
 .banner.show{transform:translate(-50%,0);visibility:visible;transition:transform .45s cubic-bezier(.2,.9,.25,1.08)}
-.banner img{width:38px;height:38px;border-radius:9px;flex:none}
+.banner .bico{width:38px;height:38px;border-radius:10px;flex:none;display:grid;place-items:center;color:#fff;background:var(--red)}
+.banner .bico svg{width:22px;height:22px}
+.banner[data-kind="drowsy"] .bico{background:var(--indigo)}
 .banner>div{flex:1}
 .banner .bt{display:flex;justify-content:space-between;gap:8px;font-size:15px;font-weight:600}
-.banner .bt span{font-size:13px;font-weight:400;color:var(--label2)}
+.banner .bt span:last-child{font-size:13px;font-weight:400;color:var(--label2)}
 .banner p{font-size:15px}
 .hud{position:fixed;z-index:56;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:11px 18px;border-radius:22px;font-size:15px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s;max-width:calc(100vw - 32px);text-align:center}
 .hud.show{opacity:1}
 #glow{position:fixed;inset:0;z-index:41;pointer-events:none;opacity:0;transition:opacity .6s;--gc:rgba(255,59,48,.55);box-shadow:inset 0 0 90px 26px var(--gc),inset 0 0 0 3px var(--gc)}
+#glow.drowsy{--gc:rgba(94,92,230,.62)!important;opacity:1!important;animation:dz 1.1s ease-in-out infinite}
+@keyframes dz{50%{opacity:.3}}
 #blurN{position:fixed;inset:0;z-index:40;pointer-events:none;-webkit-backdrop-filter:blur(var(--b,0px));backdrop-filter:blur(var(--b,0px));transition:-webkit-backdrop-filter .5s,backdrop-filter .5s;display:grid;place-items:center}
 #blurN .msg{display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:26px;font-size:17px;font-weight:600;opacity:0;transform:scale(.94);transition:opacity .4s,transform .4s}
 #blurN .msg svg{width:22px;height:22px;color:var(--red)}
 #blurN.on .msg{opacity:1;transform:none}
+
+/* ===== chairs ===== */
+.cthumb{flex:none;display:block;background:var(--fill) center/cover no-repeat}
+.typegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.typegrid button{position:relative;display:grid;justify-items:center;align-content:start;gap:6px;padding:11px 4px 9px;border:0;border-radius:16px;background:var(--card);font-size:12px;line-height:1.25;color:var(--label);text-align:center}
+.typegrid button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--tint)}
+.typegrid button .ai{position:absolute;top:5px;right:6px;font-size:10px;font-weight:700;color:var(--tint)}
+.mi .cthumb,.mi .ico{margin-right:2px}
+
+/* ===== chair scan ===== */
+.enroll .navbar .nbtext{min-width:60px;text-align:left}
+.enroll .navbar .nbtext:last-child{text-align:right}
+#scTicks line.on{stroke:var(--tint)}
+.lens video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lens video.mirror{transform:scaleX(-1)}
+.lens .lensph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.5)}
+.lens .lensph svg{width:38%;height:38%}
+.guess{margin:16px auto 0;display:flex;align-items:center;gap:12px;padding:10px 18px 10px 10px;border-radius:24px;width:min(300px,100%);min-height:58px}
+.guess .gt{flex:1;min-width:0}
+.guess b{display:block;font-size:17px;font-weight:600}
+.guess .s{display:block;font-size:13px;color:var(--label2)}
+.guess .bar{height:4px;border-radius:2px;background:var(--fill2);margin-top:7px;overflow:hidden}
+.guess .bar i{display:block;height:100%;width:0;background:var(--tint);border-radius:2px;transition:width .3s}
+.scres{display:flex;align-items:center;gap:16px;margin:22px 0 0;padding:14px;border-radius:22px;background:var(--card)}
+.scres .cthumb,.scres .ico{flex:none}
+.scres>div b{display:block;font-size:22px;line-height:28px;font-weight:700}
+.scres>div span{display:block;font-size:15px;color:var(--label2);margin-top:2px}
+.sclbl{font-size:13px;color:var(--label2);margin:20px 16px 8px}
+.enroll .list{margin-bottom:0}
+
+/* ===== live instruments: eyes and cushion ===== */
+.insts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inst{position:relative;display:flex;flex-direction:column;min-height:206px;border:0;margin:0;text-align:left;color:#fff;border-radius:26px;padding:14px 16px 16px;overflow:hidden;isolation:isolate;
+  background:radial-gradient(140% 100% at 50% 0%,#1D2D3E 0%,#0D151E 62%,#06090D 100%);box-shadow:0 18px 36px -24px rgba(10,25,45,.5),inset 0 0 0 .5px rgba(255,255,255,.08);
+  --green:#30D158;--orange:#FF9F0A;--red:#FF453A;--indigo:#8E8BFF;--mint:#63E6E2}
+.inst .ih{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:15px;font-weight:600}
+.inst .ih small{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:rgba(255,255,255,.62);white-space:nowrap}
+.inst .ih small svg{width:12px;height:12px}
+.inst .ih small.live{color:var(--mint)}
+.inst .iv{flex:1;display:grid;place-items:center;min-height:0;padding:6px 0}
+.inst .iv svg{display:block;width:100%;max-width:148px;height:auto}
+.inst .big{font:700 24px/1.15 var(--round);font-variant-numeric:tabular-nums}
+.inst .big small{font-size:.6em;font-weight:600;margin-left:1px}
+.inst .cap{font-size:13px;color:rgba(255,255,255,.66);margin-top:2px;min-height:17px}
+button.inst:active{transform:scale(.985)}
+.eyefig .base{fill:none;stroke:rgba(255,255,255,.2);stroke-width:1.5;stroke-dasharray:3 5}
+.eyefig .lid{fill:rgba(255,255,255,.05);stroke:var(--ec,#fff);stroke-width:3;stroke-linejoin:round;transition:stroke .4s}
+.eyefig .iris{fill:var(--ec,#fff);transition:fill .4s}
+.eyefig .pupil{fill:#0B1219}
+.eyefig .glint{fill:#fff;opacity:.9}
+[data-eye="ok"]{--ec:#fff} [data-eye="low"]{--ec:var(--orange)} [data-eye="drowsy"]{--ec:var(--indigo)}
+[data-eye="na"],[data-eye="off"],[data-eye="learn"]{--ec:rgba(255,255,255,.4)}
+.inst[data-eye="drowsy"]{box-shadow:inset 0 0 0 2px var(--indigo)}
+.cushviz{overflow:visible}
+.cushviz .pad{fill:rgba(255,255,255,.07);stroke:rgba(255,255,255,.18);stroke-width:1.4}
+.cushviz .seam{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1;stroke-dasharray:2 4}
+.cushviz .crease{fill:none;stroke:rgba(255,255,255,.1);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.cushviz .mot .core{fill:rgba(255,255,255,.36);transition:fill .1s}
+.cushviz .mot .rip{fill:none;stroke:var(--vib,#63E6E2);stroke-width:2.2;opacity:0;transform-box:fill-box;transform-origin:center}
+.cushviz .mot.on .core{fill:var(--vib,#63E6E2)}
+.cushviz .mot.on .rip{animation:rip .4s ease-out infinite}
+@keyframes rip{from{opacity:.95;transform:scale(1)}to{opacity:0;transform:scale(2.7)}}
+.cushviz.buzzing{animation:shake .08s linear infinite}
+@keyframes shake{0%,100%{transform:translate(.7px,0)}50%{transform:translate(-.7px,.5px)}}
+.cushviz[data-vib="turtle"]{--vib:#FF6B61} .cushviz[data-vib="drowsy"]{--vib:#8E8BFF} .cushviz[data-vib="test"]{--vib:#63E6E2}
+.cushviz.offline .mot .core{fill:rgba(255,255,255,.14)}
+.cushstage{border-radius:26px;padding:18px 16px 20px;color:#fff;text-align:center;
+  background:radial-gradient(140% 100% at 50% 0%,#1D2D3E 0%,#0D151E 62%,#06090D 100%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.08)}
+.cushstage svg{display:block;width:min(230px,62%);height:auto;margin:0 auto 12px}
+.cushstage .cs1{font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.cushstage .cs1 i{width:8px;height:8px;border-radius:50%;background:#30D158}
+.cushstage .cs1.off i{background:#8E8E93}
+.cushstage .cs2{font-size:15px;color:rgba(255,255,255,.66);margin-top:3px}
 
 /* ===== desktop ===== */
 .deskonly{display:none}
@@ -346,6 +423,7 @@ details[open] summary .chev{transform:rotate(90deg)}
   .scan .panel{display:none}
   .statuscard.deskonly{display:flex}
   .tiles{grid-template-columns:repeat(4,1fr)}
+  .inst{min-height:224px}
   .narrow{max-width:680px;margin:0 auto}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
@@ -360,9 +438,9 @@ details[open] summary .chev{transform:rotate(90deg)}
     <h1>Earline</h1>
     <p class="sub" data-i18n="ob.tag">Turtle-neck alerts that learn you.</p>
     <ul class="feats">
-      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><circle cx="18" cy="15" r="4.4"/><path d="M11 26.5c1.3-3.5 3.8-5.2 7-5.2s5.7 1.7 7 5.2"/></svg><div><b data-i18n="ob.f1">Learns your posture</b><span data-i18n="ob.f1s">Two quick poses train a model just for you.</span></div></li>
-      <li><svg viewBox="0 0 36 36" fill="var(--red)"><path d="M18 4.5c-5.2 0-8.8 4-8.8 9.1v5.6l-2.8 4.2c-.6.9 0 2.2 1.2 2.2h20.8c1.2 0 1.8-1.3 1.2-2.2l-2.8-4.2v-5.6c0-5.1-3.6-9.1-8.8-9.1zM14.4 28a3.7 3.7 0 0 0 7.2 0z"/></svg><div><b data-i18n="ob.f2">Catches turtle neck</b><span data-i18n="ob.f2s">Alerts you in seconds, even in the background.</span></div></li>
-      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7" width="20" height="14" rx="2.2"/><path d="M8 25.5h11"/><rect x="25.5" y="11" width="7" height="17" rx="2"/></svg><div><b data-i18n="ob.f3">Every place you sit</b><span data-i18n="ob.f3s">Laptop, tablet, phone and cushion, together.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--tint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12V8a3 3 0 0 1 3-3h4M24 5h4a3 3 0 0 1 3 3v4M31 24v4a3 3 0 0 1-3 3h-4M12 31H8a3 3 0 0 1-3-3v-4"/><path d="M14.5 11c-1 2.7-1 5.3 0 8h7.5M18.3 19v3.5M13.5 25.5l4.8-3 4.8 3"/></svg><div><b data-i18n="ob.f1">Knows your chair</b><span data-i18n="ob.f1s">Film it once around. Each chair gets its own posture model.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="18" cy="21" rx="13.5" ry="7.5"/><path d="M11.5 8.5c1.2 1.3 1.2 3 0 4.3M18 6.5c1.4 1.6 1.4 3.6 0 5.2M24.5 8.5c1.2 1.3 1.2 3 0 4.3"/></svg><div><b data-i18n="ob.f2">Turtle neck buzzes the cushion</b><span data-i18n="ob.f2s">When your head drifts forward, the cushion under you nudges you back.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="var(--indigo)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 18C7 11.5 12 8.5 18 8.5S29 11.5 32.5 18C29 24.5 24 27.5 18 27.5S7 24.5 3.5 18z"/><circle cx="18" cy="18" r="4.6" fill="var(--indigo)" stroke="none"/></svg><div><b data-i18n="ob.f3">Wakes you when you doze</b><span data-i18n="ob.f3s">If your eyes narrow, all ten motors buzz at once.</span></div></li>
     </ul>
     <div class="bottom">
       <p class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 4.5 6v5.6c0 4.7 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.9 7.5-9.6V6z"/><path d="m8.8 12.1 2.2 2.2 4.3-4.4"/></svg><span data-i18n="ob.privacy">Video never leaves this device.</span></p>
@@ -372,12 +450,44 @@ details[open] summary .chev{transform:rotate(90deg)}
   </div>
 </section>
 
+<!-- ================= chair scan ================= -->
+<section data-view="scan" hidden>
+  <div class="enroll" id="scanRoot">
+    <div class="navbar">
+      <button class="nbtext" id="scCancel" data-i18n="cancel">Cancel</button>
+      <div class="steps" aria-hidden="true"><i class="now"></i><i></i><i></i></div>
+      <button class="nbtext" id="scManual" data-i18n="sc.manual">Pick myself</button>
+    </div>
+    <h1 id="scTitle" style="margin-top:14px"></h1>
+    <p class="sub" id="scSub"></p>
+    <div class="calmain" id="scMain">
+      <div class="ring-cam">
+        <svg class="ticks" id="scTicks" viewBox="0 0 300 300" aria-hidden="true"></svg>
+        <div class="lens" id="camSlotScan"><div class="lensph" id="scanPh"></div><video id="scanVideo" playsinline muted autoplay></video></div>
+      </div>
+    </div>
+    <div class="guess glass" id="scGuess" aria-live="polite"></div>
+    <div id="scResult" hidden>
+      <div class="scres" id="scRes"></div>
+      <p class="sclbl" data-i18n="sc.type">Chair type</p>
+      <div class="typegrid" id="scTypes"></div>
+      <p class="sclbl" data-i18n="sc.name">Name</p>
+      <div class="list noicon"><div class="cell fieldcell"><input id="scName" maxlength="24" autocomplete="off" aria-label="Chair name"></div></div>
+    </div>
+    <p class="foot" id="scHint" style="margin-top:12px;min-height:18px"></p>
+    <div class="bottom">
+      <button class="btn" id="scBtn"></button>
+      <button class="plain" id="scBtn2" hidden></button>
+    </div>
+  </div>
+</section>
+
 <!-- ================= calibration ================= -->
 <section data-view="calib" hidden>
   <div class="enroll">
     <div class="navbar">
       <button class="nbtext" id="calCancel" data-i18n="cancel">Cancel</button>
-      <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i></div>
+      <div class="steps" id="calSteps" aria-hidden="true"><i></i><i></i><i></i></div>
       <span class="nbspacer"></span>
     </div>
     <p class="calfor" id="calFor"></p>
@@ -411,7 +521,7 @@ details[open] summary .chev{transform:rotate(90deg)}
 <!-- ================= posture ================= -->
 <section data-view="monitor" class="screen" hidden>
   <div class="navbar">
-    <button class="placebtn glass" id="placeBtn" aria-haspopup="menu"><span id="placeIco"></span><span class="nm" id="placeName"></span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg></button>
+    <button class="placebtn glass" id="chairBtn" aria-haspopup="menu"><span id="chairIco"></span><span class="nm" id="chairName"></span><svg class="chev" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.5 4.5 3.5 3.5 3.5-3.5"/></svg></button>
     <span class="grow"></span>
     <button class="gbtn glass" id="btnWidget" data-i18n-title="widget" aria-label="Mini widget" title="Mini widget" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="15" rx="3"/><rect x="12" y="11" width="7" height="5.5" rx="1.4" fill="currentColor"/></svg></button>
     <button class="gbtn glass" id="btnPause" aria-label="Pause" title="Pause"></button>
@@ -448,12 +558,25 @@ details[open] summary .chev{transform:rotate(90deg)}
         <div class="ring" id="ringLg"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="50"/><circle class="prog" cx="60" cy="60" r="50"/></svg><div class="num">–</div></div>
         <div><p class="st-title js-status">–</p><p class="st-sub js-sub"></p><button class="btn small" data-act="calib" id="cardCal" hidden style="margin-top:12px" data-i18n="calibrate">Calibrate</button></div>
       </div>
+      <div class="insts">
+        <div class="inst" id="eyeTile" data-eye="na">
+          <div class="ih"><span data-i18n="eyes">Eyes</span><small id="eyeTag"></small></div>
+          <div class="iv" id="eyeSlot"></div>
+          <div><p class="big" id="eyeVal">–</p><p class="cap" id="eyeCap"></p></div>
+        </div>
+        <button class="inst" id="cushTile" data-act="cushion" aria-haspopup="dialog">
+          <div class="ih"><span data-i18n="cushion">Cushion</span><small id="cushTag"></small></div>
+          <div class="iv" id="cushSlot"></div>
+          <div><p class="big" id="cushVal">–</p><p class="cap" id="cushCap"></p></div>
+        </button>
+      </div>
       <div class="card">
         <div class="cardhead"><h2 data-i18n="today">Today</h2><span id="todayDate"></span></div>
         <div class="metrics">
           <div class="g"><span class="cap" data-i18n="upright">Upright</span><b id="stGood">–</b></div>
           <div class="r"><span class="cap" data-i18n="turtle">Turtle neck</span><b id="stBad">0<small>m</small></b></div>
           <div><span class="cap" data-i18n="alerts">Alerts</span><b id="stAlerts">0</b></div>
+          <div class="d"><span class="cap" data-i18n="drowsy">Drowsy</span><b id="stDrowsy">0</b></div>
         </div>
         <div class="chart">
           <div class="bars" id="bars"></div>
@@ -480,8 +603,8 @@ details[open] summary .chev{transform:rotate(90deg)}
     </div>
     <h2 class="sechead" data-i18n="devices">Devices</h2>
     <div class="tiles" id="devTiles"></div>
-    <h2 class="sechead" data-i18n="places">Places</h2>
-    <div class="list" id="placeStats"></div>
+    <h2 class="sechead" data-i18n="chairs">Chairs</h2>
+    <div class="list" id="chairStats"></div>
   </div>
 </section>
 
@@ -491,7 +614,7 @@ details[open] summary .chev{transform:rotate(90deg)}
     <div class="navbar"></div>
     <h1 class="large" data-i18n="settings">Settings</h1>
 
-    <div class="list" id="placeList"></div>
+    <div class="list" id="chairList"></div>
 
     <div class="list">
       <div class="cell"><span class="ico" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg></span><span class="t" data-i18n="language">Language</span>
@@ -515,8 +638,16 @@ details[open] summary .chev{transform:rotate(90deg)}
     </div>
 
     <div class="list">
-      <button class="cell" id="btnCushion"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t" data-i18n="cushion">Cushion</span><span class="v" id="cushionVal">Connect</span></button>
-      <label class="cell"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t" data-i18n="buzz">Buzz on alert</span><input class="sw" type="checkbox" id="setBuzz"></label>
+      <label class="cell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12C5 7.6 8.3 5.5 12 5.5s7 2.1 9.5 6.5c-2.5 4.4-5.8 6.5-9.5 6.5S5 16.4 2.5 12z"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg></span><span class="t"><span data-i18n="dz.set">Drowsiness check</span><small data-i18n="dz.setSub">Watches how open your eyes are.</small></span><input class="sw" type="checkbox" id="setDrowsy"></label>
+      <div class="cell" id="dzSensCell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 18V14M9.3 18V10.5M14.7 18V7M20 18V4"/></svg></span><span class="t" data-i18n="dz.sens">Sensitivity</span>
+        <div class="seg" role="group" aria-label="Drowsiness sensitivity" id="dzSeg"><button data-v="low" data-i18n="dz.low">Low</button><button data-v="mid" data-i18n="dz.mid">Medium</button><button data-v="high" data-i18n="dz.high">High</button></div></div>
+    </div>
+    <p class="footer" data-i18n="dz.foot">Alerts when your eyes stay smaller than usual for 2 seconds. Looking down at a book can look the same, so lower the sensitivity if it fires too often.</p>
+
+    <div class="list">
+      <button class="cell" id="btnCushion" data-act="cushion"><span class="ico" style="background:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="18" height="8.5" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/></svg></span><span class="t" data-i18n="cushion">Cushion</span><span class="v" id="cushionVal"></span><svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg></button>
+      <label class="cell"><span class="ico" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8.5v7M20 8.5v7"/></svg></span><span class="t"><span data-i18n="buzz">Buzz on turtle neck</span><small data-i18n="buzzSub">A wave across the cushion.</small></span><input class="sw" type="checkbox" id="setBuzz"></label>
+      <label class="cell"><span class="ico" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4.5 7v10M1.5 9.5v5M19.5 7v10M22.5 9.5v5"/></svg></span><span class="t"><span data-i18n="buzzDz">Buzz when drowsy</span><small data-i18n="buzzDzSub">All ten motors at once.</small></span><input class="sw" type="checkbox" id="setBuzzDz"></label>
     </div>
 
     <div class="list">
@@ -554,30 +685,48 @@ details[open] summary .chev{transform:rotate(90deg)}
 
 <div id="blurN"><div class="msg glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v4M12 3 9 6M12 3l3 3"/><ellipse cx="12" cy="12.5" rx="3" ry="3.4"/><path d="M5.5 21c.6-3 3-4.8 6.5-4.8s5.9 1.8 6.5 4.8"/></svg><span data-i18n="blurmsg">Sit up to clear the screen</span></div></div>
 <div id="glow"></div>
-<button class="banner glass" id="alert" aria-live="assertive"><img src="icon-180.png" alt=""><div><div class="bt"><span data-i18n="turtle">Turtle neck</span><span data-i18n="alert.now">now</span></div><p data-i18n="alert.body">Bring your head back over your shoulders.</p></div></button>
+<button class="banner glass" id="alert" aria-live="assertive" data-kind="turtle"><span class="bico" id="alertIco"></span><div><div class="bt"><span id="alertTitle"></span><span data-i18n="alert.now">now</span></div><p id="alertBody"></p></div></button>
 <div class="hud glass" id="toast" role="status" aria-live="polite"></div>
 
-<div class="menu" id="placeMenu" role="menu"></div>
+<div class="menu" id="chairMenu" role="menu"></div>
 <div class="backdrop" id="backdrop"></div>
-<div class="sheet" id="placeSheet" role="dialog" aria-modal="true" aria-labelledby="psTitle">
+<div class="sheet" id="chairSheet" role="dialog" aria-modal="true" aria-labelledby="csTitle">
   <div class="grab"></div>
-  <header><button class="nbtext" id="psCancel" data-i18n="cancel">Cancel</button><h2 id="psTitle">New Place</h2><button class="nbtext strong" id="psSave">Add</button></header>
-  <div class="list noicon"><div class="cell fieldcell"><input id="psName" placeholder="Name" maxlength="24" autocomplete="off" aria-label="Place name" data-i18n-ph="ph.name"></div></div>
-  <p class="lbl" data-i18n="icon">Icon</p>
-  <div class="iconpick" id="psIcons"></div>
-  <p class="lbl" data-i18n="seat">Seat</p>
-  <div class="seg" id="psSeat" role="group" aria-label="Seat"></div>
+  <header><button class="nbtext" id="csCancel" data-i18n="cancel">Cancel</button><h2 id="csTitle" data-i18n="editchair">Edit Chair</h2><button class="nbtext strong" id="csSave" data-i18n="done">Done</button></header>
+  <div class="list noicon"><div class="cell fieldcell"><input id="csName" maxlength="24" autocomplete="off" aria-label="Chair name"></div></div>
+  <p class="lbl" data-i18n="sc.type">Chair type</p>
+  <div class="typegrid" id="csTypes"></div>
+</div>
+<div class="sheet" id="cushSheet" role="dialog" aria-modal="true" aria-labelledby="cuTitle">
+  <div class="grab"></div>
+  <header><span></span><h2 id="cuTitle" data-i18n="cushion">Cushion</h2><button class="nbtext strong" id="cuDone" data-i18n="done">Done</button></header>
+  <div class="cushstage"><div id="cushSlotSheet"></div><p class="cs1" id="cuState"></p><p class="cs2" id="cuSub"></p></div>
+  <p class="lbl" data-i18n="cu.try">Try a vibration</p>
+  <div class="list noicon">
+    <button class="cell action" data-buzz="1"><span class="t"><span data-i18n="cu.t1">Turtle-neck alert</span><small data-i18n="cu.t1s">A wave left to right and back, then alternating zones.</small></span></button>
+    <button class="cell action" data-buzz="3"><span class="t"><span data-i18n="cu.t3">Drowsiness alert</span><small data-i18n="cu.t3s">All ten motors, four strong pulses.</small></span></button>
+    <button class="cell action" data-buzz="2"><span class="t"><span data-i18n="cu.t2">One zone at a time</span><small data-i18n="cu.t2s">Checks the wiring, zone 1 to 5.</small></span></button>
+  </div>
+  <p class="lbl" data-i18n="cu.conn">Connection</p>
+  <div class="list noicon">
+    <button class="cell action" id="btnPair"><span class="t" id="pairLbl"></span></button>
+    <label class="cell"><span class="t"><span data-i18n="cu.demo">Demo cushion</span><small data-i18n="cu.demoSub">Shows the cushion as connected and plays vibrations on screen when no real one is paired.</small></span><input class="sw" type="checkbox" id="setDemo"></label>
+  </div>
 </div>
 <div class="actions" id="actionSheet" role="dialog" aria-modal="true"></div>
 
 <script type="module">
 /* =====================================================================
    Earline
-   Same three steps as the Face-id project: collect samples -> train a
+   Posture: same three steps as the Face-id project: collect samples -> train a
    personal model -> live probability vs. threshold. Detection is a personal
-   logistic model trained on upright / turtle-neck samples. An optional
-   head-only check (Settings, off by default) adds a forward-head rule adapted
-   from Dorso (MIT): your face growing past its upright size.
+   logistic model trained on upright / turtle-neck samples, one per chair and
+   device. An optional head-only check (Settings, off by default) adds a
+   forward-head rule adapted from Dorso (MIT).
+   Chairs: film the chair once around; an on-device CLIP model sorts it into a
+   chair type.
+   Drowsiness: eye size (lid opening / eye width) against your usual size.
+   Cushion: turtle neck plays a wave, drowsiness fires all ten motors.
    ===================================================================== */
 const MP_VER = '0.10.14';
 const MP_URL = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}`;
@@ -587,6 +736,11 @@ const CUSHION_SERVICE = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const CUSHION_CHAR    = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 const BUZZ_STRENGTH = 205;
 const HOLD_SEC = 3, COOLDOWN_SEC = 60;
+const DROWSY_HOLD = 2, DROWSY_COOLDOWN = 10;                 // eyes small for 2 s -> alert; repeat every 10 s until they open
+const DROWSY_THR = { low: .62, mid: .72, high: .8 };        // eye size vs. your usual size
+const TF_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.1';
+const CLIP_ID = 'Xenova/mobileclip_s0';
+const SCAN_BINS = 16;
 const SAMPLES_PER_POSE = 60;
 const TICK_MONITOR = 200, TICK_CALIB = 100;
 const PROFILE_V = 6;
@@ -616,74 +770,114 @@ const Store = {
 /* ---------- language (English / Korean) ---------- */
 const I18N = {
   en: {
-    'ob.tag': 'Turtle-neck alerts that learn you.', 'ob.f1': 'Learns your posture', 'ob.f1s': 'Two quick poses train a model just for you.',
-    'ob.f2': 'Catches turtle neck', 'ob.f2s': 'Alerts you in seconds, even in the background.', 'ob.f3': 'Every place you sit', 'ob.f3s': 'Laptop, tablet, phone and cushion, together.',
-    'ob.privacy': 'Video never leaves this device.', 'continue': 'Continue', 'cancel': 'Cancel', 'start': 'Start', 'done': 'Done', 'add': 'Add', 'edit': 'Edit', 'on': 'On', 'off': 'Off',
-    'cal.good': 'Sit up straight', 'cal.goodSub': 'Back against the chair, eyes on the screen.', 'cal.bad': 'Now slump forward', 'cal.badSub': 'Let your head sink toward the screen.',
-    'cal.face': 'Move your face into the circle', 'cal.allset': 'All set', 'cal.almost': 'Almost there', 'cal.ready': 'Your model for {place} is ready.',
+    'ob.tag': 'Posture and drowsiness alerts that learn you.', 'ob.f1': 'Knows your chair', 'ob.f1s': 'Film it once around. Each chair gets its own posture model.',
+    'ob.f2': 'Turtle neck buzzes the cushion', 'ob.f2s': 'When your head drifts forward, the cushion under you nudges you back.',
+    'ob.f3': 'Wakes you when you doze', 'ob.f3s': 'If your eyes narrow, all ten motors buzz at once.',
+    'ob.privacy': 'Video never leaves this device.', 'continue': 'Continue', 'cancel': 'Cancel', 'start': 'Start', 'done': 'Done', 'edit': 'Edit', 'on': 'On', 'off': 'Off',
+    'cal.good': 'Sit up straight', 'cal.goodSub.back': 'Back against the chair, eyes on the screen.', 'cal.goodSub.none': 'Back straight, eyes on the screen.', 'cal.goodSub.soft': 'Sit deep, back straight, eyes on the screen.',
+    'cal.bad': 'Now slump forward', 'cal.badSub': 'Let your head sink toward the screen.',
+    'cal.face': 'Move your face into the circle', 'cal.allset': 'All set', 'cal.almost': 'Almost there', 'cal.ready': 'Your model for {chair} is ready.',
     'cal.similar': 'Your two poses looked too similar. Slump a bit more and try again.', 'cal.tryagain': 'Try Again', 'cal.redo': 'Redo', 'cal.useanyway': 'Use Anyway',
     'cal.learning': 'Learning your posture', 'cal.training': 'Training a model just for you.', 'cal.hold': 'Hold still', 'cal.getready': 'Get ready',
-    'upright': 'Upright', 'turtle': 'Turtle neck', 'posture': 'Posture', 'turnon': 'Turn On', 'dismiss': 'Dismiss', 'live': 'Live', 'calibrate': 'Calibrate', 'today': 'Today', 'alerts': 'Alerts',
+    'upright': 'Upright', 'turtle': 'Turtle neck', 'drowsy': 'Drowsy', 'eyes': 'Eyes', 'posture': 'Posture', 'turnon': 'Turn On', 'dismiss': 'Dismiss', 'live': 'Live', 'calibrate': 'Calibrate', 'today': 'Today', 'alerts': 'Alerts',
     'last5': 'Last 5 Minutes', 'alertat': 'Alert at {n}%', 'alertatLbl': 'Alert at', 'x0': '12 AM', 'x6': '6 AM', 'x12': '12 PM', 'x18': '6 PM', 'y60': '60m', 'y30': '30m', 'timelineA11y': 'Turtle-neck risk over the last five minutes',
-    'status.ok': 'Good posture', 'status.warn': 'Drifting forward', 'status.bad': 'Turtle neck', 'status.away': 'Away', 'status.look': 'Looking away', 'status.nocal': 'Not calibrated', 'status.paused': 'Paused',
-    'sub.away': 'Sit in front of the camera.', 'sub.look': 'Face the screen to resume.', 'sub.nocal': 'Calibrate {place} on {dev}.', 'sub.paused': 'Tracking is paused.', 'sub.snoozed': 'Alerts snoozed',
-    'sub.good': 'Head over your shoulders', 'sub.fwd': 'Head {cm} cm forward', 'sub.sitback': 'Sit back and lift your chin',
+    'status.ok': 'Good posture', 'status.warn': 'Drifting forward', 'status.bad': 'Turtle neck', 'status.away': 'Away', 'status.look': 'Looking away', 'status.nocal': 'Not calibrated', 'status.paused': 'Paused', 'status.drowsy': 'Drowsiness detected',
+    'sub.away': 'Sit in front of the camera.', 'sub.look': 'Face the screen to resume.', 'sub.nocal': 'Calibrate {chair} on {dev}.', 'sub.paused': 'Tracking is paused.', 'sub.snoozed': 'Alerts snoozed',
+    'sub.good': 'Head over your shoulders', 'sub.fwd': 'Head {cm} cm forward', 'sub.sitback': 'Sit back and lift your chin', 'sub.drowsy': 'Eyes at {n}% of your usual size',
     'dev.laptop': 'Laptop', 'dev.tablet': 'Tablet', 'dev.phone': 'Phone', 'cushion': 'Cushion', 'dev.thislaptop': 'this laptop', 'dev.thistablet': 'this tablet ({tilt}, {ori})', 'dev.thisphone': 'this phone ({ori})',
     'ori.portrait': 'portrait', 'ori.landscape': 'landscape', 'tilt.propped': 'Propped', 'tilt.flat': 'Flat', 'tilt.note': 'Separate model for each position.', 'tilt.auto': 'Switches automatically from the motion sensor.',
     'tilt.toastFlat': 'Tablet is flat', 'tilt.toastProp': 'Tablet is propped up', 'tabletpos': 'Tablet Position',
-    'devices': 'Devices', 'places': 'Places', 'uprighttoday': 'upright today', 'uprightOn': 'upright today on {d} device{ds} in {p} place{ps}', 'thisdevice': 'This device', 'mintoday': '{n} min today', 'nodata': 'No data today',
+    'devices': 'Devices', 'chairs': 'Chairs', 'uprighttoday': 'upright today', 'uprightOn': 'upright today on {d} device{ds}, {p} chair{ps}', 'thisdevice': 'This device', 'mintoday': '{n} min today', 'nodata': 'No data today',
     'connected': 'Connected', 'taptoconnect': 'Tap to connect', 'connect': 'Connect', 'calibrated': 'Calibrated', 'notcalibrated': 'Not calibrated', 'pctupright': '{n}% upright today',
-    'settings': 'Settings', 'language': 'Language', 'thisDevice': 'This Device', 'recalibrate': 'Recalibrate', 'recalPlace': 'Recalibrate {place}', 'nudge': 'Nudge', 'glow': 'Glow', 'blur': 'Blur',
-    'headcheck': 'Head-only check', 'headcheckSub': 'Beta. Also alerts when only your head moves forward.', 'sound': 'Sound', 'notifications': 'Notifications', 'blocked': 'Blocked', 'buzz': 'Buzz on alert',
+    'settings': 'Settings', 'language': 'Language', 'thisDevice': 'This Device', 'recalibrate': 'Recalibrate', 'recalChair': 'Recalibrate {chair}', 'nudge': 'Nudge', 'glow': 'Glow', 'blur': 'Blur',
+    'headcheck': 'Head-only check', 'headcheckSub': 'Beta. Also alerts when only your head moves forward.', 'sound': 'Sound', 'notifications': 'Notifications', 'blocked': 'Blocked',
+    'buzz': 'Buzz on Turtle Neck', 'buzzSub': 'A wave across the cushion.', 'buzzDz': 'Buzz When Drowsy', 'buzzDzSub': 'All ten motors at once.',
     'cloud': 'Cloud Sync', 'syncnow': 'Sync Now', 'disconnect': 'Disconnect', 'ph.url': 'Supabase URL', 'ph.key': 'Anon key', 'ph.code': 'Your code',
-    'export': 'Export Data', 'import': 'Import Data', 'erase': 'Erase All Data', 'eraseConfirm': 'This erases models, places and history on this device.', 'erased': 'Erased', 'imported': 'Imported', 'notfile': 'Not an Earline file',
-    'footer': 'Pose tracking by MediaPipe. Head-only check adapted from Dorso (MIT).', 'fillall': 'Fill in all three fields', 'synced': 'Synced', 'syncerr': 'Sync error {n}',
-    'seat.chair': 'Desk chair', 'seat.stool': 'Stool', 'seat.sofa': 'Sofa', 'seat.floor': 'Floor',
-    'place.dorm': 'Dorm', 'place.study': 'Study Hall', 'place.library': 'Library', 'place.home': 'Home', 'place.class': 'Classroom', 'place.cafe': 'Café',
-    'newplace': 'New Place', 'addplace': 'Add Place', 'inuse': 'In use', 'editplace': 'Edit Place', 'ph.name': 'Name', 'icon': 'Icon', 'seat': 'Seat', 'usethis': 'Use This Place', 'deleteplace': 'Delete Place', 'saved': 'Saved', 'added': 'Added {name}', 'deleted': 'Deleted {name}',
-    'notif.allow': 'Allow notifications for this site in your browser settings', 'notif.onTitle': 'Notifications are on', 'notif.onBody': 'Earline will alert you here when your head drifts forward.',
+    'export': 'Export Data', 'import': 'Import Data', 'erase': 'Erase All Data', 'eraseConfirm': 'This erases models, chairs and history on this device.', 'erased': 'Erased', 'imported': 'Imported', 'notfile': 'Not an Earline file',
+    'footer': 'Pose and face tracking by MediaPipe. Chair check by MobileCLIP. Head-only check adapted from Dorso (MIT).', 'fillall': 'Fill in all three fields', 'synced': 'Synced', 'syncerr': 'Sync error {n}',
+    'chair.office': 'Office chair', 'chair.gaming': 'Gaming chair', 'chair.basic': 'Basic chair', 'chair.stool': 'Stool', 'chair.sofa': 'Sofa', 'chair.bench': 'Bench', 'chair.floor': 'Floor seat',
+    'tip.office': 'Sit all the way back so the backrest holds your lower back.', 'tip.gaming': 'Rest the back of your head lightly on the headrest.', 'tip.basic': 'The height is fixed, so raise the screen to eye level.',
+    'tip.stool': 'No backrest. Keep your hips a little above your knees.', 'tip.sofa': 'Soft seats tip the pelvis back. A cushion behind your lower back helps.', 'tip.bench': 'No back support, so stand up for a short break often.', 'tip.floor': 'Sitting on a folded cushion lifts the hips and eases the neck.',
+    'newchair': 'Scan a New Chair', 'inuse': 'In use', 'editchair': 'Edit Chair', 'usethis': 'Use This Chair', 'deletechair': 'Delete Chair', 'rescan': 'Scan Again', 'saved': 'Saved', 'added': 'Added {name}', 'deleted': 'Deleted {name}',
+    'sc.manual': 'Pick Myself', 'sc.type': 'Chair type', 'sc.name': 'Name', 'sc.ai': 'AI', 'sc.title': 'Film your chair once around',
+    'sc.subLaptop': 'Put the chair in front of the camera and turn it slowly through a full circle.', 'sc.subMobile': 'Keep the whole chair in frame and walk a full circle around it.',
+    'sc.start': 'Start Scan', 'sc.loadT': 'Getting the chair check ready', 'sc.loadS': 'The first scan downloads a small model, about 23 MB.',
+    'sc.goT': 'Slowly, all the way around', 'sc.goSLaptop': 'Keep turning the chair until the ring fills.', 'sc.goSMobile': 'Keep walking around the chair until the ring fills.',
+    'sc.noChair': 'No chair in view. Fit the whole chair inside the circle.', 'sc.count': 'Scanning {n}/{m}', 'sc.enough': 'Stop Here',
+    'sc.looks': 'Looks like: {type}', 'sc.conf': '{pct}% sure, from {n} angles. Change it below if that\'s wrong.', 'sc.pickT': 'Which kind of chair is it?', 'sc.pickS': 'Pick the closest type.',
+    'sc.err': 'The chair check couldn\'t start. Pick the type yourself.', 'sc.none': 'No chair showed up in the scan. Pick the type yourself.', 'sc.modelErr': 'The chair model didn\'t load.',
+    'sc.save': 'Save and Learn My Posture', 'sc.saveEdit': 'Save', 'sc.again': 'Scan Again',
+    'eye.ok': 'of your usual eye size', 'eye.low': 'Your eyes are narrowing', 'eye.drowsy': 'Drowsiness detected', 'eye.na': 'Starts when your face is in view', 'eye.off': 'Drowsiness check is off', 'eye.learn': 'Measuring your usual eye size', 'eye.tag': 'alert under {n}%',
+    'dz.set': 'Drowsiness Check', 'dz.setSub': 'Alerts when your eyes get smaller than usual.', 'dz.sens': 'Sensitivity', 'dz.low': 'Low', 'dz.mid': 'Medium', 'dz.high': 'High',
+    'dz.foot': 'Alerts when your eyes stay smaller than usual for 2 seconds. Looking down at a book can look the same, so lower the sensitivity if it fires too often.',
+    'notif.allow': 'Allow notifications for this site in your browser settings', 'notif.onTitle': 'Notifications are on', 'notif.onBody': 'Earline will alert you here when your head drifts forward or you doze off.',
     'notif.test': 'Test notification sent. Not seeing it? Allow your browser in your computer\'s notification settings.',
     'notice.iosT': 'Get alerts on iPhone', 'notice.iosS': 'Tap Share, then Add to Home Screen, and open Earline from there.', 'notice.bgT': 'Background alerts', 'notice.bgS': 'Get notified when Earline isn\'t on screen.',
     'notice.blkT': 'Notifications are blocked', 'notice.blkS': 'Allow them for this site in your browser settings.',
-    'alert.now': 'now', 'alert.body': 'Bring your head back over your shoulders.', 'push.cm': 'Your head is {cm} cm forward. ', 'push.body': 'Sit back and bring your head over your shoulders.',
+    'alert.now': 'now', 'alert.body': 'Bring your head back over your shoulders.', 'alert.drowsy': 'Your eyes are closing. Stand up and stretch.', 'alert.drowsyBuzz': 'Your eyes are closing. The whole cushion is buzzing.',
+    'push.cm': 'Your head is {cm} cm forward. ', 'push.body': 'Sit back and bring your head over your shoulders.', 'push.drowsy': 'Your eyes have been narrow for a while. Stand up and stretch.',
     'snooze': 'Snooze 15 min', 'snoozed': 'Alerts snoozed for {n} minutes', 'blurmsg': 'Sit up to clear the screen', 'pause': 'Pause', 'resume': 'Resume', 'widget': 'Mini widget', 'figure': 'Figure', 'camera': 'Camera',
     'cam.denied': 'Camera access is off. Allow it in your browser settings.', 'cam.none': 'No camera found.', 'cam.busy': 'Another app is using the camera.', 'cam.err': 'Camera error ({e})', 'cam.unsupported': 'This browser can\'t use the camera.', 'cam.https': 'Open this page over https.',
-    'bt.none': 'Bluetooth isn\'t available in this browser', 'bt.off': 'Cushion disconnected', 'bt.on': 'Cushion connected', 'bt.fail': 'Couldn\'t connect'
+    'bt.none': 'Bluetooth isn\'t available in this browser', 'bt.off': 'Cushion disconnected', 'bt.on': 'Cushion connected', 'bt.fail': 'Couldn\'t connect',
+    'cu.try': 'Try a vibration', 'cu.t1': 'Turtle-neck alert', 'cu.t1s': 'A wave left to right and back, then alternating zones.', 'cu.t3': 'Drowsiness alert', 'cu.t3s': 'All ten motors, four strong pulses.',
+    'cu.t2': 'One zone at a time', 'cu.t2s': 'Checks the wiring, zone 1 to 5.', 'cu.conn': 'Connection', 'cu.demo': 'Demo Cushion',
+    'cu.demoSub': 'Shows the cushion as connected and plays vibrations on screen when no real one is paired.', 'cu.pair': 'Pair a Real Cushion', 'cu.unpair': 'Disconnect Cushion',
+    'cu.unlinked': 'Not connected', 'cu.btDemo': 'Bluetooth · demo cushion', 'cu.buzzing': 'Buzzing', 'cu.p1': 'Turtle-neck alert', 'cu.p2': 'Zone test', 'cu.p3': 'Drowsiness alert, all 10', 'cu.motors': '10 motors in 5 zones'
   },
   ko: {
-    'ob.tag': '나를 학습하는 거북목 알림', 'ob.f1': '내 자세를 학습해요', 'ob.f1s': '두 자세만 찍으면 나만의 모델이 만들어져요.',
-    'ob.f2': '거북목을 잡아내요', 'ob.f2s': '몇 초 안에, 백그라운드에서도 알려줘요.', 'ob.f3': '앉는 곳 어디서나', 'ob.f3s': '노트북·태블릿·휴대폰·방석을 하나로.',
-    'ob.privacy': '영상은 이 기기 밖으로 나가지 않아요.', 'continue': '계속', 'cancel': '취소', 'start': '시작', 'done': '완료', 'add': '추가', 'edit': '편집', 'on': '켬', 'off': '끔',
-    'cal.good': '바르게 앉으세요', 'cal.goodSub': '등을 의자에 붙이고 화면을 보세요.', 'cal.bad': '이제 거북목 자세로', 'cal.badSub': '머리를 화면 쪽으로 쭉 내미세요.',
-    'cal.face': '얼굴을 원 안에 맞춰 주세요', 'cal.allset': '준비 완료', 'cal.almost': '조금만 더', 'cal.ready': '{place} 모델이 준비됐어요.',
+    'ob.tag': '의자와 자세를 학습하는 거북목·졸음 알림', 'ob.f1': '의자를 알아봐요', 'ob.f1s': '의자를 한 바퀴 찍으면 종류를 구분하고, 의자마다 자세를 따로 배워요.',
+    'ob.f2': '거북목이면 방석이 진동해요', 'ob.f2s': '머리가 앞으로 나오면 깔고 앉은 방석이 알려줘요.',
+    'ob.f3': '졸면 깨워 줘요', 'ob.f3s': '눈이 평소보다 작아지면 모터 10개가 한꺼번에 울려요.',
+    'ob.privacy': '영상은 이 기기 밖으로 나가지 않아요.', 'continue': '계속', 'cancel': '취소', 'start': '시작', 'done': '완료', 'edit': '편집', 'on': '켬', 'off': '끔',
+    'cal.good': '바르게 앉으세요', 'cal.goodSub.back': '등을 의자에 붙이고 화면을 보세요.', 'cal.goodSub.none': '허리를 세우고 화면을 보세요.', 'cal.goodSub.soft': '엉덩이를 깊이 넣고 허리를 세워 화면을 보세요.',
+    'cal.bad': '이제 거북목 자세로', 'cal.badSub': '머리를 화면 쪽으로 쭉 내미세요.',
+    'cal.face': '얼굴을 원 안에 맞춰 주세요', 'cal.allset': '준비 완료', 'cal.almost': '조금만 더', 'cal.ready': '{chair} 모델이 준비됐어요.',
     'cal.similar': '두 자세가 너무 비슷했어요. 거북목 자세를 더 확실히 해 보세요.', 'cal.tryagain': '다시 하기', 'cal.redo': '다시 학습', 'cal.useanyway': '그냥 사용',
     'cal.learning': '자세를 학습하는 중', 'cal.training': '나만의 모델을 만들고 있어요.', 'cal.hold': '가만히 계세요', 'cal.getready': '준비',
-    'upright': '바른 자세', 'turtle': '거북목', 'posture': '자세', 'turnon': '켜기', 'dismiss': '닫기', 'live': '실시간', 'calibrate': '학습하기', 'today': '오늘', 'alerts': '알림',
+    'upright': '바른 자세', 'turtle': '거북목', 'drowsy': '졸음', 'eyes': '눈', 'posture': '자세', 'turnon': '켜기', 'dismiss': '닫기', 'live': '실시간', 'calibrate': '학습하기', 'today': '오늘', 'alerts': '알림',
     'last5': '최근 5분', 'alertat': '{n}%에서 알림', 'alertatLbl': '알림 기준', 'x0': '0시', 'x6': '6시', 'x12': '12시', 'x18': '18시', 'y60': '60분', 'y30': '30분', 'timelineA11y': '최근 5분 거북목 위험도',
-    'status.ok': '좋은 자세', 'status.warn': '앞으로 쏠리는 중', 'status.bad': '거북목', 'status.away': '자리 비움', 'status.look': '딴 곳 보는 중', 'status.nocal': '학습 전', 'status.paused': '일시정지',
-    'sub.away': '카메라 앞에 앉아 주세요.', 'sub.look': '화면을 보면 다시 시작돼요.', 'sub.nocal': '{dev}에서 {place} 자세를 학습하세요.', 'sub.paused': '감지가 멈춰 있어요.', 'sub.snoozed': '알림 잠시 끔',
-    'sub.good': '머리가 어깨 위에 있어요', 'sub.fwd': '머리가 {cm} cm 앞으로', 'sub.sitback': '등을 기대고 턱을 드세요',
+    'status.ok': '좋은 자세', 'status.warn': '앞으로 쏠리는 중', 'status.bad': '거북목', 'status.away': '자리 비움', 'status.look': '딴 곳 보는 중', 'status.nocal': '학습 전', 'status.paused': '일시정지', 'status.drowsy': '졸음 감지',
+    'sub.away': '카메라 앞에 앉아 주세요.', 'sub.look': '화면을 보면 다시 시작돼요.', 'sub.nocal': '{dev}에서 {chair} 자세를 학습하세요.', 'sub.paused': '감지가 멈춰 있어요.', 'sub.snoozed': '알림 잠시 끔',
+    'sub.good': '머리가 어깨 위에 있어요', 'sub.fwd': '머리가 {cm} cm 앞으로', 'sub.sitback': '등을 기대고 턱을 드세요', 'sub.drowsy': '눈 크기가 평소의 {n}%예요',
     'dev.laptop': '노트북', 'dev.tablet': '태블릿', 'dev.phone': '휴대폰', 'cushion': '방석', 'dev.thislaptop': '이 노트북', 'dev.thistablet': '이 태블릿({tilt}, {ori})', 'dev.thisphone': '이 휴대폰({ori})',
     'ori.portrait': '세로', 'ori.landscape': '가로', 'tilt.propped': '세움', 'tilt.flat': '눕힘', 'tilt.note': '위치마다 따로 학습해요.', 'tilt.auto': '움직임 센서로 자동 전환돼요.',
     'tilt.toastFlat': '태블릿 눕힘 모드', 'tilt.toastProp': '태블릿 세움 모드', 'tabletpos': '태블릿 위치',
-    'devices': '기기', 'places': '장소', 'uprighttoday': '오늘 바른 자세', 'uprightOn': '오늘 바른 자세 · 기기 {d}개, 장소 {p}곳', 'thisdevice': '이 기기', 'mintoday': '오늘 {n}분', 'nodata': '오늘 기록 없음',
+    'devices': '기기', 'chairs': '의자', 'uprighttoday': '오늘 바른 자세', 'uprightOn': '오늘 바른 자세 · 기기 {d}개, 의자 {p}개', 'thisdevice': '이 기기', 'mintoday': '오늘 {n}분', 'nodata': '오늘 기록 없음',
     'connected': '연결됨', 'taptoconnect': '눌러서 연결', 'connect': '연결', 'calibrated': '학습 완료', 'notcalibrated': '학습 전', 'pctupright': '오늘 바른 자세 {n}%',
-    'settings': '설정', 'language': '언어', 'thisDevice': '이 기기', 'recalibrate': '다시 학습', 'recalPlace': '{place} 다시 학습', 'nudge': '화면 경고', 'glow': '테두리', 'blur': '흐림',
-    'headcheck': '머리만 내밀기 감지', 'headcheckSub': '베타. 몸은 그대로, 머리만 앞으로 나와도 알려요.', 'sound': '소리', 'notifications': '알림', 'blocked': '차단됨', 'buzz': '알림 때 진동',
+    'settings': '설정', 'language': '언어', 'thisDevice': '이 기기', 'recalibrate': '다시 학습', 'recalChair': '{chair} 다시 학습', 'nudge': '화면 경고', 'glow': '테두리', 'blur': '흐림',
+    'headcheck': '머리만 내밀기 감지', 'headcheckSub': '베타. 몸은 그대로, 머리만 앞으로 나와도 알려요.', 'sound': '소리', 'notifications': '알림', 'blocked': '차단됨',
+    'buzz': '거북목일 때 진동', 'buzzSub': '방석을 가로지르는 물결 진동', 'buzzDz': '졸 때 진동', 'buzzDzSub': '모터 10개가 한꺼번에',
     'cloud': '클라우드 동기화', 'syncnow': '지금 동기화', 'disconnect': '연결 끊기', 'ph.url': 'Supabase URL', 'ph.key': 'Anon 키', 'ph.code': '내 코드',
-    'export': '데이터 내보내기', 'import': '데이터 가져오기', 'erase': '모든 데이터 지우기', 'eraseConfirm': '이 기기의 모델, 장소, 기록을 모두 지워요.', 'erased': '지웠어요', 'imported': '가져왔어요', 'notfile': 'Earline 파일이 아니에요',
-    'footer': '자세 추적: MediaPipe. 머리만 내밀기 감지: Dorso(MIT) 참고.', 'fillall': '세 칸을 모두 채워 주세요', 'synced': '동기화됨', 'syncerr': '동기화 오류 {n}',
-    'seat.chair': '책상 의자', 'seat.stool': '스툴', 'seat.sofa': '소파', 'seat.floor': '바닥',
-    'place.dorm': '기숙사', 'place.study': '면학실', 'place.library': '도서관', 'place.home': '집', 'place.class': '교실', 'place.cafe': '카페',
-    'newplace': '새 장소', 'addplace': '장소 추가', 'inuse': '사용 중', 'editplace': '장소 편집', 'ph.name': '이름', 'icon': '아이콘', 'seat': '의자', 'usethis': '이 장소 사용', 'deleteplace': '장소 삭제', 'saved': '저장됨', 'added': '{name} 추가됨', 'deleted': '{name} 삭제됨',
-    'notif.allow': '브라우저 설정에서 이 사이트의 알림을 허용해 주세요', 'notif.onTitle': '알림이 켜졌어요', 'notif.onBody': '머리가 앞으로 나오면 여기로 알려드릴게요.',
+    'export': '데이터 내보내기', 'import': '데이터 가져오기', 'erase': '모든 데이터 지우기', 'eraseConfirm': '이 기기의 모델, 의자, 기록을 모두 지워요.', 'erased': '지웠어요', 'imported': '가져왔어요', 'notfile': 'Earline 파일이 아니에요',
+    'footer': '자세·얼굴 추적: MediaPipe. 의자 인식: MobileCLIP. 머리만 내밀기 감지: Dorso(MIT) 참고.', 'fillall': '세 칸을 모두 채워 주세요', 'synced': '동기화됨', 'syncerr': '동기화 오류 {n}',
+    'chair.office': '사무용 의자', 'chair.gaming': '게이밍 의자', 'chair.basic': '일반 의자', 'chair.stool': '스툴', 'chair.sofa': '소파', 'chair.bench': '벤치', 'chair.floor': '좌식 의자',
+    'tip.office': '엉덩이를 끝까지 넣고 등받이에 허리를 붙이세요.', 'tip.gaming': '뒤통수를 머리 받침에 가볍게 대 보세요.', 'tip.basic': '높이 조절이 안 되니 화면을 눈높이로 올리세요.',
+    'tip.stool': '등받이가 없어요. 엉덩이를 무릎보다 조금 높게 앉으세요.', 'tip.sofa': '푹신해서 골반이 뒤로 말리기 쉬워요. 허리 뒤에 쿠션을 받치세요.', 'tip.bench': '등을 받쳐 주지 않으니 자주 일어나 쉬세요.', 'tip.floor': '방석을 접어 엉덩이를 높이면 목이 편해져요.',
+    'newchair': '새 의자 스캔', 'inuse': '사용 중', 'editchair': '의자 편집', 'usethis': '이 의자 사용', 'deletechair': '의자 삭제', 'rescan': '다시 스캔', 'saved': '저장됨', 'added': '{name} 추가됨', 'deleted': '{name} 삭제됨',
+    'sc.manual': '직접 고르기', 'sc.type': '의자 종류', 'sc.name': '이름', 'sc.ai': 'AI', 'sc.title': '의자를 한 바퀴 찍어 주세요',
+    'sc.subLaptop': '의자를 카메라 앞에 두고 천천히 한 바퀴 돌려 주세요.', 'sc.subMobile': '의자가 화면에 다 들어오게 잡고 의자 주위를 한 바퀴 도세요.',
+    'sc.start': '스캔 시작', 'sc.loadT': '의자 인식을 준비하는 중', 'sc.loadS': '처음 한 번만 인식 모델(약 23MB)을 내려받아요.',
+    'sc.goT': '천천히 한 바퀴', 'sc.goSLaptop': '원이 다 찰 때까지 의자를 계속 돌려 주세요.', 'sc.goSMobile': '원이 다 찰 때까지 의자 주위를 계속 도세요.',
+    'sc.noChair': '의자가 안 보여요. 의자 전체가 원 안에 들어오게 해 주세요.', 'sc.count': '스캔 중 {n}/{m}', 'sc.enough': '여기까지만 찍기',
+    'sc.looks': '{type}로 보여요', 'sc.conf': '{n}개 각도에서 봤고 {pct}% 확신해요. 틀리면 아래에서 바꾸세요.', 'sc.pickT': '어떤 의자인가요?', 'sc.pickS': '가장 비슷한 종류를 고르세요.',
+    'sc.err': '의자 인식을 시작하지 못했어요. 종류를 직접 골라 주세요.', 'sc.none': '스캔에서 의자를 찾지 못했어요. 종류를 직접 골라 주세요.', 'sc.modelErr': '의자 인식 모델을 불러오지 못했어요.',
+    'sc.save': '저장하고 자세 학습하기', 'sc.saveEdit': '저장', 'sc.again': '다시 스캔',
+    'eye.ok': '평소 눈 크기 대비', 'eye.low': '눈이 작아지고 있어요', 'eye.drowsy': '졸음 감지', 'eye.na': '얼굴이 보이면 시작해요', 'eye.off': '졸음 감지가 꺼져 있어요', 'eye.learn': '평소 눈 크기를 재는 중', 'eye.tag': '{n}% 아래면 알림',
+    'dz.set': '졸음 감지', 'dz.setSub': '눈이 평소보다 작아지면 알려요.', 'dz.sens': '민감도', 'dz.low': '낮음', 'dz.mid': '보통', 'dz.high': '높음',
+    'dz.foot': '눈이 평소보다 작은 상태가 2초 이어지면 알려요. 책을 내려다볼 때도 눈이 작게 보일 수 있으니, 알림이 너무 잦으면 민감도를 낮추세요.',
+    'notif.allow': '브라우저 설정에서 이 사이트의 알림을 허용해 주세요', 'notif.onTitle': '알림이 켜졌어요', 'notif.onBody': '머리가 앞으로 나오거나 졸면 여기로 알려드릴게요.',
     'notif.test': '테스트 알림을 보냈어요. 안 보이면 컴퓨터 알림 설정에서 브라우저를 허용해 주세요.',
     'notice.iosT': '아이폰에서 알림 받기', 'notice.iosS': '공유 → 홈 화면에 추가한 뒤, 그 아이콘으로 열어 주세요.', 'notice.bgT': '백그라운드 알림', 'notice.bgS': 'Earline이 화면에 없을 때도 알림을 받아요.',
     'notice.blkT': '알림이 차단되어 있어요', 'notice.blkS': '브라우저 설정에서 이 사이트의 알림을 허용해 주세요.',
-    'alert.now': '지금', 'alert.body': '머리를 어깨 위로 다시 가져오세요.', 'push.cm': '머리가 {cm} cm 앞으로 나왔어요. ', 'push.body': '등을 기대고 머리를 어깨 위로 가져오세요.',
+    'alert.now': '지금', 'alert.body': '머리를 어깨 위로 다시 가져오세요.', 'alert.drowsy': '눈이 감기고 있어요. 일어나서 기지개를 켜세요.', 'alert.drowsyBuzz': '눈이 감기고 있어요. 방석 전체가 울리는 중이에요.',
+    'push.cm': '머리가 {cm} cm 앞으로 나왔어요. ', 'push.body': '등을 기대고 머리를 어깨 위로 가져오세요.', 'push.drowsy': '눈이 한동안 작아져 있어요. 일어나서 기지개를 켜세요.',
     'snooze': '15분 끄기', 'snoozed': '{n}분 동안 알림을 꺼요', 'blurmsg': '바르게 앉으면 화면이 선명해져요', 'pause': '일시정지', 'resume': '다시 시작', 'widget': '미니 위젯', 'figure': '그림', 'camera': '카메라',
     'cam.denied': '카메라 권한이 꺼져 있어요. 브라우저 설정에서 허용해 주세요.', 'cam.none': '카메라를 찾을 수 없어요.', 'cam.busy': '다른 앱이 카메라를 쓰고 있어요.', 'cam.err': '카메라 오류 ({e})', 'cam.unsupported': '이 브라우저에서는 카메라를 쓸 수 없어요.', 'cam.https': 'https로 열어 주세요.',
-    'bt.none': '이 브라우저에서는 블루투스를 쓸 수 없어요', 'bt.off': '방석 연결 끊김', 'bt.on': '방석 연결됨', 'bt.fail': '연결 실패'
+    'bt.none': '이 브라우저에서는 블루투스를 쓸 수 없어요', 'bt.off': '방석 연결 끊김', 'bt.on': '방석 연결됨', 'bt.fail': '연결 실패',
+    'cu.try': '진동 미리 보기', 'cu.t1': '거북목 알림', 'cu.t1s': '왼쪽에서 오른쪽으로 갔다 오는 물결, 이어서 구역이 번갈아 울려요.', 'cu.t3': '졸음 알림', 'cu.t3s': '모터 10개 전체가 네 번 강하게 울려요.',
+    'cu.t2': '구역 하나씩', 'cu.t2s': '구역 1부터 5까지 차례로 울려 배선을 확인해요.', 'cu.conn': '연결', 'cu.demo': '데모 방석',
+    'cu.demoSub': '실제 방석을 연결하지 않아도 연결된 것으로 표시하고, 진동을 화면에서 보여 줘요.', 'cu.pair': '실제 방석 연결하기', 'cu.unpair': '방석 연결 끊기',
+    'cu.unlinked': '연결 안 됨', 'cu.btDemo': 'Bluetooth · 데모 방석', 'cu.buzzing': '진동 중', 'cu.p1': '거북목 알림', 'cu.p2': '구역 테스트', 'cu.p3': '졸음 알림 · 10개 전체', 'cu.motors': '모터 10개 · 5구역'
   }
 };
 let LANG = Store.get('lang', null) || ((navigator.language || '').toLowerCase().startsWith('ko') ? 'ko' : 'en');
@@ -708,7 +902,7 @@ const Cloud = {
       ...opts, headers: { apikey: c.key, Authorization: 'Bearer ' + c.key, 'Content-Type': 'application/json', ...(opts.headers || {}) }
     });
     if (!r.ok) throw new Error(t('syncerr', { n: r.status }));
-    const t = await r.text(); return t ? JSON.parse(t) : null;
+    const body = await r.text(); return body ? JSON.parse(body) : null;
   },
   async pushProfile(p) {
     const c = this.cfg();
@@ -728,36 +922,40 @@ const Cloud = {
   async pullDaily(day) { const c = this.cfg(); return await this.req(`posture_daily?user_code=eq.${encodeURIComponent(c.user)}&day=eq.${day}&select=device,good_sec,bad_sec,alerts`) || []; }
 };
 
-/* ---------- devices, places, icons ---------- */
+/* ---------- devices, chairs, icons ---------- */
 const DEV_KEYS = ['laptop', 'tablet', 'phone'];
 const devName = k => t('dev.' + k);
 const tiltName = k => t('tilt.' + k);
-const seatName = k => t('seat.' + k);
 const DEV_ICON = {
   laptop: ['var(--gray)', '<path d="M4 5.5h16v10.5H4zM2 19h20"/>'],
   tablet: ['var(--indigo)', '<rect x="5" y="3" width="14" height="18" rx="2.2"/><path d="M11 18h2"/>'],
   phone:  ['var(--green)', '<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/>'],
   cushion:['var(--mint)', '<rect x="3" y="10.5" width="18" height="8" rx="3.5" fill="currentColor"/><path d="M7.5 5.5c.8.8.8 1.8 0 2.6M12 5c.9 1 .9 2.2 0 3.2M16.5 5.5c.8.8.8 1.8 0 2.6"/>']
 };
-const PLACE_ICONS = {
-  dorm:    { label: 'Dorm',       color: 'var(--indigo)', svg: '<path d="M3 5v14M3 14.5h18M21 19v-4.5a3 3 0 0 0-3-3h-7.5v3"/><circle cx="7" cy="11.3" r="1.8"/>' },
-  study:   { label: 'Study Hall', color: 'var(--orange)', svg: '<path d="M12 7.5C10 6 7 5.5 3.5 6v12c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V6c-3.5-.5-6.5 0-8.5 1.5zM12 7.5v12"/>' },
-  library: { label: 'Library',    color: 'var(--brown)',  svg: '<path d="M5 4h3.2v16H5zM10.4 4h3.2v16h-3.2zM15.6 5.2l3-.8 3 15.2-3 .8z"/>' },
-  home:    { label: 'Home',       color: 'var(--green)',  svg: '<path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z"/>' },
-  class:   { label: 'Classroom',  color: 'var(--tint)',   svg: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11v4.8c3.2 2.2 7.8 2.2 11 0V11M21.5 9v5"/>' },
-  cafe:    { label: 'Café',       color: 'var(--pink)',   svg: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5V6M12 3.5V6"/>' }
+/* Chair types the 360° chair check sorts a chair into. back = how the chair supports your back, which changes the calibration wording. */
+const CHAIR_TYPES = {
+  office: { color: 'var(--tint)',   back: 'back', svg: '<path d="M8.2 3.5c-1 2.9-1 6 0 9h8.3M12.3 12.5V17M7 20.5 12.3 17l5.3 3.5"/>' },
+  gaming: { color: 'var(--indigo)', back: 'back', svg: '<path d="M8 12.5V3.5a1.5 1.5 0 0 1 3 0V6M8 12.5h8.5M11 9.5h5M12.3 12.5V17M7 20.5 12.3 17l5.3 3.5"/>' },
+  basic:  { color: 'var(--orange)', back: 'back', svg: '<path d="M7.5 3v18M7.5 12.5H17V21M7.5 6.5H12"/>' },
+  stool:  { color: 'var(--brown)',  back: 'none', svg: '<rect x="5.5" y="5.5" width="13" height="3.2" rx="1.6"/><path d="M8.5 8.7 7 21M15.5 8.7 17 21M7.8 15.5h8.4"/>' },
+  sofa:   { color: 'var(--pink)',   back: 'soft', svg: '<path d="M5.5 11V8a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v3"/><path d="M3 13a2 2 0 0 1 4 0v2.5h10V13a2 2 0 0 1 4 0v6H3zM6 19v2M18 19v2"/>' },
+  bench:  { color: 'var(--green)',  back: 'none', svg: '<path d="M3 8.5h18M3 13.5h18M5.5 13.5V20M18.5 13.5V20M6.5 8.5v5M17.5 8.5v5"/>' },
+  floor:  { color: 'var(--mint)',   back: 'none', svg: '<path d="M2.5 20.5h19"/><path d="M6.5 17.5H19a1.5 1.5 0 0 0 0-3H9.5L8 5.5H5z"/>' }
 };
-const SEAT_KEYS = ['chair', 'stool', 'sofa', 'floor'];
-const DEFAULT_PLACES = [
-  { id: 'dorm', name: 'Dorm', icon: 'dorm', seat: 'chair' },
-  { id: 'study', name: 'Study Hall', icon: 'study', seat: 'chair' },
-  { id: 'library', name: 'Library', icon: 'library', seat: 'chair' }
-];
+const CHAIR_KEYS = Object.keys(CHAIR_TYPES);
+const typeName = k => t('chair.' + (CHAIR_TYPES[k] ? k : 'office'));
 const svgIcon = (body, extra = '') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${body}</svg>`;
-const placeSquare = (icon, size = 29) => `<span class="ico" style="background:${PLACE_ICONS[icon]?.color || 'var(--gray)'};width:${size}px;height:${size}px">${svgIcon(PLACE_ICONS[icon]?.svg || '')}</span>`;
+const typeSquare = (type, size = 29) => `<span class="ico" style="background:${CHAIR_TYPES[type]?.color || 'var(--gray)'};width:${size}px;height:${size}px;border-radius:${Math.round(size * .28)}px">${svgIcon(CHAIR_TYPES[type]?.svg || CHAIR_TYPES.office.svg)}</span>`;
+const okThumb = u => typeof u === 'string' && /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(u);
+// a scanned chair shows its photo; one picked by hand shows the type icon
+const chairBadge = (c, size = 29) => okThumb(c?.scan?.thumb)
+  ? `<span class="cthumb" style="width:${size}px;height:${size}px;border-radius:${Math.round(size * .28)}px;background-image:url(${c.scan.thumb})"></span>` : typeSquare(c?.type, size);
 const ICO = {
   check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.2 3.2L13 4.8"/></svg>',
-  plus: svgIcon('<path d="M12 5v14M5 12h14"/>', 'class="mic"'),
+  scan: '<path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5"/><path d="M9.5 8.5v7M9.5 12.5h5v3"/>',
+  bell: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8c-3.6 0-6.1 2.8-6.1 6.3v3.9L4 15.8c-.4.7 0 1.5.8 1.5h14.4c.8 0 1.2-.8.8-1.5l-1.9-2.8V9.1c0-3.5-2.5-6.3-6.1-6.3zM9.5 19a2.6 2.6 0 0 0 5 0z"/></svg>',
+  eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12C5 7.6 8.3 5.5 12 5.5s7 2.1 9.5 6.5c-2.5 4.4-5.8 6.5-9.5 6.5S5 16.4 2.5 12z"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg>',
+  bt: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 3.8 8.8 8.2 6 10.5v-9l2.8 2.3-5.6 4.4"/></svg>',
   recal: svgIcon('<path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4.5v4.6h-4.6"/>', 'class="mic"'),
   chev: '<svg class="chev" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 6 5.5-6 5.5"/></svg>',
   pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4.5" width="4" height="15" rx="1.3"/><rect x="14" y="4.5" width="4" height="15" rx="1.3"/></svg>',
@@ -781,35 +979,48 @@ function orientation() {
 }
 
 /* ---------- state ---------- */
+// Places from the earlier version become chairs. Their ids stay the same, so the posture models keep working.
+function loadChairs() {
+  const saved = Store.get('chairs', null);
+  if (Array.isArray(saved)) return saved.filter(c => c && c.id);
+  const places = Store.get('places', null), profs = Store.get('profiles', {});
+  if (!Array.isArray(places)) return [];
+  const oldName = { dorm: ['Dorm', '기숙사'], study: ['Study Hall', '면학실'], library: ['Library', '도서관'] };
+  const seat = { chair: 'office', stool: 'stool', sofa: 'sofa', floor: 'floor' };
+  const out = places.filter(p => p && p.id && Object.keys(profs).some(k => k.startsWith(p.id + '|')))
+    .map(p => ({ id: p.id, name: oldName[p.id]?.[0] === p.name ? oldName[p.id][LANG === 'ko' ? 1 : 0] : String(p.name || ''), type: seat[p.seat] || 'office', scan: null }));
+  Store.set('chairs', out);
+  return out;
+}
 const S = {
   device: Store.get('device', null) || detectDevice(),
   tilt: Store.get('tilt', 'propped'), tiltSensor: false,
-  places: Store.get('places', null) || DEFAULT_PLACES.map(p => ({ ...p })),
-  place: Store.get('place', 'dorm'),
+  chairs: loadChairs(),
+  chair: Store.get('chair', null) ?? Store.get('place', null),
   view: 'onboard', started: false, paused: false,
-  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false, nudge: 'glow', headCheck: false }, Store.get('settings', {})),
+  settings: Object.assign({ threshold: 90, sound: true, buzz: true, camView: false, nudge: 'glow', headCheck: false, drowsy: true, drowsySens: 'mid', buzzDrowsy: true, demoCushion: true }, Store.get('settings', {})),
   profiles: Store.get('profiles', {}),
   stats: Store.get('stats', {}),
-  pstats: Store.get('pstats', {}),
+  pstats: Store.get('pstats', {}),          // per chair, per day: [upright sec, turtle-neck sec]
   cloudDaily: {},
   stream: null, video: $('#video'), overlay: $('#overlay'), frameW: 640, frameH: 480, imageCapture: null,
   vision: null, busy: false, lastTs: 0, lastVT: -1, lastVTAt: 0,
   smooth: null, fwd: null, fwdDz: 1.5, level: 'away', mode: '', badSince: null, lastAlert: 0, lastTick: 0, history: [], lastHist: 0,
-  disp: { p: null, fwd: null, level: 'away', at: 0, sumP: 0, sumF: 0, n: 0 }, snoozeUntil: 0,
-  cushion: { dev: null, ch: null }, pip: null, wake: null
+  disp: { p: null, fwd: null, eye: null, level: 'away', at: 0, sumP: 0, sumF: 0, n: 0, sumE: 0, nE: 0 }, snoozeUntil: 0,
+  // eyes: r = eye size vs. usual (1 = usual), run = seconds it has stayed small, win = last 20 s of small / not small
+  eye: { base: null, learn: [], r: null, run: 0, clear: 0, win: [], state: 'na', episode: false, lastFire: 0 },
+  cushion: { dev: null, ch: null, playing: 0 }, pip: null, wake: null
 };
-if (!S.places.length) S.places = DEFAULT_PLACES.map(p => ({ ...p }));
-if (!S.places.some(p => p.id === S.place)) S.place = S.places[0].id;
-const curPlace = () => S.places.find(p => p.id === S.place) || S.places[0];
-// one model per place x device (x orientation for tablets and phones: the camera sits somewhere else; x flat/propped for tablets: the camera looks up at you from the desk)
+if (!S.chairs.some(c => c.id === S.chair)) S.chair = S.chairs[0]?.id ?? null;
+const curChair = () => S.chairs.find(c => c.id === S.chair) || null;
+const cname = c => c ? (c.name || typeName(c.type)) : '';
+// one model per chair x device (x orientation for tablets and phones: the camera sits somewhere else; x flat/propped for tablets: the camera looks up at you from the desk)
 const devKey = (device = S.device) => device === 'laptop' ? 'laptop' : device === 'tablet' ? `tablet-${orientation()}-${S.tilt}` : `phone-${orientation()}`;
-const keyFor = (placeId, device = S.device) => `${placeId}|${devKey(device)}`;
+const keyFor = (chairId, device = S.device) => `${chairId}|${devKey(device)}`;
 const devLabel = (device = S.device) => device === 'tablet' ? `${devName('tablet')} · ${tiltName(S.tilt)}` : devName(device);
-// default places keep their English name in storage and show up translated until the user renames them
-const pname = p => DEFAULT_PLACES.some(d => d.id === p.id && d.name === p.name) ? t('place.' + p.id) : p.name;
-const profileKey = () => keyFor(S.place);
-const currentProfile = () => { const p = S.profiles[profileKey()]; return p && p.v === PROFILE_V ? p : null; };
-const placeCalibrated = id => Object.entries(S.profiles).some(([k, p]) => k.startsWith(id + '|') && p.v === PROFILE_V);
+const profileKey = () => keyFor(S.chair);
+const currentProfile = () => { if (!S.chair) return null; const p = S.profiles[profileKey()]; return p && p.v === PROFILE_V ? p : null; };
+const chairCalibrated = id => Object.entries(S.profiles).some(([k, p]) => k.startsWith(id + '|') && p.v === PROFILE_V);
 const thisDeviceLabel = () => S.device === 'laptop' ? t('dev.thislaptop') : S.device === 'tablet' ? t('dev.thistablet', { tilt: tiltName(S.tilt).toLowerCase(), ori: t('ori.' + orientation()) }) : t('dev.thisphone', { ori: t('ori.' + orientation()) });
 
 /* =====================================================================
@@ -830,7 +1041,14 @@ async function initVision() {
   return { detect: (src, ts) => ({ face: face.detectForVideo(src, ts), pose: pose.detectForVideo(src, ts) }) };
 }
 
-/* face: head tilt, face size, nose height in frame, face shape, chin-to-nose; plus distance (cm) from the 3D head transform */
+/* eye size = lid opening / eye width (eye aspect ratio), mean of both eyes. Roughly 0.3 open, under 0.15 closed. */
+const EYE_R = [33, 160, 158, 133, 153, 144], EYE_L = [362, 385, 387, 263, 373, 380];   // outer, upper, upper, inner, lower, lower
+function eyeOpen(P) {
+  const one = ix => { const [a, u1, u2, b, l2, l1] = ix.map(P), w = dist(a, b); return w > 1 ? (dist(u1, l1) + dist(u2, l2)) / (2 * w) : null; };
+  const r = one(EYE_R), l = one(EYE_L);
+  return r != null && l != null ? (r + l) / 2 : r ?? l ?? 0;
+}
+/* face: head tilt, face size, nose height in frame, face shape, chin-to-nose; plus distance (cm) from the 3D head transform, and eye size */
 function faceFeatures(lm, matrix, W, H) {
   const P = i => ({ x: lm[i].x * W, y: lm[i].y * H });
   const eR = P(33), eL = P(263), nose = P(1), chin = P(152), top = P(10), cl = P(234), cr = P(454);
@@ -844,7 +1062,7 @@ function faceFeatures(lm, matrix, W, H) {
     if (t > 12 && t < 250) tz = t;
   } else pitch = deg(Math.atan2(nose.y - (eR.y + eL.y) / 2, iod));
   const scale = iod / W * 100, noseY = nose.y / H * 100;
-  return { vec: [pitch, scale, noseY, fh / fw, (chin.y - nose.y) / iod], yaw, iod, scale, noseY, tz, nose, eyes: [eR, eL], chin };
+  return { vec: [pitch, scale, noseY, fh / fw, (chin.y - nose.y) / iod], yaw, iod, scale, noseY, tz, nose, eyes: [eR, eL], chin, ear: eyeOpen(P), lids: [159, 145, 386, 374].map(P) };
 }
 /* shoulders (same 5 features as the version that tested well): torso distance, neck height, nose height, head-vs-torso size, 3D neck angle */
 function poseFeatures(lm, world, W, H, face) {
@@ -872,7 +1090,7 @@ function extract(r) {
   if (pl && face) pose = poseFeatures(pl, r.pose.worldLandmarks?.[0], W, H, face);
   return { face, pose };
 }
-const toSample = obs => ({ f: obs.face.vec, p: obs.pose ? obs.pose.vec : null, yaw: obs.face.yaw, scale: obs.face.scale, tz: obs.face.tz });
+const toSample = obs => ({ f: obs.face.vec, p: obs.pose ? obs.pose.vec : null, yaw: obs.face.yaw, scale: obs.face.scale, tz: obs.face.tz, ear: obs.face.ear });
 
 /* =====================================================================
    Personal model: upright vs turtle neck, standardized features + L2 logistic regression
@@ -914,14 +1132,18 @@ function fitModels(good, bad) {
   };
   return { face: fit(s => s.f), full: useFull ? fit(s => s.p ? [...s.f, ...s.p] : null) : null };
 }
-/* upright baseline for the optional head-only check and the "Head x cm forward" readout */
+/* upright baseline: face size for the optional head-only check and the "Head x cm forward" readout,
+   usual eye size and head tilt for the drowsiness check */
 function headBase(good) {
   const sc = good.map(s => s.scale), scaleMed = median(sc);
   const grow = sc.map(v => v / scaleMed - 1);
+  const ears = good.map(s => s.ear).filter(v => v > 0);
   return {
     scaleMed,
     dz: Math.max(.05, pct(grow, .97) + .5 * ((pct(grow, .75) - pct(grow, .25)) || 0)),
-    tz0: median(good.map(s => s.tz).filter(v => v != null && Number.isFinite(v)))
+    tz0: median(good.map(s => s.tz).filter(v => v != null && Number.isFinite(v))),
+    eye0: ears.length >= 10 ? pct(ears, .6) : null,
+    pitch0: median(good.map(s => s.f[0]))
   };
 }
 /* Optional head-only check (Settings, off by default). Adapted from Dorso's forward-head rule (MIT,
@@ -947,7 +1169,7 @@ function trainProfile(rec) {
   const val = { good: rate(g2, false), bad: rate(b2, true) };
   const now = Date.now();
   return {
-    v: PROFILE_V, key: profileKey(), place: S.place, device: S.device, createdAt: now, updatedAt: now,
+    v: PROFILE_V, key: profileKey(), chair: S.chair, place: S.chair, device: S.device, createdAt: now, updatedAt: now,
     ...fitModels(rec.good, rec.bad), H: headBase(rec.good),
     yaw0: rec.good.reduce((a, s) => a + s.yaw, 0) / Math.max(rec.good.length, 1),
     val, valAcc: (val.good + val.bad) / 2, samples: { good: rec.good.length, bad: rec.bad.length }
@@ -961,7 +1183,16 @@ function cameraError(e) {
   const m = { NotAllowedError: t('cam.denied'), NotFoundError: t('cam.none'), NotReadableError: t('cam.busy') };
   return new Error(m[e.name] || t('cam.err', { e: e.name || e.message }));
 }
-async function startCamera() {
+function syncFrame() { const v = S.video; S.frameW = v.videoWidth || 640; S.frameH = v.videoHeight || 480; $('#camFrame').style.setProperty('--ar', `${S.frameW}/${S.frameH}`); }
+S.video.addEventListener('resize', syncFrame);
+function stopCamera() {
+  if (!S.stream) return;
+  S.stream.getTracks().forEach(tr => tr.stop());
+  S.stream = null; S.imageCapture = null; S.video.srcObject = null;
+}
+let camJob = null;
+const startCamera = () => camJob ??= openCamera().finally(() => { camJob = null; });   // one camera request at a time
+async function openCamera() {
   if (S.stream) return;
   if (!navigator.mediaDevices?.getUserMedia) {
     if (SIM) return;
@@ -973,8 +1204,7 @@ async function startCamera() {
   v.srcObject = S.stream;
   await v.play().catch(() => {});
   if (v.readyState < 2) await new Promise(r => v.addEventListener('loadeddata', r, { once: true }));
-  const sync = () => { S.frameW = v.videoWidth || 640; S.frameH = v.videoHeight || 480; $('#camFrame').style.setProperty('--ar', `${S.frameW}/${S.frameH}`); };
-  sync(); v.addEventListener('resize', sync);
+  syncFrame();
   if ('ImageCapture' in window) { try { S.imageCapture = new ImageCapture(S.stream.getVideoTracks()[0]); } catch {} }
 }
 async function getFrame() {
@@ -1001,7 +1231,7 @@ function setTickRate(ms) {
   else { clearInterval(fallbackTimer); fallbackTimer = setInterval(tick, ms); }
 }
 async function tick() {
-  if (S.busy || !S.vision || S.paused || !S.started) return;
+  if (S.busy || !S.vision || S.paused || !S.started || S.view === 'scan') return;
   S.busy = true;
   try {
     const fr = await getFrame(); if (!fr) return;
@@ -1099,8 +1329,8 @@ function renderCalib() {
   const done = !!C.result, step = STEPS[Math.min(C.i, STEPS.length - 1)];
   $('.enroll').classList.toggle('done', done);
   $('#calCancel').style.visibility = currentProfile() ? 'visible' : 'hidden';
-  $('#calFor').textContent = `${pname(curPlace())} · ${devLabel()}`;
-  $$('#calSteps i').forEach((el, i) => el.className = done || i < C.i ? 'done' : i === C.i ? 'now' : '');
+  $('#calFor').textContent = `${cname(curChair())} · ${devLabel()}`;
+  $$('#calSteps i').forEach((el, i) => el.className = i === 0 || done || i - 1 < C.i ? 'done' : i - 1 === C.i ? 'now' : '');   // first dot = the chair scan
   const b1 = $('#calBtn'), b2 = $('#calBtn2');
   $('#calDone').hidden = !done; $('#calVals').hidden = !done; $('#calDemo').hidden = done || C.state === 'training';
   $('#camSlotCalib').style.visibility = done ? 'hidden' : 'visible';
@@ -1109,7 +1339,7 @@ function renderCalib() {
     const v = C.result.val, ok = calOk();
     $('#calDone').innerHTML = ok ? ICO.okc : ICO.warnc;
     $('#calTitle').textContent = ok ? t('cal.allset') : t('cal.almost');
-    $('#calSub').textContent = ok ? t('cal.ready', { place: pname(curPlace()) }) : t('cal.similar');
+    $('#calSub').textContent = ok ? t('cal.ready', { chair: cname(curChair()) }) : t('cal.similar');
     const row = (name, r) => `<div class="cell"><span class="ico ${r >= .8 ? 'ok' : 'no'}">${r >= .8 ? ICO.rowOk : ICO.rowNo}</span><span class="t">${name}</span><span class="v">${Math.round(r * 100)}%</span></div>`;
     $('#calVals').innerHTML = row(t('upright'), v.good) + row(t('turtle'), v.bad);
     setTicks(SAMPLES_PER_POSE);
@@ -1127,7 +1357,7 @@ function renderCalib() {
     return;
   }
   $('#calTitle').textContent = t(step.title);
-  $('#calSub').textContent = t(step.sub);
+  $('#calSub').textContent = t(step.key === 'good' ? 'cal.goodSub.' + (CHAIR_TYPES[curChair()?.type]?.back || 'back') : step.sub);
   setTicks(C.rec[step.key].length);
   runDemo(step.demo);
   b1.disabled = C.state !== 'idle';
@@ -1142,9 +1372,9 @@ function monitorTick(obs) {
   const now = performance.now();
   const dt = S.lastTick ? Math.min((now - S.lastTick) / 1000, 2) : 0;
   S.lastTick = now;
-  if (!prof) { S.level = 'away'; S.mode = 'nocal'; S.smooth = null; render(); return; }
-  if (!obs.face) { S.mode = 'away'; S.smooth = null; S.fwd = null; S.badSince = null; S.level = 'away'; render(); return; }
-  if (Math.abs(obs.face.yaw - prof.yaw0) > 35) { S.mode = 'look'; S.smooth = null; S.badSince = null; S.level = 'away'; render(); return; }
+  if (!prof) { S.level = 'away'; S.mode = 'nocal'; S.smooth = null; eyeIdle('na'); render(); return; }
+  if (!obs.face) { S.mode = 'away'; S.smooth = null; S.fwd = null; S.badSince = null; S.level = 'away'; eyeIdle('na'); render(); return; }
+  if (Math.abs(obs.face.yaw - prof.yaw0) > 35) { S.mode = 'look'; S.smooth = null; S.badSince = null; S.level = 'away'; eyeIdle('na'); render(); return; }
   const r = predictCore(prof, toSample(obs));
   S.mode = 'on';
   S.smooth = S.smooth == null ? r.p : S.smooth + 0.3 * (r.p - S.smooth);
@@ -1156,23 +1386,61 @@ function monitorTick(obs) {
   const st = statToday();
   st.h ??= Array.from({ length: 24 }, () => [0, 0]);
   if (bad) { st.bad += dt; st.h[hr][1] += dt; } else { st.good += dt; st.h[hr][0] += dt; }
-  const ps = placeStatToday(); ps[bad ? 1 : 0] += dt;
+  const ps = chairStatToday(); ps[bad ? 1 : 0] += dt;
   if (S.smooth >= thr) {
     S.badSince ??= now;
     if (now - S.badSince >= HOLD_SEC * 1000 && Date.now() - S.lastAlert >= COOLDOWN_SEC * 1000) fireAlert();
   } else if (S.smooth < thr - 0.08) {
     S.badSince = null;
-    if (S.smooth < 0.5) hideAlert();
+    if (S.smooth < 0.5) hideAlert('turtle');
   }
+  eyeTick(obs.face, prof, dt);
   if (now - S.lastHist >= 1000) { S.history.push({ t: Date.now(), p: S.smooth }); S.lastHist = now; if (S.history.length > 300) S.history.shift(); }
   render();
+}
+/* Drowsiness: eye size against your usual size (from calibration, or the first seconds of this session).
+   Small for DROWSY_HOLD seconds in a row, or for nearly half of the last 20 seconds, counts as drowsy. */
+function eyeIdle(state) {
+  const E = S.eye;
+  E.r = null; E.run = 0; E.clear = 0; E.win.length = 0;
+  if (E.episode) endDrowsy();
+  E.state = state;
+  setEyeFig(null);
+}
+function eyeTick(f, prof, dt) {
+  const E = S.eye;
+  if (!S.settings.drowsy) { eyeIdle('off'); return; }
+  let base = prof.H.eye0 || E.base;
+  if (!base) {                                   // model trained before the eye check existed: learn the usual size now
+    if (f.ear > 0) E.learn.push(f.ear);
+    if (E.learn.length < 25) { eyeIdle('learn'); return; }
+    base = E.base = pct(E.learn, .6);
+  }
+  const down = prof.H.pitch0 != null ? f.vec[0] - prof.H.pitch0 : 0;      // degrees the head is tipped down from upright
+  if (down > 24 || Math.abs(f.yaw - prof.yaw0) > 28) { eyeIdle('na'); return; }   // the camera can't judge the eyes from here
+  // looking down hides part of the eye behind the lid, so expect a little less
+  const r = clamp(f.ear / (base * (1 - .012 * clamp(down, 0, 24))), 0, 1.4);
+  E.r = E.r == null ? r : E.r + .5 * (r - E.r);
+  S.disp.sumE += E.r; S.disp.nE++;
+  setEyeFig(E.r);
+  const thr = DROWSY_THR[S.settings.drowsySens] || DROWSY_THR.mid, now = Date.now(), low = E.r < thr;
+  if (low) { E.run += dt; E.clear = 0; }
+  else if (E.r >= thr + .05) { E.run = 0; E.clear += dt; }
+  if (E.episode && E.clear >= 1.5) { endDrowsy(); E.win.length = 0; }       // eyes open again for 1.5 s
+  E.win.push([now, low]);
+  while (now - E.win[0][0] > 20000) E.win.shift();
+  const share = E.win.filter(x => x[1]).length / E.win.length;
+  if (E.run >= DROWSY_HOLD || (now - E.win[0][0] >= 12000 && share >= .45)) {
+    E.state = 'drowsy';
+    if (now - E.lastFire >= DROWSY_COOLDOWN * 1000) fireDrowsy();
+  } else E.state = E.episode ? 'drowsy' : low ? 'low' : 'ok';
 }
 function statToday(device = S.device) {
   const d = today();
   S.stats[d] ??= {};
-  return (S.stats[d][device] ??= { good: 0, bad: 0, alerts: 0 });
+  return (S.stats[d][device] ??= { good: 0, bad: 0, alerts: 0, drowsy: 0 });
 }
-function placeStatToday(id = S.place) {
+function chairStatToday(id = S.chair) {
   const d = today();
   S.pstats[d] ??= {};
   return (S.pstats[d][id] ??= [0, 0]);
@@ -1193,14 +1461,14 @@ async function registerSW() {
   try { swReg = await navigator.serviceWorker.register('sw.js'); } catch (e) { console.warn(e); }
 }
 function unlockAudio() { try { audioCtx ??= new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume(); } catch {} }
-function chime() {
+function chime(kind = 'turtle') {       // turtle neck: two soft notes. drowsy: four louder rising notes
   if (!S.settings.sound || !audioCtx) return;
-  const t = audioCtx.currentTime;
-  [[1046.5, 0], [1318.5, 0.12]].forEach(([f, d]) => {
+  const t0 = audioCtx.currentTime, dz = kind === 'drowsy';
+  (dz ? [[880, 0], [1174.7, .16], [1568, .32], [1568, .56]] : [[1046.5, 0], [1318.5, .12]]).forEach(([f, d]) => {
     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.type = 'sine'; o.frequency.value = f;
-    g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.14, t + d + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.5);
-    o.connect(g).connect(audioCtx.destination); o.start(t + d); o.stop(t + d + 0.55);
+    o.type = dz ? 'triangle' : 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t0 + d); g.gain.exponentialRampToValueAtTime(dz ? .24 : .14, t0 + d + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.5);
+    o.connect(g).connect(audioCtx.destination); o.start(t0 + d); o.stop(t0 + d + 0.55);
   });
 }
 /* system notification: shows on the desktop / home screen like a message, even when Earline isn't in front */
@@ -1227,18 +1495,42 @@ function fireAlert() {
     const cm = S.fwd > S.fwdDz ? t('push.cm', { cm: S.fwd.toFixed(1) }) : '';
     pushNotify(t('status.bad'), cm + t('push.body'), true);
   }
-  if (S.settings.buzz) buzz(1);
-  $('#alert').classList.add('show');
-  clearTimeout(bannerTimer); bannerTimer = setTimeout(hideAlert, 6000);
+  if (S.settings.buzz) buzz(1);                 // cushion: wave pattern
+  showBanner('turtle');
   chime();
   navigator.vibrate?.([120, 60, 120]);
-  if (document.hidden) {
-    clearInterval(titleTimer); let on = false;
-    titleTimer = setInterval(() => { document.title = (on = !on) ? t('status.bad') : 'Earline'; }, 900);
-  }
+  if (document.hidden) blinkTitle(t('status.bad'));
 }
-function hideAlert() { $('#alert').classList.remove('show'); }
-$('#alert').onclick = hideAlert;
+/* eyes stayed small: wake the user with all ten cushion motors, a louder chime and a pulsing screen edge */
+function fireDrowsy() {
+  if (Date.now() < S.snoozeUntil) return;
+  const E = S.eye;
+  E.lastFire = Date.now();
+  if (!E.episode) { E.episode = true; const st = statToday(); st.drowsy = (st.drowsy || 0) + 1; }
+  if (document.hidden || !document.hasFocus()) pushNotify(t('status.drowsy'), t('push.drowsy'), true);
+  if (S.settings.buzzDrowsy) buzz(3);            // cushion: all ten motors
+  showBanner('drowsy');
+  $('#glow').classList.add('drowsy');
+  chime('drowsy');
+  navigator.vibrate?.([300, 100, 300, 100, 300]);
+  if (document.hidden) blinkTitle(t('status.drowsy'));
+}
+function endDrowsy() { S.eye.episode = false; $('#glow').classList.remove('drowsy'); hideAlert('drowsy'); }
+function blinkTitle(text) {
+  clearInterval(titleTimer); let on = false;
+  titleTimer = setInterval(() => { document.title = (on = !on) ? text : 'Earline'; }, 900);
+}
+function showBanner(kind) {
+  const el = $('#alert'), dz = kind === 'drowsy';
+  el.dataset.kind = kind;
+  $('#alertIco').innerHTML = dz ? ICO.eye : ICO.bell;
+  $('#alertTitle').textContent = t(dz ? 'status.drowsy' : 'turtle');
+  $('#alertBody').textContent = t(!dz ? 'alert.body' : S.settings.buzzDrowsy && cushionLinked() ? 'alert.drowsyBuzz' : 'alert.drowsy');
+  el.classList.add('show');
+  clearTimeout(bannerTimer); bannerTimer = setTimeout(() => hideAlert(), 6000);
+}
+function hideAlert(kind) { const el = $('#alert'); if (!kind || el.dataset.kind === kind) el.classList.remove('show'); }
+$('#alert').onclick = () => hideAlert();
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) { clearInterval(titleTimer); document.title = 'Earline'; render(true); if (S.view === 'monitor') renderBars(); requestWake(); }
 });
@@ -1315,11 +1607,25 @@ function setFigure(svg, p, level) {
   st.target = p == null ? st.cur : figT(p);
   figState.set(svg, st);
 }
+/* eye on the Posture screen: opens and closes with your eye size; the dashed outline is your usual size */
+const eyePath = o => `M14 50Q80 ${(50 - 46 * o).toFixed(1)} 146 50Q80 ${(50 + 34 * o).toFixed(1)} 14 50Z`;
+const eyeMarkup = () => `<svg class="eyefig" viewBox="0 0 160 100" aria-hidden="true"><defs><clipPath id="eyeClip"><path d="${eyePath(1)}"/></clipPath></defs>
+  <path class="base" d="${eyePath(1)}"/><g clip-path="url(#eyeClip)"><circle class="iris" cx="80" cy="52" r="20"/><circle class="pupil" cx="80" cy="52" r="8.5"/><circle class="glint" cx="86.5" cy="45.5" r="3.2"/></g>
+  <path class="lid" d="${eyePath(1)}"/></svg>`;
+const eyeAnim = { cur: 1, target: 1 };
+function setEyeFig(r) { eyeAnim.target = r == null ? 1 : clamp(r, .05, 1); }
+function drawEye(o) {
+  const svg = $('#eyeSlot svg'); if (!svg) return;
+  const d = eyePath(o);
+  svg.querySelector('.lid').setAttribute('d', d); svg.querySelector('clipPath path').setAttribute('d', d);
+}
 (function animateFigures() {
   for (const [svg, st] of figState) {
     const d = st.target - st.cur;
     if (Math.abs(d) > 0.002) { st.cur += d * 0.14; drawFigure(svg, st.cur); }
   }
+  const de = eyeAnim.target - eyeAnim.cur;
+  if (Math.abs(de) > 0.004) { eyeAnim.cur += de * 0.25; drawEye(eyeAnim.cur); }
   requestAnimationFrame(animateFigures);
 })();
 
@@ -1343,6 +1649,8 @@ function drawOverlay(obs) {
   }
   g.globalAlpha = 1; g.fillStyle = '#fff';
   for (const pt of [...obs.face.eyes, obs.face.nose, obs.face.chin]) { g.beginPath(); g.arc(pt.x, pt.y, 3.5, 0, 7); g.fill(); }
+  g.fillStyle = S.eye.state === 'drowsy' ? '#8E8BFF' : S.eye.state === 'low' ? '#FF9F0A' : '#fff';
+  for (const pt of obs.face.lids) { g.beginPath(); g.arc(pt.x, pt.y, 2.2, 0, 7); g.fill(); }
 }
 
 /* 5-minute trend */
@@ -1379,7 +1687,7 @@ function setRing(el, frac, label) {
 function subText(mode) {
   if (mode === 'away') return t('sub.away');
   if (mode === 'look') return t('sub.look');
-  if (mode === 'nocal') return t('sub.nocal', { place: pname(curPlace()), dev: thisDeviceLabel() });
+  if (mode === 'nocal') return t('sub.nocal', { chair: cname(curChair()), dev: thisDeviceLabel() });
   if (mode === 'paused') return t('sub.paused');
   if (Date.now() < S.snoozeUntil) return t('sub.snoozed');
   if (S.disp.level === 'ok' || S.disp.fwd == null) return t('sub.good');
@@ -1392,9 +1700,12 @@ function render(force = false) {
   if (!force && now - D.at < 1000) return;
   D.at = now;
   const on = S.mode === 'on' && !S.paused;
-  if (!on) { D.p = null; D.fwd = null; }
-  else if (D.n) { D.p = D.sumP / D.n; D.fwd = D.sumF / D.n; }
-  D.sumP = D.sumF = D.n = 0;
+  if (!on) { D.p = null; D.fwd = null; D.eye = null; }
+  else {
+    if (D.n) { D.p = D.sumP / D.n; D.fwd = D.sumF / D.n; }
+    D.eye = D.nE ? D.sumE / D.nE : S.eye.r;
+  }
+  D.sumP = D.sumF = D.n = D.sumE = D.nE = 0;
   const thr = S.settings.threshold / 100;
   D.level = D.p == null ? 'away' : D.p >= thr ? 'bad' : D.p >= .5 ? 'warn' : 'ok';
   if (S.pip) renderWidget();
@@ -1403,12 +1714,15 @@ function render(force = false) {
   const shown = on && D.p != null;
   const mode = S.paused ? 'paused' : shown ? D.level : on ? 'ok' : (S.mode || 'away');
   const lvl = shown ? D.level : 'away';
-  $('#scan').dataset.level = lvl; $('#statusCard').dataset.level = lvl;
+  const dz = on && S.eye.state === 'drowsy';          // drowsiness takes over the status line and ring colour while it lasts
+  $('#scan').dataset.level = $('#statusCard').dataset.level = dz ? 'dz' : lvl;
   $('#scan').classList.toggle('live', on);
   const label = shown ? Math.round(D.p * 100) : null;
   setRing($('#ringSm'), shown ? D.p : 0, label); setRing($('#ringLg'), shown ? D.p : 0, label);
-  $$('.js-status').forEach(el => el.textContent = statusText(mode));
-  const sub = subText(mode); $$('.js-sub').forEach(el => el.textContent = sub);
+  $$('.js-status').forEach(el => el.textContent = dz ? t('status.drowsy') : statusText(mode));
+  const sub = dz ? t('sub.drowsy', { n: Math.round(Math.min(D.eye ?? 0, 1) * 100) }) : subText(mode);
+  $$('.js-sub').forEach(el => el.textContent = sub);
+  renderEye();
   const nocal = S.mode === 'nocal';
   $('#scanCal').hidden = !nocal; $('#cardCal').hidden = !nocal;
   const fig = $('#scan .fig'); if (fig) setFigure(fig, shown ? D.p : null, lvl);
@@ -1416,9 +1730,20 @@ function render(force = false) {
   $('#stGood').innerHTML = tot > 5 ? `${Math.round(st.good / tot * 100)}<small>%</small>` : '–';
   $('#stBad').innerHTML = `${mins(st.bad)}<small>m</small>`;
   $('#stAlerts').textContent = st.alerts;
+  $('#stDrowsy').textContent = st.drowsy || 0;
   $('#thrLabel').textContent = t('alertat', { n: S.settings.threshold });
   if (Date.now() - (render.barsAt || 0) > 5000) renderBars();
   drawTimeline();
+}
+function renderEye() {
+  const D = S.disp, on = S.mode === 'on' && !S.paused;
+  const st = !S.settings.drowsy ? 'off' : on ? S.eye.state : 'na';
+  const live = st === 'ok' || st === 'low' || st === 'drowsy';
+  $('#eyeTile').dataset.eye = st;
+  $('#eyeVal').innerHTML = live && D.eye != null ? `${Math.round(Math.min(D.eye, 1) * 100)}<small>%</small>` : '–';
+  $('#eyeCap').textContent = t('eye.' + st);
+  $('#eyeTag').textContent = S.settings.drowsy ? t('eye.tag', { n: Math.round((DROWSY_THR[S.settings.drowsySens] || DROWSY_THR.mid) * 100) }) : '';
+  if (!live) setEyeFig(null);
 }
 function renderBars() {
   render.barsAt = Date.now();
@@ -1429,10 +1754,10 @@ function renderBars() {
   }).join('');
 }
 function renderHeader() {
-  const p = curPlace();
-  $('#placeIco').innerHTML = placeSquare(p.icon, 30);
-  $('#placeName').textContent = pname(p);
-  $('#livePill').textContent = `${pname(p)} · ${devLabel()}`;
+  const c = curChair();
+  $('#chairIco').innerHTML = c ? chairBadge(c, 30) : '';
+  $('#chairName').textContent = cname(c);
+  $('#livePill').textContent = c ? `${cname(c)} · ${devLabel()}` : t('live');
 }
 function renderDevices() {
   const d = today(), local = S.stats[d] || {}, cloud = S.cloudDaily || {};
@@ -1454,33 +1779,36 @@ function renderDevices() {
     const s = merged[k], tracked = s && s.good + s.bad > 5;
     return tile(k, devName(k), k === S.device ? t('thisdevice') : tracked ? t('mintoday', { n: mins(s.good + s.bad) }) : t('nodata'), pctTxt(s), k === S.device);
   });
-  tiles.push(tile('cushion', t('cushion'), S.cushion.dev ? `<span class="badge"><i></i>${t('connected')}</span>` : t('taptoconnect'), '', false, 'data-act="cushion"'));
+  tiles.push(tile('cushion', t('cushion'), cushionLinked() ? `<span class="badge"><i></i>${t('connected')}</span>` : t('taptoconnect'), '', false, 'data-act="cushion"'));
   $('#devTiles').innerHTML = tiles.join('');
   const ps = S.pstats[d] || {};
-  $('#placeStats').innerHTML = S.places.map(p => {
-    const [a, b] = ps[p.id] || [0, 0];
-    return `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(pname(p))}<small>${seatName(p.seat)} · ${placeCalibrated(p.id) ? t('calibrated') : t('notcalibrated')}</small></span><span class="v">${a + b > 5 ? Math.round(a / (a + b) * 100) + '%' : '–'}</span>${p.id === S.place ? `<span class="v tick">${ICO.check}</span>` : ''}</button>`;
-  }).join('');
+  $('#chairStats').innerHTML = S.chairs.map(c => {
+    const [a, b] = ps[c.id] || [0, 0];
+    return `<button class="cell" data-chair="${esc(c.id)}">${chairBadge(c)}<span class="t">${esc(cname(c))}<small>${chairSub(c)}</small></span><span class="v">${a + b > 5 ? Math.round(a / (a + b) * 100) + '%' : '–'}</span>${c.id === S.chair ? `<span class="v tick">${ICO.check}</span>` : ''}</button>`;
+  }).join('') + newChairCell();
 }
+const chairSub = c => `${c.name ? typeName(c.type) + ' · ' : ''}${chairCalibrated(c.id) ? t('calibrated') : t('notcalibrated')}`;   // an unnamed chair already shows its type as the name
+const newChairCell = () => `<button class="cell action" data-act="newchair"><span class="ico" style="background:var(--tint)">${svgIcon(ICO.scan)}</span><span class="t">${t('newchair')}</span></button>`;
 
 /* =====================================================================
-   Places: menu, sheet, action sheet
+   Chairs: menu, edit sheet, action sheet
    ===================================================================== */
-function savePlaces() { Store.set('places', S.places); Store.set('place', S.place); }
-function usePlace(id) {
-  if (!S.places.some(p => p.id === id)) return;
-  S.place = id; savePlaces();
+function saveChairs() { Store.set('chairs', S.chairs); Store.set('chair', S.chair); }
+function useChair(id) {
+  if (!S.chairs.some(c => c.id === id)) return;
+  S.chair = id; saveChairs();
   S.smooth = null; S.fwd = null; S.badSince = null; S.mode = currentProfile() ? '' : 'nocal';
+  eyeIdle('na'); S.eye.base = null; S.eye.learn = [];
   renderHeader(); refreshView();
 }
 function openMenu() {
-  const m = $('#placeMenu'), btn = $('#placeBtn');
+  const m = $('#chairMenu'), btn = $('#chairBtn');
   const ps = S.pstats[today()] || {};
-  m.innerHTML = S.places.map(p => {
-    const [a, b] = ps[p.id] || [0, 0];
-    const sub = a + b > 5 ? t('pctupright', { n: Math.round(a / (a + b) * 100) }) : (placeCalibrated(p.id) ? seatName(p.seat) : t('notcalibrated'));
-    return `<button class="mi" role="menuitemradio" aria-checked="${p.id === S.place}" data-place="${p.id}"><span class="chk">${p.id === S.place ? ICO.check : ''}</span><span class="t">${esc(pname(p))}<small>${sub}</small></span>${svgIcon(PLACE_ICONS[p.icon]?.svg || '', 'class="mic"')}</button>`;
-  }).join('') + `<div class="msep"></div><button class="mi" data-mact="new"><span class="chk"></span><span class="t">${t('newplace')}</span>${ICO.plus}</button><button class="mi" data-mact="recal"><span class="chk"></span><span class="t">${t('recalPlace', { place: esc(pname(curPlace())) })}</span>${ICO.recal}</button>`;
+  m.innerHTML = S.chairs.map(c => {
+    const [a, b] = ps[c.id] || [0, 0];
+    const sub = a + b > 5 ? t('pctupright', { n: Math.round(a / (a + b) * 100) }) : chairCalibrated(c.id) ? typeName(c.type) : t('notcalibrated');
+    return `<button class="mi" role="menuitemradio" aria-checked="${c.id === S.chair}" data-chair="${esc(c.id)}"><span class="chk">${c.id === S.chair ? ICO.check : ''}</span><span class="t">${esc(cname(c))}<small>${sub}</small></span>${chairBadge(c, 26)}</button>`;
+  }).join('') + `<div class="msep"></div><button class="mi" data-mact="new"><span class="chk"></span><span class="t">${t('newchair')}</span>${svgIcon(ICO.scan, 'class="mic"')}</button><button class="mi" data-mact="recal"><span class="chk"></span><span class="t">${t('recalChair', { chair: esc(cname(curChair())) })}</span>${ICO.recal}</button>`;
   const r = btn.getBoundingClientRect();
   m.style.left = Math.max(8, Math.min(r.left, innerWidth - 266)) + 'px';
   m.style.top = (r.bottom + 8) + 'px';
@@ -1488,79 +1816,329 @@ function openMenu() {
   $('#backdrop').classList.add('open', 'clear');
 }
 function closeOverlays() {
-  $('#placeMenu').classList.remove('open'); $('#placeSheet').classList.remove('open'); $('#actionSheet').classList.remove('open');
+  ['#chairMenu', '#chairSheet', '#cushSheet', '#actionSheet'].forEach(q => $(q).classList.remove('open'));
   $('#backdrop').classList.remove('open', 'clear');
 }
+function openSheet(q) { $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open'); $(q).classList.add('open'); }
 $('#backdrop').onclick = closeOverlays;
 addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlays(); });
-$('#placeBtn').onclick = openMenu;
-$('#placeMenu').onclick = e => {
+$('#chairBtn').onclick = openMenu;
+$('#chairMenu').onclick = e => {
   const b = e.target.closest('.mi'); if (!b) return;
   closeOverlays();
-  if (b.dataset.place) usePlace(b.dataset.place);
-  if (b.dataset.mact === 'new') openPlaceSheet();
+  if (b.dataset.chair) useChair(b.dataset.chair);
+  if (b.dataset.mact === 'new') startScan();
   if (b.dataset.mact === 'recal') startCalibration();
 };
-let sheetEdit = null, sheetIcon = 'home', sheetSeat = 'chair';
-function paintIconPicker() { $('#psIcons').innerHTML = Object.keys(PLACE_ICONS).map(k => `<button data-icon="${k}" aria-pressed="false">${placeSquare(k, 40)}<span>${t('place.' + k)}</span></button>`).join(''); $('#psSeat').innerHTML = SEAT_KEYS.map(k => `<button data-seat="${k}" aria-pressed="false">${seatName(k)}</button>`).join(''); }
-paintIconPicker();
-function paintSheet() {
-  $$('#psIcons button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.icon === sheetIcon)));
-  $$('#psSeat button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.seat === sheetSeat)));
-  $('#psSave').disabled = !$('#psName').value.trim();
+function paintTypes(el, cur, ai = null) {
+  el.innerHTML = CHAIR_KEYS.map(k => `<button data-type="${k}" aria-pressed="${k === cur}">${typeSquare(k, 34)}<span>${typeName(k)}</span>${k === ai ? `<span class="ai">${t('sc.ai')}</span>` : ''}</button>`).join('');
 }
-function openPlaceSheet(place = null) {
-  sheetEdit = place;
-  sheetIcon = place?.icon || 'home'; sheetSeat = place?.seat || 'chair';
-  $('#psTitle').textContent = place ? t('editplace') : t('newplace');
-  $('#psSave').textContent = place ? t('done') : t('add');
-  $('#psName').value = place ? pname(place) : '';
-  paintSheet();
-  $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
-  $('#placeSheet').classList.add('open');
-  if (!place) setTimeout(() => $('#psName').focus(), 350);
+let sheetChair = null, sheetType = 'office';
+function openChairSheet(c) {
+  sheetChair = c; sheetType = CHAIR_TYPES[c.type] ? c.type : 'office';
+  $('#csName').value = c.name || ''; $('#csName').placeholder = typeName(sheetType);
+  paintTypes($('#csTypes'), sheetType, c.scan?.ai);
+  openSheet('#chairSheet');
 }
-$('#psIcons').onclick = e => {
+$('#csTypes').onclick = e => {
   const b = e.target.closest('button'); if (!b) return;
-  const prev = t('place.' + sheetIcon), name = $('#psName').value.trim();
-  sheetIcon = b.dataset.icon;
-  if (!name || name === prev) $('#psName').value = t('place.' + sheetIcon);
-  paintSheet();
+  sheetType = b.dataset.type; $('#csName').placeholder = typeName(sheetType);
+  paintTypes($('#csTypes'), sheetType, sheetChair?.scan?.ai);
 };
-$('#psSeat').onclick = e => { const b = e.target.closest('button'); if (!b) return; sheetSeat = b.dataset.seat; paintSheet(); };
-$('#psName').oninput = paintSheet;
-$('#psCancel').onclick = closeOverlays;
-$('#psSave').onclick = () => {
-  let name = $('#psName').value.trim(); if (!name) return;
-  if (sheetEdit && name === pname(sheetEdit)) name = sheetEdit.name; // unchanged default name stays translatable
-  if (sheetEdit) { Object.assign(sheetEdit, { name, icon: sheetIcon, seat: sheetSeat }); savePlaces(); closeOverlays(); renderHeader(); refreshView(); toast(t('saved')); return; }
-  const id = 'p' + Date.now().toString(36);
-  S.places.push({ id, name, icon: sheetIcon, seat: sheetSeat });
-  closeOverlays(); usePlace(id); toast(t('added', { name }));
-  if (S.started) setTimeout(startCalibration, 350);
+$('#csCancel').onclick = closeOverlays;
+$('#csSave').onclick = () => {
+  if (!sheetChair) return;
+  const name = $('#csName').value.trim();
+  Object.assign(sheetChair, { type: sheetType, name: name === typeName(sheetType) ? '' : name });   // a blank name follows the type and the language
+  saveChairs(); closeOverlays(); renderHeader(); refreshView(); toast(t('saved'));
 };
 function showActions(title, actions) {
   const a = $('#actionSheet');
   a.innerHTML = `<div class="agroup">${title ? `<p>${esc(title)}</p>` : ''}${actions.map((x, i) => `<button data-i="${i}" class="${x.danger ? 'danger' : ''}">${esc(x.label)}</button>`).join('')}</div><div class="agroup"><button class="cancel" data-i="-1">${t('cancel')}</button></div>`;
   a.onclick = e => { const b = e.target.closest('button'); if (!b) return; closeOverlays(); const i = +b.dataset.i; if (i >= 0) actions[i].fn(); };
-  $('#backdrop').classList.remove('clear'); $('#backdrop').classList.add('open');
-  a.classList.add('open');
+  openSheet('#actionSheet');
 }
-function placeActions(id) {
-  const p = S.places.find(x => x.id === id); if (!p) return;
+function chairActions(id) {
+  const c = S.chairs.find(x => x.id === id); if (!c) return;
   const acts = [];
-  if (id !== S.place) acts.push({ label: t('usethis'), fn: () => { usePlace(id); toast(pname(p)); } });
-  acts.push({ label: t('recalibrate'), fn: () => { usePlace(id); startCalibration(); } });
-  acts.push({ label: t('edit'), fn: () => openPlaceSheet(p) });
-  if (S.places.length > 1) acts.push({ label: t('deleteplace'), danger: true, fn: () => {
-    S.places = S.places.filter(x => x.id !== id);
+  if (id !== S.chair) acts.push({ label: t('usethis'), fn: () => { useChair(id); toast(cname(c)); } });
+  acts.push({ label: t('recalibrate'), fn: () => { useChair(id); startCalibration(); } });
+  acts.push({ label: t('edit'), fn: () => openChairSheet(c) });
+  acts.push({ label: t('rescan'), fn: () => startScan(c) });
+  if (S.chairs.length > 1) acts.push({ label: t('deletechair'), danger: true, fn: () => {
+    S.chairs = S.chairs.filter(x => x.id !== id);
     for (const k of Object.keys(S.profiles)) if (k.startsWith(id + '|')) delete S.profiles[k];
     Store.set('profiles', S.profiles);
-    if (S.place === id) S.place = S.places[0].id;
-    savePlaces(); renderHeader(); refreshView(); toast(t('deleted', { name: pname(p) }));
+    if (S.chair === id) S.chair = S.chairs[0].id;
+    saveChairs(); renderHeader(); refreshView(); toast(t('deleted', { name: cname(c) }));
   } });
-  showActions(pname(p), acts);
+  showActions(cname(c), acts);
 }
+
+/* =====================================================================
+   Chair check: film the chair once around. A small CLIP model (MobileCLIP-S0,
+   via transformers.js) runs on this device and compares every frame with text
+   descriptions of each chair type. The text side is stored below already
+   embedded, so only the image half of the model is downloaded.
+   ===================================================================== */
+const CHAIR_PROMPTS = {     // what CHAIR_EMB was made from (mean of the prompts, fp32 text model); also the fallback if CHAIR_EMB can't be read
+  office: ['a photo of an office chair with wheels', 'a swivel desk chair', 'a mesh task chair on casters'],
+  gaming: ['a photo of a gaming chair', 'a racing style chair with a tall back and headrest'],
+  basic:  ['a photo of a wooden dining chair', 'a school classroom chair with four legs', 'a plastic chair with a backrest'],
+  stool:  ['a photo of a stool with no backrest', 'a bar stool', 'a round stool'],
+  sofa:   ['a photo of a sofa', 'a couch in a living room', 'an upholstered armchair'],
+  bench:  ['a photo of a bench', 'a long wooden bench'],
+  floor:  ['a photo of a legless floor chair', 'a zaisu floor seat with a backrest', 'a seat cushion on the floor'],
+  none:   ['a photo of an empty room', 'a photo of a person', 'a photo of a desk with a computer', 'a photo of a wall', 'a photo of a floor', 'a photo of a bed', 'a photo of a table']
+};
+// 512-d text embeddings, one per chair type, as int8 in base64 + a checksum
+const CHAIR_EMB = {
+  office: ['/fb9AgP6A/wBAv3+Cf4BBvv/BgH5BgEGA/z4CfoF/Av9/Pv///vkDQv8BAIGAwT6AwYBCf8OAfYBAP0C+Af6AgLxBvsUBwj9AwYC+AUD/P4CBAj++AAOBPsGAQUFAAEC/gD5+gf9Bv4E+PsFBfsGAv77/wH8//7/+wX9DP8M9P/9Dvz+AQEA//j1A/z/APsBB3/5AAL5/wABCP8EAAYG/Pj++QkE//0IBf4JBwMJ+wMEAv4E+AoC/f8A+P4DAfz//gkD//0DCfgBCfYC//0M/wYF/AIC9QYE/vP5Cgv+CAAEBvj/+vv9AQD8AQMBIf73APwHA/oCAPj9AAT8BP0A+P37/APz/QcBAQID/Af5AwYBBwT8+/QFAoEFA/v1AAX5+wsL/QL+BQP5/fr/+gIB/v4AAPj9AwgBA/v3AQIN/gf9AfsDAvv99vj6APsEBvoD/fsC+QUDAPz8CQQM/f0FAP8KAQr+BgcA/wL9+wj+/AABBPkA+v78BAEF9v4DBf8GAf4F+QD2+wL28/wL/wH9/vsBCfb8BPn/+Ab29/n6+vwAA/8C/gL/A/8BCgH58/3+Avjz/Ar/Bgf0B/3+Avz+/P/4EPoE/Qb3AgMA+xz5/wkE/gYE/gH7AQQDBgAMAv4BBPcHAQX+AwgI/fj/APz/+QT6B//9Bf7+/gMHAfsF/f8=', 62517],
+  gaming: ['+foGAwv8/AQABAAB/gIAAv8BCv34BAL8A/4ECPoF/gf//vr7//rmEQcABgAGB/sEBQMKB/8FAfoB/v76+f/8BgDxBAETAgL0/wP/AwYH+/kHAgX1/gEPAf/9AAgOCP0F+wb//QMACAAA+QAA/vsKAv8C/QH+/QD9BP8ECQEQ7wgHCvsBAvsA+gX6/vr3AfoCA3/8+v78BP/8/QEJ/v8J/fT5/Ar9Cf8B/v/+AQIIBv/7/wT++wL7+vz7/AAA/AL9+wD6A/r/DekBCf0EAAIF/v4D/g388/3+AfMADAj6APgCBfP+/f4ABvr68gn7L/3yBPv9/vkAAv/5BQIAAQD//wX5/f3vAQgCBgIDBQMC/AsF/wMJ/vP6AYICA/f5AQIAAQEI/gEA/Af1Af7++f0C+P8EAvz9Bw0B//0BAQIGCQb1/gYDBAQF7f4MCv0CDfwDAPQD+QUIAAL+/gMKA/oJ9wYI/Q79A/33/QMDAAL7+QD+AgD9/AL+A/4E+f37BgkACfkJ/gD7/v748/0F/fj/Bv4EBv74//v97f359gP8/fgFBf0G+gT/BvMAA/318/gBAO3xAgcEBgr8BwX/Bvv8Bv8ABvID/AXz/gL99RMDAwAI/f0A+AAAAwb9CAIKAwEDBvsFBwX+AwQH/Pn/BQwAA/77BAP/Cf39/f4D/wgF+AA=', 61206],
+  basic: ['/f/zBgn/BP4BBP4CAwH6/gQDCgX4AgQDBPgAA/wI9Af4Av4FAQDvDgT//AMDBP/+BwP+CwAOAPYA/fwA+wj5A/zwBf4bA//9AQEDBQb/+QAC+QL9+wMUCAH9BAoOBfsA/gYFAQkDAgEE/f4C+QAGBQL//QD+AwAB/vz8AQQF+/0FCfkEA/oB/PX8AwEC/foAA3/+/wD7CfoCAv0J/f8C9fwF/Qn+A/4CBf4CB/kIAgIAAQEC/QQA9PoA+gADAgT7/AsAAQD+CPQCCPoCAPwEAwUH+wL79/8C+PgEBAb9//4BBPACAPz/Bf7++Qb8Fvv7BPz/Afj/AvP+APv/AfwC+gL0/gHt/gYBBP8DAgT6/wUA/QkFAfX6AYL+AQL4AAT5/Q0N+QD7AQP5A/f7+gX8/wAE+fX+BgEHA/78Af8OAwAC/f8BBPz9AAD5AvwCCfgB/P0F/AMB/wL6CAIDAP0KAQwI+wcAAQkABAEC/AX6AAP5AvsC+v39A/wC+gP5AgUGBf0D9wb8Avv0+fwI//0D//sCA/r7A/0C7/v+9vv//PsGB/4A+Af+Bv8EBfz89v74Avjy/wX8BAX1DAYCAfj+/vz/CwME/gH1/v0C9RT++wMC9wIC+v/6/gADAwQIAQQDBv4KBwAAAAUD+foBBP/7AwEDDv79AP78Af8EA/0HAQY=', 57628],
+  stool: ['Avv9AwIDE/0CBAL8Av/++g4HAgb7BQL/A/4A9wUG/gX3/gECBgPpEf8A+v3/BgAHBQX+A/z+Afn/9wT7/vz8Bf3s//0gB/v8AfwDAgH+9QEABfwA9f8PCv8L/wgFAvj7+/76AAb6A/z6A/wBAgAL//gH/P0G//0EAv/+BgAE9PsDCPn/Avz/+eP7B/7/A/37Bn/++fYAA//2/P0LBQAD+PX+/wz/+gH9APwEDfsHAAEFB/oJ8QAABgMF/P4HAPv8/AP9AwgEDPcAAvf7AwD+BwL7/gX9AQUH+/UFB/z/BAIBBe4A/vj4Af8E+wD+BfT5+Pz6/PX4BPcCB/4FA/4C/Af1+wHt/xP9+wT9Avv6AwMHBgkB+/L//IIABgb+/gv+BBUN/vwIAQT++Pn7+QD7/P/99P4ACQAEAvr2AwEIBQTzBv0EAPf++vf9/gIPBvgS+vn++QD7+gP7AQMC+/0JAQkD+QwC/g/+/wAM+wH++gMBAPz9+gP6/wH6/wL9BfoA/P8GAgMA/wAG/gX9AfYB/fkABPUDAv/98vv/7/4A+vcBBQP+9gL/BQMFBgD8/gb+APXzAAH/CQb4AwoCBfr5+f35AQj/Agb4AwME+xL6AQQF/AQA+gECAQMJAAgD/wb7BQcMCQb4APv+Afr6CAr89/7xCAv+AfQEAwr//Qb8//8=', 63900],
+  sofa: ['+v/qAgb/CAX8Af8C/gYEBf8BDwT/AfwEAfwEBvz++QP+Af0C//7+EQMGBgAA//0AAQcEA/0W/vn9Av4A/Pz7BgHvAwYNCQL2AQAEBAcBAPv9Afz9/fwO/AMPAgsJAv8F/QIB/f8ICQH79gH9+wMFBf4CARD8Af/8/PwHEQMR8/oFCwMEAv8BBff/BQcA+fYDBH//AQABBAr+AAD/Av0F+vj6+Q3+AgMA+v3+CP0EBf/6BAAI8gACBQD8/wX4AP8DAf/z//UHDPH/BwACAf4KAwr//vUE//j//f/8BAT4/f4C/vn5Af38APsE9wD7CwD+AAIDBPwB//n4BAgDAPcD/gL9/v/2AQoIAvwAAQj+/gMFBPgFAvb+BIIC+v39A/4BBvIG/P8A+/f/BfwBAAAB/wYCAQMFCwgDAwIAA/8LBf7v/gADA/kA8v/t+wYHAfkD/vAFAgEIBwT6BP76BgUG/Az/BQr9+/oBAf4D/gEDAv4CAfkB/f0C+gIA+Pz+DgT7BP8C/goD//4AAQMF/vr8B/0H//75//P+/goC9/z8/wD+CfgEBQAAAf///AD/+wT8Bv33/QoABwn8Bv///gQG/PwDBP8EAgb7AwH6+Bb+BgAH+f/++//7BgL+/v7/APwCCf4EAQYA/QH+/v/8AA7/+wT9APkEAgP/AP4CAwYDAQI=', 59308],
+  bench: ['AgTpBAcFDwH3BwAQAQEA+Av5/gAC+/8EAfsC/P8A+wEHBPYF+/wCAAcABvrz/wEAAAb8AA0dBfX7+//++f78AfzuBwIX/AT1AQMFBAEB//38/wT6/AMKCQAG/gQbCPME/wT6//8BAv8G/gD//AsAC/oIAgcABwYE//36//4H9P0DDAIAAu//+/X9Af4OAQH7/H8C//z6Cwn9/vkE/+0A9PYF9gr6AwL9+///CvX9CPr6Bfv/9v/+/QIF/f0F//r/BgL4Bv4CD/L/AQsJBPwEA//9/wH+CfwA+//+/wb7AP8A+/gCAAIBB/4ABPz3AQL49wb3BQH9AvX/DAAEAQH6/vr58/v1//sI+vYBBQL+AwEE+AAHAPUE/IIAAwf8BgEFAAL8+gv+/f/+Avn++gX9AwP1/PcKA/cEDQH++QDzAPv7APoABvb3AgIJ/Qf+AO/8+fwCAAL7Af79AwP2/wMI/wUB+Qf7/w78AP0BAAAGAQAC/Aj9BP78BfgD9gL3/gAICP8CAQT8//4A/AAJ/AP/AvP7BgD3Avf/+f7+8wP9Av0E/v8F/gUB/gQBBf4E9AQA/P71Bfr6BQ76AQL/BQX8+/oECQv+BP77/fr79Rj79QH++wMB/wH6Cv0MBPn/AAX/DPv5A/oHAAD2+f//+hoFCP/7Bv8DAP8BAQH/AAQCAAc=', 63395],
+  floor: ['/vzsAgb/GwUEAvz5+f8A/P4BBwP1AwQCB/79A/sF+wj4AvkIAP3nJQAABAMAB/X+BAQCBAAJAP0IAQT+Bgf9Bf3tAv8WDQD7/QYDBQr+/QIEBf39+f8OCAMAAwYIA/UF+gX7AgkEAAIB/QD+AP8KDPz//AT6A/8HAwP9Bv4Q9f8FFAICA/n9APH8APv6/Pz7C38E+v7//P0B/wEPAPr4+/kB+g4A/gL//P4GB/cCAfv5AfwC8AX/BwH//QD3+/kC/AH4/gAGCvr9B/X/+fv/BQcG+gP7//r//vQB/wL3AQEBBO4E+QL6AvcB7/3/Fwb6+gMBAQQA/PT9BQD+Bf77AP/4AAHr/wr//wIEBwb5Awf9AAgDAvIFAYL8AAL9AQMEAf0E+gIA/Pv+Av369gT//gj//f4CEQL8BPvyAwEUAwH6+wL+Av3/9gP6Av4G/vH6+fb/+gD+/QH+BAYE/P0L/wUG/Aj+/wP4BwcCAgX9//sEBAMA+wH69f4A8/v3BQEEA/8EAgEB/QT4AQEFBfP/AAAEAf38//v/+P0F9QH+Bf4HBgUH/gMCBP4I//v19P8D/f71//79BAj8CAgLAQH9/gD9Bv8B/v74Af4A/RD6BgII+wD/9AUACf0CAgX7///+BQAQBwkAAv8I/wH9/Ab+Bv7yC/r++vgHAAIC/v0DCAA=', 61957],
+  none: ['AATtAgP/Df4CAf8PAPwAAgL8/gP9/gIAAgEBAwMDAQIB/vv8AQAJFv/5AP/+/f/9AAEBAwcM/voAAAH/+f7+Af/s/v8MD/8ACAAABAL8//7/APr9AgEGAf8A/f8P/wAE/v/9/wIDAP7+AQIA/wEHAf4AAgH//P4EAQD+AQAD/P/+AAMA//z8++r9A/8BAP0B/3////wA//gAAP0E+/sIAP8C/QT8A/8C/wEAAPsBAgDsBPsBB//8/wMCAv///QP8AwH9APkBEPv/AgYA+gEAAwD//voAAv4C///9+v8A/gH/AAMDAf4ABf8E/PoB+QECAAECAAL9AvoEAAMB/v0CAf3//wD+/wED//7+Av3+/wIB/v4G/vP+/oIBAf39AP4DAf8D/gD//fwA/wL+Bf4CAf0CAgEBCv0DAwD8AQUC/f36AQQD///++v4K+/z//vQB//4C/wUFAgABAwL7/v4EAPv/Af38Af36AAAB/gED/v0CA/4AAv74/wIBA/0B/wH+A//7AvoBAP0C/QMAAwYBAv4A//0BAvwC8wAC///8AgL/Af0C/QAA/foD+gH7+gAFAQL6AQH9AfsA/gAHAQEB/gQE/wUAAAT8AQIAAQYBAv7+/f7/+gD9A/4CAQIBAP8AAAMCAAIAAQMB/wT+AAgA+QD0AfoDBAACAgQCAAH/AgI=', 56753]
+};
+function decodeEmb(k) {
+  const [b64, sum] = CHAIR_EMB[k];
+  let raw; try { raw = atob(b64); } catch { return null; }
+  if (raw.length !== 512) return null;
+  const v = new Float32Array(512); let chk = 0, n = 0;
+  for (let i = 0; i < 512; i++) { const b = raw.charCodeAt(i); chk = (chk + b) % 65521; v[i] = b > 127 ? b - 256 : b; n += v[i] * v[i]; }
+  if (chk !== sum) console.warn('chair embedding checksum', k);
+  n = Math.sqrt(n);
+  return v.map(x => x / n);
+}
+const ChairAI = {
+  job: null, T: null, proc: null, vm: null, cls: null,
+  load(onProgress) {
+    return this.job ??= (async () => {
+      if (SIM) { await sleep(300); return; }
+      const T = this.T = await import(TF_URL);
+      const prog = p => { if (p.status === 'progress' && /vision_model/.test(p.file || '')) onProgress?.(p.progress / 100); };
+      this.proc = await T.AutoProcessor.from_pretrained(CLIP_ID);
+      const blank = document.createElement('canvas'); blank.width = blank.height = 64;
+      for (const dtype of ['fp16', 'fp32']) {        // half-precision is 23 MB; fall back to the 45 MB full model where it won't run
+        try { this.vm = await T.CLIPVisionModelWithProjection.from_pretrained(CLIP_ID, { dtype, progress_callback: prog }); await this.embed(blank); break; }
+        catch (e) { console.warn('chair model', dtype, e); this.vm = null; }
+      }
+      if (!this.vm) throw new Error(t('sc.modelErr'));
+      this.cls = Object.fromEntries(Object.keys(CHAIR_EMB).map(k => [k, decodeEmb(k)]));
+      const missing = Object.keys(this.cls).filter(k => !this.cls[k]);
+      if (missing.length) await this.embedText(missing);
+    })().catch(e => { this.job = null; throw e; });
+  },
+  async embedText(keys) {
+    const T = this.T, tok = await T.AutoTokenizer.from_pretrained(CLIP_ID), tm = await T.CLIPTextModelWithProjection.from_pretrained(CLIP_ID, { dtype: 'q8' });
+    for (const k of keys) {
+      const { text_embeds } = await tm(tok(CHAIR_PROMPTS[k], { padding: 'max_length', truncation: true }));
+      const rows = text_embeds.normalize().tolist(), m = new Float32Array(rows[0].length);
+      for (const r of rows) r.forEach((x, i) => m[i] += x);
+      const n = Math.hypot(...m);
+      this.cls[k] = m.map(x => x / n);
+    }
+  },
+  async embed(canvas) {
+    const d = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, canvas.width, canvas.height);
+    const img = new this.T.RawImage(d.data, canvas.width, canvas.height, 4).rgb();
+    const { image_embeds } = await this.vm(await this.proc(img));
+    return image_embeds.normalize().tolist()[0];
+  },
+  /* probability of each chair type, and of "no chair in the picture", for one frame */
+  async probs(canvas) {
+    if (SIM) return simChairProbs();
+    const e = await this.embed(canvas), ks = Object.keys(this.cls);
+    const lg = ks.map(k => { const c = this.cls[k]; let d = 0; for (let i = 0; i < c.length; i++) d += e[i] * c[i]; return 100 * d; });
+    const mx = Math.max(...lg), ex = lg.map(v => Math.exp(v - mx)), sum = ex.reduce((a, b) => a + b, 0);
+    return Object.fromEntries(ks.map((k, i) => [k, ex[i] / sum]));
+  }
+};
+
+/* scan state: bins = which 1/16ths of the circle are covered, sum = added-up type probabilities over the frames kept */
+const SC = { state: 'idle', run: 0, edit: null, bins: new Set(), n: 0, sum: {}, live: null, best: 0, thumb: null, type: 'office', ai: null, conf: null, err: '', stream: null, timer: 0, loadP: 0, sensor: false, heading: null, h0: null };
+const scCanvas = Object.assign(document.createElement('canvas'), { width: 256, height: 256 });
+(function buildScanTicks() {
+  let h = '';
+  for (let i = 0; i < SCAN_BINS * 3; i++) {
+    const a = (i / (SCAN_BINS * 3)) * Math.PI * 2 - Math.PI / 2, c = Math.cos(a), sn = Math.sin(a);
+    h += `<line x1="${(150 + c * 132).toFixed(1)}" y1="${(150 + sn * 132).toFixed(1)}" x2="${(150 + c * 146).toFixed(1)}" y2="${(150 + sn * 146).toFixed(1)}"/>`;
+  }
+  $('#scTicks').innerHTML = h;
+  $('#scanPh').innerHTML = svgIcon(CHAIR_TYPES.office.svg, 'stroke-width="1.4"');
+})();
+function scanReset(edit = null) {
+  clearTimeout(SC.timer); closeScanCamera();
+  Object.assign(SC, { state: 'idle', run: SC.run + 1, edit, bins: new Set(), n: 0, sum: {}, live: null, best: 0, thumb: null, type: edit?.type || 'office', ai: null, conf: null, err: '', loadP: 0, sensor: false, h0: null });
+  $('#scName').value = edit?.name || '';
+}
+function startScan(edit = null) {
+  if (!S.started) { goto('onboard'); return; }
+  scanReset(edit); goto('scan');
+}
+/* phones and tablets: the heading of the rear camera, so the ring fills as you walk around the chair */
+let scanSensorOn = false;
+function onScanTilt(e) {
+  if (e.alpha == null || e.beta == null || e.gamma == null) return;
+  const k = Math.PI / 180, a = e.alpha * k, b = e.beta * k, g = e.gamma * k;
+  const x = -(Math.cos(a) * Math.sin(g) + Math.cos(g) * Math.sin(a) * Math.sin(b)), y = -(Math.sin(a) * Math.sin(g) - Math.cos(a) * Math.cos(g) * Math.sin(b));
+  if (Math.hypot(x, y) < .35) return;          // camera aimed at the floor or ceiling: no usable heading
+  SC.heading = deg(Math.atan2(x, y));
+}
+function enableScanSensor() {
+  if (scanSensorOn || S.device === 'laptop' || !('DeviceOrientationEvent' in window)) return;
+  const listen = () => { scanSensorOn = true; addEventListener('deviceorientation', onScanTilt); };
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') DeviceOrientationEvent.requestPermission().then(r => { if (r === 'granted') listen(); }).catch(() => {});
+  else listen();
+}
+async function openScanCamera() {
+  const v = $('#scanVideo');
+  if (!navigator.mediaDevices?.getUserMedia) { if (SIM) return; throw new Error(isSecureContext ? t('cam.unsupported') : t('cam.https')); }
+  if (S.device === 'laptop') {                  // one camera: turn the chair in front of it
+    if (!S.stream) { if (SIM) return; await startCamera(); }
+    v.srcObject = S.stream; v.classList.add('mirror');
+  } else {                                      // rear camera; the front one comes back on when the scan screen closes
+    stopCamera();
+    try { SC.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false }); }
+    catch (e) { if (SIM) return; throw cameraError(e); }
+    v.srcObject = SC.stream; v.classList.remove('mirror');
+  }
+  await v.play().catch(() => {});
+}
+function closeScanCamera() {
+  const v = $('#scanVideo'); v.srcObject = null;
+  if (SC.stream) { SC.stream.getTracks().forEach(tr => tr.stop()); SC.stream = null; }
+}
+async function scanBegin() {
+  if (SC.state !== 'idle') return;
+  const run = SC.run;
+  SC.state = 'loading'; renderScan();
+  enableScanSensor();
+  try { await Promise.all([ChairAI.load(p => { if (SC.run === run) { SC.loadP = p; renderScan(); } }), openScanCamera()]); }
+  catch (e) { console.warn(e); if (SC.run === run && S.view === 'scan') { SC.err = 'sc.err'; scanManual(); } return; }
+  if (SC.run !== run || S.view !== 'scan') {      // cancelled while the model or camera was still loading
+    closeScanCamera();
+    if (S.view !== 'scan' && S.started && !S.stream) startCamera().then(mountCamera).catch(() => {});
+    return;
+  }
+  SC.state = 'scanning'; SC.heading = null; renderScan(); scanLoop();
+}
+async function scanLoop() {
+  const run = SC.run;
+  if (S.view !== 'scan' || SC.state !== 'scanning') return;
+  const v = $('#scanVideo'), ready = v.readyState >= 2 && v.videoWidth > 0;
+  if (ready) {
+    const side = Math.min(v.videoWidth, v.videoHeight);
+    scCanvas.getContext('2d', { willReadFrequently: true }).drawImage(v, (v.videoWidth - side) / 2, (v.videoHeight - side) / 2, side, side, 0, 0, 256, 256);
+  }
+  if (ready || SIM) {
+    try {
+      const p = await ChairAI.probs(scCanvas);
+      if (SC.run !== run || SC.state !== 'scanning') return;
+      scanFrame(p, ready);
+    } catch (e) { console.warn(e); }
+  }
+  if (SC.run === run && SC.state === 'scanning') SC.timer = setTimeout(scanLoop, SIM ? (__sim.scanMs || 150) : 300);
+}
+function scanFrame(p, hasImage) {
+  const seen = p.none < .5, top = CHAIR_KEYS.reduce((a, k) => p[k] > p[a] ? k : a);
+  SC.live = seen ? { type: top, p: p[top] / (1 - p.none) } : null;
+  if (seen) {
+    let bin = SC.bins.size;                       // no motion sensor: one step of the ring per frame with the chair in it
+    if (SC.heading != null) {
+      SC.h0 ??= SC.heading;
+      const turned = ((SC.heading - SC.h0) % 360 + 360) % 360;
+      if (!SC.sensor && Math.min(turned, 360 - turned) > 25) { SC.sensor = true; SC.bins = new Set(); }   // the camera really is going around the chair
+      if (SC.sensor) bin = Math.floor(turned / (360 / SCAN_BINS));
+    }
+    if (bin < SCAN_BINS && !SC.bins.has(bin)) {
+      SC.bins.add(bin); SC.n++;
+      for (const k of CHAIR_KEYS) SC.sum[k] = (SC.sum[k] || 0) + p[k] / (1 - p.none);
+      if (hasImage && p[top] > SC.best) { SC.best = p[top]; SC.thumb = thumbFrom(scCanvas); }
+      navigator.vibrate?.(8);
+    }
+  }
+  if (SC.bins.size >= (SC.sensor ? SCAN_BINS - 3 : SCAN_BINS)) scanFinish(); else renderScan();
+}
+function thumbFrom(c) {
+  const small = Object.assign(document.createElement('canvas'), { width: 112, height: 112 });
+  small.getContext('2d').drawImage(c, 0, 0, 112, 112);
+  try { return small.toDataURL('image/jpeg', .72); } catch { return null; }
+}
+function scanFinish() {
+  clearTimeout(SC.timer); closeScanCamera();
+  const tot = CHAIR_KEYS.reduce((a, k) => a + (SC.sum[k] || 0), 0);
+  if (!SC.n || !tot) { SC.err = 'sc.none'; scanManual(); return; }
+  const best = CHAIR_KEYS.reduce((a, k) => (SC.sum[k] || 0) > (SC.sum[a] || 0) ? k : a);
+  Object.assign(SC, { state: 'result', run: SC.run + 1, type: best, ai: best, conf: SC.sum[best] / tot });
+  navigator.vibrate?.(30); renderScan();
+}
+function scanManual() {
+  clearTimeout(SC.timer); closeScanCamera();
+  Object.assign(SC, { state: 'result', run: SC.run + 1, ai: null, conf: null, type: SC.edit?.type || 'office' });
+  renderScan();
+}
+function scanSave() {
+  let name = $('#scName').value.trim();
+  if (name === typeName(SC.type)) name = '';
+  const scan = SC.conf != null ? { ai: SC.ai, conf: +SC.conf.toFixed(3), n: SC.n, at: Date.now(), thumb: okThumb(SC.thumb) ? SC.thumb : null } : (SC.edit?.scan || null);
+  if (SC.edit) {
+    Object.assign(SC.edit, { name, type: SC.type, scan }); saveChairs(); renderHeader(); toast(t('saved'));
+    if (SC.edit.id === S.chair && !currentProfile()) startCalibration(); else goto('monitor');
+    return;
+  }
+  const c = { id: 'c' + Date.now().toString(36), name, type: SC.type, scan };
+  S.chairs.push(c); useChair(c.id); toast(t('added', { name: cname(c) }));
+  startCalibration();
+}
+function leaveScan() {
+  clearTimeout(SC.timer); closeScanCamera();
+  SC.state = 'idle'; SC.run++;
+  if (S.started && !S.stream) startCamera().then(mountCamera).catch(e => toast(e.message));     // phones: back to the front camera
+}
+const setScanTicks = () => $$('#scTicks line').forEach((l, i) => l.classList.toggle('on', SC.bins.has(Math.floor(i / 3))));
+function renderScan() {
+  const st = SC.state, res = st === 'result', b1 = $('#scBtn'), b2 = $('#scBtn2');
+  $('#scCancel').style.visibility = S.chairs.length ? 'visible' : 'hidden';
+  $('#scManual').style.visibility = res ? 'hidden' : 'visible';
+  $('#scMain').hidden = res; $('#scGuess').hidden = st !== 'scanning'; $('#scResult').hidden = !res;
+  $('#scanRoot').classList.toggle('done', res);
+  $('#scanPh').hidden = st === 'scanning' && !!$('#scanVideo').srcObject;
+  setScanTicks();
+  b1.disabled = false; b2.hidden = true;
+  let title = '', sub = '', hint = '';
+  if (st === 'idle') {
+    title = t('sc.title'); sub = t(S.device === 'laptop' ? 'sc.subLaptop' : 'sc.subMobile'); b1.textContent = t('sc.start');
+  } else if (st === 'loading') {
+    title = t('sc.loadT'); sub = t('sc.loadS'); b1.disabled = true;
+    b1.innerHTML = `<span class="spin"></span>${SC.loadP > 0 && SC.loadP < 1 ? `<span>${Math.round(SC.loadP * 100)}%</span>` : ''}`;
+  } else if (st === 'scanning') {
+    title = t('sc.goT'); sub = t(S.device === 'laptop' ? 'sc.goSLaptop' : 'sc.goSMobile'); hint = SC.live ? '' : t('sc.noChair');
+    b1.disabled = true; b1.textContent = t('sc.count', { n: SC.bins.size, m: SCAN_BINS });
+    if (SC.n >= 5) { b2.hidden = false; b2.textContent = t('sc.enough'); }
+    $('#scGuess').innerHTML = SC.live
+      ? `${typeSquare(SC.live.type, 38)}<div class="gt"><b>${typeName(SC.live.type)}</b><div class="bar"><i style="width:${Math.round(SC.live.p * 100)}%"></i></div></div>`
+      : `<span class="ico" style="background:var(--fill2);color:var(--label2);width:38px;height:38px;border-radius:11px">${svgIcon(ICO.scan)}</span><div class="gt"><span class="s">${t('sc.noChair')}</span></div>`;
+  } else {
+    const ai = SC.conf != null;
+    title = ai ? t('sc.looks', { type: typeName(SC.ai) }) : t('sc.pickT');
+    sub = ai ? t('sc.conf', { pct: Math.round(SC.conf * 100), n: SC.n }) : t(SC.err || 'sc.pickS');
+    const thumb = ai ? SC.thumb : SC.edit?.scan?.thumb;
+    $('#scRes').innerHTML = `${okThumb(thumb) ? `<span class="cthumb" style="width:64px;height:64px;border-radius:18px;background-image:url(${thumb})"></span>` : typeSquare(SC.type, 64)}<div><b>${typeName(SC.type)}</b><span>${t('tip.' + SC.type)}</span></div>`;
+    paintTypes($('#scTypes'), SC.type, SC.ai);
+    $('#scName').placeholder = typeName(SC.type);
+    b1.textContent = t(SC.edit ? 'sc.saveEdit' : 'sc.save');
+    b2.hidden = false; b2.textContent = t('sc.again');
+  }
+  $('#scTitle').textContent = title; $('#scSub').textContent = sub; $('#scHint').textContent = hint;
+}
+$('#scBtn').onclick = () => { if (SC.state === 'idle') scanBegin(); else if (SC.state === 'result') scanSave(); };
+$('#scBtn2').onclick = () => { if (SC.state === 'scanning') scanFinish(); else if (SC.state === 'result') { scanReset(SC.edit); renderScan(); } };
+$('#scManual').onclick = () => { SC.err = ''; scanManual(); };
+$('#scCancel').onclick = () => goto('monitor');
+$('#scTypes').onclick = e => { const b = e.target.closest('button'); if (!b) return; SC.type = b.dataset.type; renderScan(); };
 
 /* mini widget (Document Picture-in-Picture) */
 async function openWidget() {
@@ -1579,7 +2157,7 @@ function renderWidget() {
   const d = S.pip.document, D = S.disp, shown = S.mode === 'on' && !S.paused && D.p != null;
   d.getElementById('w').dataset.level = shown ? D.level : 'away';
   setRing(d.querySelector('.ring'), shown ? D.p : 0, shown ? Math.round(D.p * 100) : null);
-  d.getElementById('ws').textContent = statusText(S.paused ? 'paused' : shown ? D.level : (S.mode || 'away'));
+  d.getElementById('ws').textContent = shown && S.eye.state === 'drowsy' ? t('status.drowsy') : statusText(S.paused ? 'paused' : shown ? D.level : (S.mode || 'away'));
 }
 
 /* =====================================================================
@@ -1596,23 +2174,26 @@ function mountCamera() {
   if (S.stream) S.video.play().catch(() => {});
 }
 function goto(view) {
-  if ((view === 'monitor' || view === 'calib') && !S.started) view = 'onboard';
+  if ((view === 'monitor' || view === 'calib' || view === 'scan') && !S.started) view = 'onboard';
+  if ((view === 'monitor' || view === 'calib') && !curChair()) { view = 'scan'; scanReset(); }   // nothing to track until there is a chair
+  if (S.view === 'scan' && view !== 'scan') leaveScan();
   S.view = view;
   closeOverlays();
   $$('section[data-view]').forEach(s => s.hidden = s.dataset.view !== view);
-  $('#tabbar').hidden = view === 'onboard' || view === 'calib';
+  $('#tabbar').hidden = view === 'onboard' || view === 'calib' || view === 'scan';
   $$('.tabbar button').forEach(b => b.dataset.go === view ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
   if (S.started) setTickRate(view === 'calib' ? TICK_CALIB : TICK_MONITOR);
   if (view !== 'calib') stopDemo();
   mountCamera();
   if (view === 'calib') renderCalib();
-  if (view === 'monitor') { renderHeader(); renderNotice(); if (S.level !== 'bad') hideAlert(); renderBars(); render(true); requestWake(); }
+  if (view === 'scan') renderScan();
+  if (view === 'monitor') { renderHeader(); renderNotice(); renderCushion(); if (S.level !== 'bad') hideAlert('turtle'); renderBars(); render(true); requestWake(); }
   if (view === 'devices') { renderDevices(); refreshCloudDaily(); }
   if (view === 'settings') renderSettings();
   scrollTo({ top: 0 });
 }
 function refreshView() { if (S.view === 'devices') renderDevices(); else if (S.view === 'settings') renderSettings(); else if (S.view === 'monitor') render(true); }
-function startCalibration() { if (!S.started) { goto('onboard'); return; } calibReset(); goto('calib'); }
+function startCalibration() { if (!S.started) { goto('onboard'); return; } if (!curChair()) { startScan(); return; } calibReset(); goto('calib'); }
 async function begin() {
   const btn = $('#btnBegin'), out = $('#obStatus');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; out.className = 'foot'; out.textContent = '';
@@ -1622,7 +2203,7 @@ async function begin() {
     if (!S.vision) S.vision = await initVision();
     registerSW();
     S.started = true;
-    if (currentProfile()) goto('monitor'); else startCalibration();
+    if (!S.chairs.length) startScan(); else if (currentProfile()) goto('monitor'); else startCalibration();
   } catch (e) {
     console.error(e); out.className = 'foot err'; out.textContent = e.message || String(e);
   } finally { btn.disabled = false; btn.textContent = t('continue'); }
@@ -1630,12 +2211,12 @@ async function begin() {
 document.addEventListener('click', e => {
   const go = e.target.closest('[data-go]');
   if (go) { e.preventDefault(); goto(go.dataset.go); return; }
-  const pl = e.target.closest('#placeStats [data-place], #placeList [data-place]');
-  if (pl) { placeActions(pl.dataset.place); return; }
+  const ch = e.target.closest('#chairStats [data-chair], #chairList [data-chair]');
+  if (ch) { chairActions(ch.dataset.chair); return; }
   const act = e.target.closest('[data-act]')?.dataset.act;
   if (act === 'calib') startCalibration();
-  if (act === 'cushion') toggleCushion();
-  if (act === 'newplace') openPlaceSheet();
+  if (act === 'cushion') openCushion();
+  if (act === 'newchair') startScan();
 });
 $('#btnBegin').onclick = begin;
 $('#calBtn').onclick = () => {
@@ -1650,7 +2231,7 @@ $('#calCancel').onclick = () => goto('monitor');
 $('#segFig').onclick = () => { S.settings.camView = false; saveSettings(); mountCamera(); };
 $('#segCam').onclick = () => { S.settings.camView = true; saveSettings(); mountCamera(); };
 function setPauseIcon() { const b = $('#btnPause'); b.innerHTML = S.paused ? ICO.play : ICO.pause; b.ariaLabel = b.title = S.paused ? t('resume') : t('pause'); }
-$('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; hideAlert(); } S.lastTick = 0; render(true); };
+$('#btnPause').onclick = () => { S.paused = !S.paused; setPauseIcon(); if (S.paused) { S.smooth = null; eyeIdle('na'); hideAlert(); } S.lastTick = 0; render(true); };
 if ('documentPictureInPicture' in window) { $('#btnWidget').hidden = false; $('#btnWidget').onclick = () => openWidget().catch(e => toast(e.message)); }
 function onOrientation() {
   if (S.device === 'laptop') return;
@@ -1684,17 +2265,55 @@ $$('#tiltSeg button').forEach(b => b.onclick = () => { setTilt(b.dataset.v); ena
 function setLang(v) {
   if (!I18N[v] || v === LANG) return;
   LANG = v; Store.set('lang', v);
-  applyLang(); paintIconPicker(); setPauseIcon(); renderHeader(); renderCushion(); renderNotice();
-  if (S.view === 'calib') renderCalib(); else refreshView();
+  applyLang(); setPauseIcon(); renderHeader(); renderCushion(); renderNotice();
+  if (S.view === 'calib') renderCalib(); else if (S.view === 'scan') renderScan(); else refreshView();
   render(true);
 }
 $$('#langSeg button').forEach(b => b.onclick = () => setLang(b.dataset.v));
 addEventListener('resize', () => { if (S.view === 'monitor') drawTimeline(); });
 
 /* =====================================================================
-   Vibration cushion (Web Bluetooth, output only)
+   Vibration cushion (Web Bluetooth, output only): ten motors in five zones.
+   The patterns below are the same ones cushion_esp32.ino plays, replayed on
+   the on-screen cushion so you can see what the cushion is doing.
    ===================================================================== */
-async function toggleCushion() {
+// [zone, x, y] on the round cushion seen from above: zone 1 is the left edge, zone 5 the right edge, two motors each
+const MOTORS = [[1, 92.5, 167.5], [1, 65, 120], [2, 79, 96], [2, 92.5, 72.5], [3, 120, 167.5], [3, 120, 120], [4, 161, 96], [4, 147.5, 72.5], [5, 147.5, 167.5], [5, 175, 120]];
+// steps: [zones on (bit 0 = zone 1), ms]
+const PATTERNS = {
+  1: { kind: 'turtle', steps: [[1, 120], [2, 120], [4, 120], [8, 120], [16, 120], [0, 80], [16, 120], [8, 120], [4, 120], [2, 120], [1, 120], [0, 140], [21, 260], [0, 140], [10, 260]] },
+  2: { kind: 'test',   steps: [[1, 350], [0, 150], [2, 350], [0, 150], [4, 350], [0, 150], [8, 350], [0, 150], [16, 350]] },
+  3: { kind: 'drowsy', steps: [[31, 450], [0, 150], [31, 450], [0, 150], [31, 450], [0, 150], [31, 450]] }
+};
+// the demo cushion stands in for a paired one, so the app behaves as if the cushion is connected
+const cushionLinked = () => !!S.cushion.ch || S.settings.demoCushion;
+function cushionMarkup() {
+  const hub = [[65, 120], [92.5, 72.5], [147.5, 72.5], [175, 120], [147.5, 167.5], [92.5, 167.5]];
+  let h = '<svg class="cushviz" viewBox="0 0 240 240" data-vib="test" aria-hidden="true"><circle class="pad" cx="120" cy="120" r="108"/><circle class="seam" cx="120" cy="120" r="100"/>';
+  hub.forEach(([x, y], i) => {
+    const [x2, y2] = hub[(i + 1) % 6], a = Math.atan2(y - 120, x - 120);
+    h += `<path class="crease" d="M120 120L${x} ${y}L${x2} ${y2}M${x} ${y}L${(120 + 100 * Math.cos(a)).toFixed(1)} ${(120 + 100 * Math.sin(a)).toFixed(1)}"/>`;
+  });
+  for (const [z, x, y] of MOTORS) h += `<g class="mot" data-z="${z}"><circle class="rip" cx="${x}" cy="${y}" r="8.5"/><circle class="core" cx="${x}" cy="${y}" r="8.5"/></g>`;
+  return h + '</svg>';
+}
+let vizTimer = 0;
+function playViz(pattern) {
+  clearTimeout(vizTimer);
+  const pat = PATTERNS[pattern]; let i = 0;
+  const show = mask => $$('.cushviz').forEach(svg => {
+    if (pat) svg.dataset.vib = pat.kind;
+    svg.classList.toggle('buzzing', mask > 0);
+    svg.querySelectorAll('.mot').forEach(m => m.classList.toggle('on', !!(mask >> (m.dataset.z - 1) & 1)));
+  });
+  const step = () => {
+    if (!pat || i >= pat.steps.length) { show(0); S.cushion.playing = 0; renderCushion(); return; }
+    show(pat.steps[i][0]); vizTimer = setTimeout(step, pat.steps[i][1]); i++;
+  };
+  S.cushion.playing = pat ? pattern : 0;
+  renderCushion(); step();
+}
+async function pairCushion() {
   const cu = S.cushion;
   if (cu.dev) { try { cu.dev.gatt.disconnect(); } catch {} cu.dev = null; cu.ch = null; renderCushion(); return; }
   if (!navigator.bluetooth) { toast(t('bt.none')); return; }
@@ -1707,8 +2326,12 @@ async function toggleCushion() {
     buzz(2);
   } catch (e) { if (e.name !== 'NotFoundError') toast(t('bt.fail')); }
 }
-async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
-  const ch = S.cushion.ch; if (!ch) return;
+/* 1 = turtle neck (wave), 2 = test (one zone at a time), 3 = drowsy (all ten motors), 0 = stop */
+async function buzz(pattern) {
+  const ch = S.cushion.ch;
+  if (!ch && !S.settings.demoCushion) return;
+  playViz(pattern);
+  if (!ch) return;
   const data = new Uint8Array([pattern, BUZZ_STRENGTH]);
   try {
     if (ch.properties?.write && ch.writeValueWithResponse) await ch.writeValueWithResponse(data);
@@ -1717,11 +2340,30 @@ async function buzz(pattern) {   // 1 = alert (double), 2 = test (single)
   } catch (e) { console.warn(e); }
 }
 function renderCushion() {
-  $('#cushionVal').innerHTML = S.cushion.dev ? `<span class="badge"><i></i>${t('connected')}</span>` : t('connect');
-  $('#cushionVal').style.color = S.cushion.dev ? '' : 'var(--tint)';
+  const cu = S.cushion, linked = cushionLinked(), busy = !!PATTERNS[cu.playing];
+  const state = busy ? t('cu.buzzing') : linked ? t('connected') : t('cu.unlinked');
+  $('#cushVal').textContent = state;
+  $('#cushCap').textContent = busy ? t('cu.p' + cu.playing) : linked ? t('cu.motors') : t('taptoconnect');
+  $('#cushTag').innerHTML = linked ? `${ICO.bt}Bluetooth` : '';
+  $('#cushTag').classList.toggle('live', linked);
+  $('#cuState').innerHTML = `<i></i>${state}`; $('#cuState').classList.toggle('off', !linked);
+  $('#cuSub').textContent = busy ? t('cu.p' + cu.playing) : cu.ch ? `Bluetooth · ${cu.dev?.name || 'Earline Cushion'}` : linked ? t('cu.btDemo') : t('taptoconnect');
+  $('#pairLbl').textContent = t(cu.ch ? 'cu.unpair' : 'cu.pair');
+  $('#setDemo').checked = S.settings.demoCushion;
+  $('#cushionVal').innerHTML = linked ? `<span class="badge"><i></i>${t('connected')}</span>` : t('connect');
+  $('#cushionVal').style.color = linked ? '' : 'var(--tint)';
+  $$('.cushviz').forEach(svg => svg.classList.toggle('offline', !linked));
   if (S.view === 'devices') renderDevices();
 }
-$('#btnCushion').onclick = toggleCushion;
+function openCushion() { renderCushion(); openSheet('#cushSheet'); }
+$('#cuDone').onclick = closeOverlays;
+$('#cushSheet').addEventListener('click', e => {
+  const b = e.target.closest('[data-buzz]'); if (!b) return;
+  if (!cushionLinked()) { toast(t('cu.unlinked')); return; }
+  buzz(+b.dataset.buzz);
+});
+$('#btnPair').onclick = pairCushion;
+$('#setDemo').onchange = e => { S.settings.demoCushion = e.target.checked; saveSettings(); if (!cushionLinked()) playViz(0); renderCushion(); };
 
 /* =====================================================================
    Settings
@@ -1730,8 +2372,7 @@ function saveSettings() { Store.set('settings', S.settings); }
 function paintSlider() { const el = $('#setThr'); el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); }
 function renderSettings() {
   const s = S.settings;
-  $('#placeList').innerHTML = S.places.map(p => `<button class="cell" data-place="${p.id}">${placeSquare(p.icon)}<span class="t">${esc(pname(p))}<small>${seatName(p.seat)} · ${placeCalibrated(p.id) ? t('calibrated') : t('notcalibrated')}</small></span>${p.id === S.place ? `<span class="v">${t('inuse')}</span>` : ''}${ICO.chev}</button>`).join('')
-    + `<button class="cell action" data-act="newplace"><span class="ico" style="background:var(--tint)">${svgIcon('<path d="M12 5v14M5 12h14"/>', 'stroke-width="2.6"')}</span><span class="t">${t('addplace')}</span></button>`;
+  $('#chairList').innerHTML = S.chairs.map(c => `<button class="cell" data-chair="${esc(c.id)}">${chairBadge(c)}<span class="t">${esc(cname(c))}<small>${chairSub(c)}</small></span>${c.id === S.chair ? `<span class="v">${t('inuse')}</span>` : ''}${ICO.chev}</button>`).join('') + newChairCell();
   $('#devSel').value = S.device;
   $('#tiltCell').hidden = S.device !== 'tablet';
   $$('#tiltSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.tilt)));
@@ -1739,6 +2380,8 @@ function renderSettings() {
   $('#setThr').value = s.threshold; $('#setThrOut').textContent = s.threshold + '%'; paintSlider();
   $$('#nudgeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === s.nudge)));
   $('#setSound').checked = s.sound; $('#setBuzz').checked = s.buzz; $('#setHead').checked = s.headCheck;
+  $('#setDrowsy').checked = s.drowsy; $('#setBuzzDz').checked = s.buzzDrowsy; $('#dzSensCell').hidden = !s.drowsy;
+  $$('#dzSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === s.drowsySens)));
   const c = Cloud.cfg() || {};
   $('#dbUrl').value = c.url || ''; $('#dbKey').value = c.key || ''; $('#dbUser').value = c.user || '';
   $('#dbState').textContent = Cloud.on() ? t('on') : t('off');
@@ -1786,6 +2429,9 @@ $('#setThr').oninput = e => { S.settings.threshold = +e.target.value; $('#setThr
 $('#nudgeSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.nudge = b.dataset.v; saveSettings(); renderSettings(); renderNudge(); };
 $('#setSound').onchange = e => { S.settings.sound = e.target.checked; saveSettings(); if (e.target.checked) { unlockAudio(); chime(); } };
 $('#setBuzz').onchange = e => { S.settings.buzz = e.target.checked; saveSettings(); };
+$('#setBuzzDz').onchange = e => { S.settings.buzzDrowsy = e.target.checked; saveSettings(); };
+$('#setDrowsy').onchange = e => { S.settings.drowsy = e.target.checked; saveSettings(); eyeIdle(e.target.checked ? 'na' : 'off'); renderSettings(); };
+$('#dzSeg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.settings.drowsySens = b.dataset.v; saveSettings(); renderSettings(); };
 $('#setHead').onchange = e => { S.settings.headCheck = e.target.checked; saveSettings(); S.smooth = null; };
 $('#btnDbSave').onclick = async () => {
   const url = $('#dbUrl').value.trim(), key = $('#dbKey').value.trim(), user = $('#dbUser').value.trim();
@@ -1817,7 +2463,7 @@ async function refreshCloudDaily() {
   } catch (e) { console.warn(e); }
 }
 $('#btnExport').onclick = () => {
-  const blob = new Blob([JSON.stringify({ app: 'earline', version: PROFILE_V, places: S.places, profiles: S.profiles, stats: S.stats, pstats: S.pstats }, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({ app: 'earline', version: PROFILE_V, chairs: S.chairs, profiles: S.profiles, stats: S.stats, pstats: S.pstats }, null, 2)], { type: 'application/json' });
   const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `earline-${today()}.json` });
   a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
@@ -1826,15 +2472,22 @@ $('#importFile').onchange = async e => {
   try {
     const d = JSON.parse(await f.text());
     if (d.app !== 'earline') throw new Error(t('notfile'));
-    for (const p of d.places || []) if (!S.places.some(x => x.id === p.id)) S.places.push(p);
-    Object.assign(S.profiles, d.profiles || {}); Store.set('profiles', S.profiles); savePlaces();
+    const add = (id, name, type, scan) => { if (id && !S.chairs.some(x => x.id === String(id))) S.chairs.push({ id: String(id), name: String(name || '').slice(0, 24), type: CHAIR_TYPES[type] ? type : 'office', scan }); };
+    for (const c of d.chairs || []) add(c?.id, c?.name, c?.type, c?.scan && typeof c.scan === 'object' ? { ...c.scan, thumb: okThumb(c.scan.thumb) ? c.scan.thumb : null } : null);
+    // files from before chairs: a place with a trained model comes in as a chair
+    for (const p of d.places || []) if (p && Object.keys(d.profiles || {}).some(k => k.startsWith(p.id + '|'))) add(p.id, p.name, { stool: 'stool', sofa: 'sofa', floor: 'floor' }[p.seat], null);
+    Object.assign(S.profiles, d.profiles || {}); Store.set('profiles', S.profiles);
+    if (!curChair()) S.chair = S.chairs[0]?.id ?? null;
+    saveChairs(); renderHeader();
     toast(t('imported')); refreshView();
   } catch (err) { toast(err.message); }
   e.target.value = '';
 };
 $('#btnReset').onclick = () => showActions(t('eraseConfirm'), [{ label: t('erase'), danger: true, fn: () => {
-  Store.clear(); S.profiles = {}; S.stats = {}; S.pstats = {}; S.history = []; S.places = DEFAULT_PLACES.map(p => ({ ...p })); S.place = S.places[0].id;
-  toast(t('erased')); renderHeader(); renderSettings();
+  Store.clear(); S.profiles = {}; S.stats = {}; S.pstats = {}; S.history = []; S.chairs = []; S.chair = null;
+  eyeIdle('na'); S.eye.base = null; S.eye.learn = [];
+  toast(t('erased')); renderHeader();
+  if (S.started) startScan(); else renderSettings();      // no chairs left: start again from the chair scan
 } }]);
 
 let toastTimer;
@@ -1842,15 +2495,24 @@ function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add
 
 /* =====================================================================
    Simulation (?sim): head = how far the head pokes forward, torso = how far you lean in
-   keys: t = head forward only, s = slouch, a = away
+   keys: t = head forward only, s = slouch, a = away, d = drowsy eyes
    ===================================================================== */
+function simChairProbs() {   // chair check without a camera: __sim.chair = the type to "see", __sim.chairSeen = false hides the chair
+  const k = CHAIR_TYPES[__sim.chair] ? __sim.chair : 'office', seen = __sim.chairSeen !== false;
+  const p = Object.fromEntries([...CHAIR_KEYS, 'none'].map(x => [x, .01 + Math.random() * .02]));
+  if (seen) { p[k] = .7 + Math.random() * .2; p.none = .05; } else p.none = .9;
+  const sum = Object.values(p).reduce((a, b) => a + b, 0);
+  for (const x in p) p[x] /= sum;
+  return p;
+}
 function makeSimVision() {
-  // head: head-only forward 0..1, torso: slump 0..1, near: scoot toward the screen 0..1 (~10 cm), yaw: head turn deg, pose: shoulders visible, camShift: camera aimed higher/lower (px)
-  window.__sim = window.__sim || { head: 0, torso: 0, present: true, drift: 0, near: 0, yaw: 0, pose: true, camShift: 0 };
+  // head: head-only forward 0..1, torso: slump 0..1, near: scoot toward the screen 0..1 (~10 cm), yaw: head turn deg, pose: shoulders visible, camShift: camera aimed higher/lower (px), eyes: 1 open .. 0 closed
+  window.__sim = Object.assign({ head: 0, torso: 0, present: true, drift: 0, near: 0, yaw: 0, pose: true, camShift: 0, eyes: 1 }, window.__sim || {});
   addEventListener('keydown', e => {
     if (e.key === 't') { __sim.head = __sim.head > .5 ? 0 : 1; __sim.torso = 0; }
     if (e.key === 's') { const on = __sim.torso < .5; __sim.torso = on ? 1 : 0; __sim.head = on ? .5 : 0; }
     if (e.key === 'a') __sim.present = !__sim.present;
+    if (e.key === 'd') __sim.eyes = __sim.eyes > .7 ? .45 : 1;
   });
   const W = 640, H = 480, F = 500, rn = a => (Math.random() - .5) * 2 * a;
   const wander = { h: 0, t: 0 };
@@ -1870,6 +2532,17 @@ function makeSimVision() {
       lm[33] = P(cx - 3.15 * k, ey); lm[263] = P(cx + 3.15 * k, ey);
       lm[1] = P(cx, ey + 4.5 * k * cp); lm[152] = P(cx, ey + 11.5 * k * cp); lm[10] = P(cx, ey - 7.5 * k * cp);
       lm[234] = P(cx - 7 * k, ey + 2 * k); lm[454] = P(cx + 7 * k, ey + 2 * k);
+      { // eyelids: each eye is 2.1 k wide, lids 0.15 widths above and below the corners when open; a blink now and then
+        const open = Math.max(0, (__sim.eyes ?? 1) * (Math.random() < .03 ? .2 : 1) + rn(.03));
+        const Pe = (x, y) => ({ x: x / W, y: y / H, z: 0 });
+        for (const [ix, x0, dir] of [[[33, 160, 158, 133, 153, 144], cx - 3.15 * k, 1], [[263, 387, 385, 362, 380, 373], cx + 3.15 * k, -1]]) {
+          const w = 2.1 * k, h = .15 * w * open, y0 = lm[ix[0]].y * H;
+          lm[ix[3]] = Pe(x0 + dir * w, y0);
+          lm[ix[1]] = Pe(x0 + dir * .3 * w, y0 - h); lm[ix[2]] = Pe(x0 + dir * .7 * w, y0 - h);
+          lm[ix[4]] = Pe(x0 + dir * .7 * w, y0 + h); lm[ix[5]] = Pe(x0 + dir * .3 * w, y0 + h);
+        }
+        lm[159] = lm[160]; lm[145] = lm[144]; lm[386] = lm[385]; lm[374] = lm[373];
+      }
       const pr = pitch * Math.PI / 180, yr = yaw * Math.PI / 180;
       const data = [1, 0, -Math.sin(yr), 0, 0, Math.cos(pr), Math.sin(pr), 0, 0, -Math.sin(pr), Math.cos(pr), 0, 0, 0, -Zh, 1];
       const sy = 405 + 12 * t + 20 * nr + sh;
@@ -1895,10 +2568,12 @@ $('#scan').insertAdjacentHTML('afterbegin', figureMarkup());
   setTimeout(flip, 700); setInterval(flip, 3200);
 }
 { const svg = $('#scan .fig'); drawFigure(svg, 0); figState.set(svg, { cur: 0, target: 0 }); svg.dataset.level = 'away'; }
-applyLang(); setPauseIcon(); renderHeader();
+$('#eyeSlot').innerHTML = eyeMarkup();
+$('#cushSlot').innerHTML = cushionMarkup(); $('#cushSlotSheet').innerHTML = cushionMarkup();
+applyLang(); setPauseIcon(); renderHeader(); renderCushion(); renderEye();
 goto('onboard');
 if (Cloud.on()) syncFromCloud().catch(e => console.warn(e));
-window.__earline = { S, C, LR, trainProfile, predictCore, toSample, extract, headEval };
+window.__earline = { S, C, SC, LR, ChairAI, trainProfile, predictCore, toSample, extract, headEval, buzz, startScan };
 </script>
 </body>
 </html>

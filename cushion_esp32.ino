@@ -1,5 +1,7 @@
 // Earline 진동 방석 (ESP32 + 진동 모터 모듈 10개)
-// 웹앱에서 거북목 알림이 나가면 블루투스(BLE)로 신호를 받아 방석 속 모듈을 울린다. 센서는 없음.
+// 웹앱이 블루투스(BLE)로 신호를 보내면 방석 속 모듈을 울린다. 센서는 없음.
+//   거북목 알림 → 왼쪽·오른쪽으로 오가는 물결 진동
+//   졸음 알림   → 모듈 10개 전체가 한꺼번에 네 번 진동
 //
 // 사용 부품: "진동 모터 모듈 PWM DC 모터 드라이버 3.3V 5V" (핀 IN · VCC · GND) × 10
 //   모듈 안에 드라이버(트랜지스터)가 있어서 ESP32 핀에 바로 연결한다.
@@ -16,16 +18,18 @@
 //   위·아래 + 레일, 위·아래 − 레일은 점퍼로 서로 이어 둔다 (위쪽 모듈 4개가 위 레일을 쓰므로)
 //   ESP32 전원은 USB 케이블. ESP32의 3V3, 5V 핀은 배터리 레일에 연결하지 말 것.
 //
-// 전원 때문에 한 번에 최대 3구역(모듈 6개)까지만 같이 켠다. 10개를 동시에 켜면 건전지가 버거움.
+// 전원: 거북목 알림과 테스트는 한 번에 최대 3구역(모듈 6개)까지만 같이 켠다.
+//   졸음 알림만 10개를 모두 켠다. 건전지에 무리가 덜 가도록 구역을 0.015초 간격으로 차례로 켜고,
+//   0.45초씩 짧게 끊어 울린다. AA 2개로는 전압이 떨어져 약하게 느껴질 수 있으니 AA 3개를 권장.
 //
 // 웹앱과 맞춘 BLE 형식 (바꾸면 index.html의 CUSHION_* 도 같이 바꿀 것)
 //   Service UUID        4fafc201-1fb5-459e-8fcc-c5c9c331914b
 //   Characteristic UUID beb5483e-36e1-4688-b7f5-ea07361b26a8  (WRITE)
 //   받는 값 [pattern, strength]
-//     pattern 1 = 거북목 알림, 2 = 연결 테스트, 0 = 멈춤
+//     pattern 1 = 거북목 알림, 2 = 연결 테스트, 3 = 졸음 알림(10개 전체), 0 = 멈춤
 //     strength 0~255 (웹앱은 205를 보냄)
 //
-// 웹앱 없이 테스트: 시리얼 모니터(115200)에서 1 = 알림, 2 = 테스트, 0 = 멈춤
+// 웹앱 없이 테스트: 시리얼 모니터(115200)에서 1 = 거북목 알림, 2 = 테스트, 3 = 졸음 알림, 0 = 멈춤
 // 전원을 켜면 구역 1 → 2 → 3 → 4 → 5 순서로 한 번씩 울려서 배선을 확인할 수 있다.
 
 #include <BLEDevice.h>
@@ -51,6 +55,9 @@ const Step ALERT[] = { {0b00001, 120}, {0b00010, 120}, {0b00100, 120}, {0b01000,
 // 테스트: 구역을 하나씩 울려서 어느 선이 어느 구역인지 확인
 const Step TEST[]  = { {0b00001, 350}, {0, 150}, {0b00010, 350}, {0, 150}, {0b00100, 350}, {0, 150},
                        {0b01000, 350}, {0, 150}, {0b10000, 350}, {0, 0} };
+// 졸음 알림: 10개 전체를 네 번 강하게. 구역을 15ms 간격으로 차례로 켜서 순간 전류를 나눈다.
+#define ALL_ON {0b00001, 15}, {0b00011, 15}, {0b00111, 15}, {0b01111, 15}, {0b11111, 390}
+const Step DROWSY[] = { ALL_ON, {0, 150}, ALL_ON, {0, 150}, ALL_ON, {0, 150}, ALL_ON, {0, 0} };
 
 // 작은 진동 모터는 약한 PWM으로는 잘 안 돌기 시작해서, 켤 때 잠깐 최대로 밀어 준다
 const uint16_t KICK_MS = 40;
@@ -83,16 +90,17 @@ void startStep() {
 }
 
 void play(uint8_t pattern, uint8_t s) {
-  if (pattern != 1 && pattern != 2) {  // 0이나 모르는 값이면 멈춤
+  if (pattern < 1 || pattern > 3) {    // 0이나 모르는 값이면 멈춤
     pat = nullptr;
     setMotors(0, 0);
     return;
   }
   strength = AA_CELLS <= 2 ? 255 : (s < MIN_STRENGTH ? MIN_STRENGTH : s);
-  pat = pattern == 1 ? ALERT : TEST;
+  if (pattern == 3) strength = 255;    // 졸음은 항상 최대 세기
+  pat = pattern == 1 ? ALERT : pattern == 2 ? TEST : DROWSY;
   idx = 0;
   startStep();
-  Serial.println(pattern == 1 ? "거북목 알림 진동" : "테스트 진동");
+  Serial.println(pattern == 1 ? "거북목 알림 진동" : pattern == 2 ? "테스트 진동" : "졸음 알림 진동 (10개 전체)");
 }
 
 class ServerCB : public BLEServerCallbacks {
@@ -144,7 +152,7 @@ void loop() {
   }
   while (Serial.available()) {
     char c = Serial.read();
-    if (c >= '0' && c <= '2') play(c - '0', 205);
+    if (c >= '0' && c <= '3') play(c - '0', 205);
   }
   if (pat) {
     unsigned long t = millis() - stepStart;
